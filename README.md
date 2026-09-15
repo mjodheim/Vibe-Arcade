@@ -54,6 +54,22 @@ Chaque run consiste à devenir de plus en plus déraisonnablement puissant avant
 
 ---
 
+# 🧱 BORNE #002
+
+## **Stack Panic**
+
+> *Tout est sous contrôle.*
+
+Un **jeu de blocs qui tombent** dans lequel la partie refuse de rester sage. Tu empiles, tu nettoies des lignes — et le directeur du chaos envoie des moutons qui poussent les cases, de l'eau qui coule dans les trous, une bombe, un tank, une panne de courant, un canard inspecteur, ou une **brèche structurelle** : le jeu s'ouvre alors en 3D et tu pilotes un vaisseau dans un tunnel construit à partir de ta propre pile.
+
+Chaque incident peut sauver ta partie… ou l'achever. Le chaos a quand même ses règles : il ne s'acharne jamais deux fois de suite et se retient quand ta pile touche le plafond.
+
+`🐑 moutons` · `💧 blocs liquides` · `💣 bombes` · `🪖 tank` · `🌑 panne de courant` · `📼 glitch` · `🦆 canard` · `🌀 brèche 3D` · `☀️ défi du jour` · `🏆 records locaux`
+
+➡️ **[Jouer à Stack Panic](https://arcade.mjodheim.be/stack-panic/)** · [le code et les notes de jeu](games/stack-panic)
+
+---
+
 ## 🧪 La boucle Vibe
 
 ```text
@@ -100,7 +116,7 @@ La dernière phrase est la plus importante. 😈
 | Borne | Jeu | Genre | Statut |
 |:--:|---|---|:--:|
 | `#001` | 🐝 **Hivebound: Relics of the Bloom** | Roguelite d'action fantasy | 🟢 JOUABLE |
-| `#002` | ❔ **???** | ??? | 🔒 VERROUILLÉ |
+| `#002` | 🧱 **Stack Panic** | Puzzle de blocs chaotique | 🟢 JOUABLE |
 | `#003` | ❔ **???** | ??? | 🔒 VERROUILLÉ |
 | `#004` | ❔ **???** | ??? | 🔒 VERROUILLÉ |
 
