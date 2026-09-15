@@ -1,10 +1,11 @@
 import { HiveboundGame, CLASSES, SIGILS, DEFAULT_CONTROLS } from './game.js';
 
-// Keep public descriptions aligned with the mechanics that actually exist.
+// Keep public descriptions aligned with mechanics that actually exist.
 SIGILS.Gloam.desc = '2: +24% score · 4: +48% score · Gloam itself empowers enemies';
 SIGILS.Echo.desc = '2: -12% cooldown · 4: ability cooldown rebounds to 1s after use';
 
 const proto = HiveboundGame.prototype;
+const originalPauseForTalent = proto.pauseForTalent;
 const originalWinCombat = proto.winCombat;
 const originalRender = proto.render;
 const originalApplyEvent = proto.applyEvent;
@@ -21,10 +22,15 @@ function deterministicShuffle(game, values) {
 
 function continueAfterTalent(game) {
   if (!game.running) return;
+
+  // If one XP burst crossed several thresholds, resolve rewards one at a time.
   if (game.state.xp >= game.state.xpNext) {
     queueMicrotask(() => game.gainXp(0));
     return;
   }
+
+  // A combat can end in the same frame that a level-up occurs. Defer loot until
+  // the talent choice is resolved so the two modals never overwrite each other.
   if (game._pendingWin) {
     const pending = game._pendingWin;
     game._pendingWin = null;
@@ -33,7 +39,7 @@ function continueAfterTalent(game) {
 }
 
 // Daily runs must be deterministic across browsers. Array.sort(randomComparator)
-// is not guaranteed to produce the same ordering on every JS engine.
+// does not guarantee identical ordering across JS engines.
 proto.pathChoices = function pathChoices() {
   if (this.state.step >= 4) {
     return [{
@@ -56,8 +62,8 @@ proto.pathChoices = function pathChoices() {
   return choices;
 };
 
-// Process one level at a time. This prevents two reward modals from overwriting
-// one another when several XP thresholds are crossed in the same combat frame.
+// Process one level at a time. Extra XP remains queued until the current talent
+// has been selected, which keeps long runs stable.
 proto.gainXp = function gainXp(amount) {
   this.state.xp += amount;
   if (this.paused || this.state.xp < this.state.xpNext) return;
@@ -69,24 +75,32 @@ proto.gainXp = function gainXp(amount) {
 };
 
 proto.pauseForTalent = function pauseForTalent() {
-  this.paused = true;
-  const universal = [
-    ['ferocity', 5], ['fleet', 4], ['heart', 4], ['tempo', 5], ['fortune', 4]
-  ];
-  const classTalentIds = {
-    waxguard: [['rage',3], ['cleave',3], ['thorns',3]],
-    bloomweaver: [['split',3], ['blast',3], ['mana',3]],
-    thornstrider: [['multishot',3], ['distance',3], ['venom',3]],
-    hymnkeeper: [['motes',3], ['grace',3], ['choir',3]]
+  const knownCaps = {
+    waxguard: [
+      ['ferocity',5], ['fleet',4], ['heart',4], ['tempo',5], ['fortune',4],
+      ['rage',3], ['cleave',3], ['thorns',3]
+    ],
+    bloomweaver: [
+      ['ferocity',5], ['fleet',4], ['heart',4], ['tempo',5], ['fortune',4],
+      ['split',3], ['blast',3], ['mana',3]
+    ],
+    thornstrider: [
+      ['ferocity',5], ['fleet',4], ['heart',4], ['tempo',5], ['fortune',4],
+      ['multishot',3], ['distance',3], ['venom',3]
+    ],
+    hymnkeeper: [
+      ['ferocity',5], ['fleet',4], ['heart',4], ['tempo',5], ['fortune',4],
+      ['motes',3], ['grace',3], ['choir',3]
+    ]
   };
 
-  // We cannot access the private TALENTS table from the base module, so ask the
-  // original talent hook to provide options while talents remain. Once every
-  // known rank is capped, long runs transition into endless Overflow levels.
-  const allCapped = [...universal, ...classTalentIds[this.classId]]
+  const allCapped = knownCaps[this.classId]
     .every(([id, max]) => this.talentRank(id) >= max);
 
+  // Endless runs used to soft-lock here because the choice modal had zero
+  // buttons once every talent was maxed. Overflow gives infinite progression.
   if (allCapped) {
+    this.paused = true;
     this.state.talents.overflow = (this.state.talents.overflow || 0) + 1;
     this.state.damageMult += 0.04;
     this.state.maxHp += 4;
@@ -98,15 +112,11 @@ proto.pauseForTalent = function pauseForTalent() {
     return;
   }
 
-  // Use the base method to build the real talent objects, but intercept its
-  // shuffle by temporarily supplying a deterministic implementation.
-  // Reconstructing the available talent objects is intentionally avoided here
-  // so the patch remains compatible with future additions to game.js.
+  // The base engine owns the actual talent objects. Temporarily replace only
+  // its shuffle with Fisher-Yates so seeded runs remain deterministic.
   const previousShuffle = this.rng.shuffle;
   this.rng.shuffle = values => deterministicShuffle(this, values);
 
-  // The original method sets paused and calls the hook. Wrap the hook so we can
-  // resume queued levels / combat rewards after the player's choice.
   const originalHook = this.hooks.onTalent;
   this.hooks.onTalent = (options, choose) => {
     const wrappedChoose = talent => {
@@ -115,17 +125,118 @@ proto.pauseForTalent = function pauseForTalent() {
       this.rng.shuffle = previousShuffle;
       continueAfterTalent(this);
     };
+
     if (originalHook) originalHook(options, wrappedChoose);
     else if (options[0]) wrappedChoose(options[0]);
   };
 
-  // Call the original implementation saved before patching.
-  basePauseForTalent.call(this);
+  originalPauseForTalent.call(this);
 };
 
-const basePauseForTalent = (() => {
-  // Capture the original method after defining the replacement logic above.
-  // This IIFE is evaluated immediately while proto still holds the replacement,
-  // so the actual original is stored explicitly below via a descriptor trick.
-  return null;
-})();
+proto.winCombat = function winCombat(boss = false) {
+  if (!this.running) return;
+  if (this.paused) {
+    if (boss || !this._pendingWin) this._pendingWin = boss ? 'boss' : 'normal';
+    return;
+  }
+  return originalWinCombat.call(this, boss);
+};
+
+// Ranged classes now respect their advertised range. Predator's Line was
+// previously displayed as a Thornstrider talent but had no gameplay effect.
+proto.autoAttack = function autoAttack() {
+  const c = this.combat;
+  const p = c.player;
+  const enemy = this.nearestEnemy();
+  if (!enemy) return;
+
+  const st = this.stats();
+  const distance = Math.hypot(enemy.x - p.x, enemy.y - p.y);
+  if (this.classId !== 'waxguard' && distance > st.range) return;
+
+  const crit = this.rng.next() < st.crit;
+  let damage = st.damage * (crit ? st.critDamage : 1);
+
+  if (this.classId === 'thornstrider') {
+    const rank = this.talentRank('distance');
+    if (rank) damage *= 1 + (0.12 * rank * Math.min(1, distance / st.range));
+  }
+
+  if (this.classId === 'waxguard') {
+    for (const target of c.enemies) {
+      if (Math.hypot(target.x - p.x, target.y - p.y) <= st.range) {
+        this.hitEnemy(target, damage, crit);
+      }
+    }
+    this.particleRing(p.x, p.y, st.range, '#efc661');
+    return;
+  }
+
+  const count = this.classId === 'thornstrider' ? 1 + this.talentRank('multishot') : 1;
+  for (let i = 0; i < count; i++) {
+    const angle = Math.atan2(enemy.y - p.y, enemy.x - p.x) + (i - (count - 1) / 2) * 0.12;
+    this.projectile(p.x, p.y, angle, damage, {
+      speed: st.projectileSpeed,
+      crit,
+      poison: this.classId === 'thornstrider' && crit && this.talentRank('venom'),
+      splash: this.classId === 'bloomweaver' && this.talentRank('blast') > 0,
+      homing: this.classId === 'hymnkeeper'
+    });
+  }
+
+  if (this.classId === 'bloomweaver' && this.talentRank('split') && this.rng.next() < 0.16 * this.talentRank('split')) {
+    const baseAngle = Math.atan2(enemy.y - p.y, enemy.x - p.x);
+    this.projectile(p.x, p.y, baseAngle + 0.3, damage * 0.7, { speed: st.projectileSpeed });
+    this.projectile(p.x, p.y, baseAngle - 0.3, damage * 0.7, { speed: st.projectileSpeed });
+  }
+
+  if (this.classId === 'hymnkeeper' && this.talentRank('motes') && this.rng.next() < 0.14 * this.talentRank('motes')) {
+    this.projectile(p.x, p.y, this.rng.next() * Math.PI * 2, damage * 0.7, { speed: st.projectileSpeed, homing: true });
+  }
+};
+
+// The base engine already queued ring particles but never drew or expired them.
+// Render them as lightweight combat feedback without changing the simulation.
+proto.particleRing = function particleRing(x, y, radius, color) {
+  if (!this.combat) return;
+  this.combat.particles.push({ x, y, r: radius, color, born: performance.now(), duration: 320 });
+};
+
+proto.render = function render() {
+  originalRender.call(this);
+  if (!this.combat?.particles?.length) return;
+
+  const now = performance.now();
+  const ctx = this.ctx;
+  const active = [];
+  for (const particle of this.combat.particles) {
+    const progress = (now - particle.born) / particle.duration;
+    if (progress >= 1) continue;
+    active.push(particle);
+    ctx.save();
+    ctx.globalAlpha = 1 - progress;
+    ctx.strokeStyle = particle.color;
+    ctx.lineWidth = 3 - progress * 2;
+    ctx.beginPath();
+    ctx.arc(particle.x, particle.y, particle.r * (0.65 + progress * 0.35), 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.restore();
+  }
+  this.combat.particles = active;
+};
+
+// Keep corruption bounded even when an event and a pact land above the normal
+// node-based cap.
+proto.applyEvent = function applyEvent(option) {
+  originalApplyEvent.call(this, option);
+  this.state.gloam = Math.min(200, this.state.gloam);
+  this.state.multiplier = 1 + this.state.gloam / 100 + (this.state.sigils.Gloam || 0) * 0.12;
+};
+
+proto.applyPact = function applyPact(pact) {
+  originalApplyPact.call(this, pact);
+  this.state.gloam = Math.min(200, this.state.gloam);
+  this.state.multiplier = 1 + this.state.gloam / 100 + (this.state.sigils.Gloam || 0) * 0.12;
+};
+
+export { HiveboundGame, CLASSES, SIGILS, DEFAULT_CONTROLS };
