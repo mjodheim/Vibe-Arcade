@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/vibe-arcade-banner.svg" alt="Vibe Arcade — Ideas in, games out" width="100%" />
+  <img src="assets/vibe-arcade-banner-v2.svg" alt="Vibe Arcade — Ideas in, games out" width="100%" />
 </p>
 
 <p align="center">
