@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Hivebound — Relics of the Bloom</title>
+  <meta name="theme-color" content="#141019" />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <div id="app">
+    <header class="topbar">
+      <div class="brand"><span class="brand-mark">⬡</span><span>HIVEBOUND</span><small>Relics of the Bloom</small></div>
+      <div class="top-actions">
+        <button class="ghost" id="leaderboardBtn">🏆 Leaderboard</button>
+        <button class="ghost" id="settingsBtn">⚙ Controls</button>
+        <button class="ghost" id="accountBtn">Guest</button>
+      </div>
+    </header>
+
+    <main>
+      <section id="homeScreen" class="screen active hero-screen">
+        <div class="hero-copy">
+          <p class="eyebrow">VIBE ARCADE · GAME #001</p>
+          <h1>THE BLOOM IS<br><span>BREAKING.</span></h1>
+          <p class="lede">A fantasy action roguelite about warrior bees, forbidden pollen, impossible builds and one more run.</p>
+          <div class="hero-actions">
+            <button class="primary big" id="newRunBtn">Begin a Run</button>
+            <button class="secondary big" id="dailyRunBtn">Daily Hive</button>
+          </div>
+          <div class="feature-strip">
+            <span>4 classes</span><span>Procedural paths</span><span>Loot resonances</span><span>Endless corruption</span>
+          </div>
+        </div>
+        <div class="hive-art" aria-hidden="true">
+          <div class="moon"></div><div class="hex h1"></div><div class="hex h2"></div><div class="hex h3"></div>
+          <div class="bee-silhouette">🐝</div>
+        </div>
+      </section>
+
+      <section id="classScreen" class="screen">
+        <div class="section-heading"><p class="eyebrow">CHOOSE YOUR OATH</p><h2>Who enters the Gloam?</h2><p>Every class changes movement, attack rhythm, ability and talent pool.</p></div>
+        <div id="classGrid" class="class-grid"></div>
+        <button class="ghost back-home">← Back</button>
+      </section>
+
+      <section id="gameScreen" class="screen game-screen">
+        <div class="game-layout">
+          <aside class="hud-panel left-panel">
+            <div class="portrait" id="classPortrait">🐝</div>
+            <div><strong id="className">Warden</strong><small id="classSubtitle">Class</small></div>
+            <div class="meter"><label>Vitality <span id="hpText"></span></label><div><i id="hpBar"></i></div></div>
+            <div class="meter xp"><label>Level <span id="levelText">1</span></label><div><i id="xpBar"></i></div></div>
+            <div class="stats-grid">
+              <span>⚔ <b id="damageStat">0</b></span><span>⚡ <b id="speedStat">0</b></span><span>✦ <b id="critStat">0</b></span><span>⌛ <b id="cooldownStat">0</b></span>
+            </div>
+            <div class="ability-card"><span id="abilityKeyLabel">SPACE</span><strong id="abilityName">Ability</strong><small id="abilityDesc"></small><div class="cooldown"><i id="abilityCd"></i></div></div>
+            <div class="materials"><span>🍯 <b id="nectarCount">0</b></span><span>⬡ <b id="waxCount">0</b></span><span>✿ <b id="pollenCount">0</b></span></div>
+          </aside>
+
+          <div class="arena-wrap">
+            <canvas id="gameCanvas" width="960" height="540"></canvas>
+            <div class="arena-top">
+              <div><small id="biomeLabel">VERDANT REACH</small><strong id="nodeLabel">Encounter</strong></div>
+              <div class="scorebox"><small>SCORE</small><b id="scoreText">0</b><span id="multiplierText">×1.00</span></div>
+            </div>
+            <div id="objective" class="objective">Survive</div>
+            <div id="toast" class="toast"></div>
+          </div>
+
+          <aside class="hud-panel right-panel">
+            <div class="side-title"><span>RESONANCE</span><small>Sigils carried</small></div>
+            <div id="resonances" class="resonances"></div>
+            <div class="side-title"><span>RELICS</span><small id="relicCount">0 / 8</small></div>
+            <div id="relics" class="relics"></div>
+            <div class="side-title"><span>RUN</span></div>
+            <div class="run-stats"><span>Region <b id="regionStat">1</b></span><span>Gloam <b id="gloamStat">0%</b></span><span>Kills <b id="killsStat">0</b></span></div>
+          </aside>
+        </div>
+      </section>
+
+      <section id="pathScreen" class="screen path-screen">
+        <div class="section-heading"><p class="eyebrow" id="pathEyebrow">THE VERDANT REACH</p><h2>Choose the next path.</h2><p id="pathHint">Every step feeds the Gloam. Greed scores higher.</p></div>
+        <div id="pathCards" class="path-cards"></div>
+        <div id="runSummaryBar" class="run-summary-bar"></div>
+      </section>
+
+      <section id="endScreen" class="screen end-screen">
+        <p class="eyebrow">THE HIVE REMEMBERS</p><h2 id="endTitle">Your run has ended.</h2>
+        <div class="final-score"><small>FINAL SCORE</small><strong id="finalScore">0</strong></div>
+        <div id="finalStats" class="final-stats"></div>
+        <div class="hero-actions"><button class="primary big" id="againBtn">One More Run</button><button class="secondary big" id="submitBtn">Submit Score</button></div>
+        <p id="submitStatus" class="muted"></p>
+      </section>
+    </main>
+  </div>
+
+  <div id="modal" class="modal hidden"><div class="modal-card"><button id="modalClose" class="modal-close">×</button><div id="modalContent"></div></div></div>
+  <script type="module" src="/js/app.js"></script>
+</body>
+</html>
