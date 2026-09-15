@@ -1,80 +1,177 @@
-# Hivebound: Relics of the Bloom
+<p align="center">
+  <img src="../../assets/hivebound-banner.svg" alt="Hivebound: Relics of the Bloom" width="100%" />
+</p>
 
-**Vibe Arcade — Game #001**
+<p align="center">
+  <strong>🐝 Vibe Arcade — Cabinet #001</strong><br/>
+  <sub>Fantasy action roguelite · playable prototype v0.2</sub>
+</p>
 
-Hivebound is a browser-based fantasy action roguelite created as a vibe-coding experiment: describe the desired experience, play the result, discuss what feels wrong or missing, and iterate with AI until it becomes the game we wanted.
+---
 
-The human rule for the experiment is simple: **shape the product through conversation rather than manually implementing game code.**
+# 🌼 The Bloom is fading
 
-## Current playable loop (v0.2)
+Beyond the hive, the old gardens are changing.
 
-- 4 genuinely different classes: Waxguard, Bloomweaver, Thornstrider, Hymnkeeper
-- top-down real-time combat with keyboard controls
-- configurable keyboard controls with WASD, ZQSD and arrow-key presets
-- endless regions with increasing corruption
-- procedural route choices: combat, elite, treasure, shrine, event, boss
-- XP and randomized talent choices during combat
-- randomized relics with four rarity tiers
-- 5 Sigil families and Resonance thresholds that alter builds
-- crafting materials and shrine upgrades
-- risk/reward Gloam Pacts after bosses
-- endless difficulty scaling and score multiplier
-- account registration/login
-- run tokens and basic score validation
-- per-user all-time leaderboard
-- deterministic Daily Hive seed shared by everyone
-- persistent data without external services (JSON database for the prototype)
-- zero runtime npm dependencies
+Flowers glow where they should not. Ancient wax shrines hum in the dark. Strange relics surface beneath corrupted roots. The deeper a bee ventures into the Bloom, the stronger the **Gloam** becomes — and the greater the rewards.
 
-## Run locally
+Choose a role. Build something ridiculous. Defeat what waits beyond the petals. Decide how long you're willing to risk the run.
 
-Requires Node.js 20+.
+> **Survive. Adapt. Become gloriously overpowered. Score higher. Go again.**
+
+---
+
+## 🐝 Choose your bee
+
+| Class | Role | Fantasy |
+|:--|:--|:--|
+| 🛡️ **Waxguard** | Warrior | Heavy wax armor, retaliation and staying power |
+| ✨ **Bloomweaver** | Mage | Arcane pollen, bursts and magical destruction |
+| 🏹 **Thornstrider** | Ranger | Speed, precision and critical-hit builds |
+| 🎶 **Hymnkeeper** | Support | Auras, swarm power and strange supportive magic |
+
+Each class is intended to feel different rather than simply carrying different stat bonuses.
+
+---
+
+## ⚔️ The run
+
+```text
+             🐝 HIVE
+                │
+                ▼
+          🗺️ CHOOSE A PATH
+          ╱      │       ╲
+       ⚔️       💎       🔨
+     COMBAT   TREASURE   SHRINE
+        │        │         │
+        └────────┼─────────┘
+                 ▼
+             🌿 GROW
+        talents · loot · craft
+                 │
+                 ▼
+              👑 BOSS
+                 │
+                 ▼
+           🌑 GLOAM PACT
+          safer?  greedier?
+                 │
+                 ▼
+             GO DEEPER ↺
+```
+
+The further you push, the more dangerous the run becomes — and the more valuable your score multiplier can become.
+
+---
+
+## 💎 Buildcraft
+
+Relics carry one of five **Sigils**. Stack matching Sigils and they awaken **Resonances** that reshape a build.
+
+| Sigil | Identity |
+|:--:|---|
+| 🟡 **Wax** | durability, armor and retaliation |
+| 🌸 **Bloom** | raw damage and chain explosions |
+| 🌹 **Thorn** | speed, critical hits and aggression |
+| 🔊 **Echo** | ability tempo and repeated effects |
+| 🌑 **Gloam** | dangerous power and score multipliers |
+
+The goal is not perfect balance at all times. Part of the fun is discovering combinations that become **beautifully unfair**.
+
+---
+
+## 🍯 What's playable now?
+
+`⚔️ real-time combat` · `🗺️ procedural routes` · `💎 four loot rarities` · `🌿 randomized talents` · `🔨 crafting` · `👑 bosses` · `🌀 Sigil Resonances` · `🌑 Gloam Pacts` · `📈 endless scaling` · `🏆 all-time leaderboard` · `☀️ Daily Hive`
+
+Also included:
+
+- 👤 account registration and login
+- 🎟️ run tokens with basic score validation
+- 💾 persistent prototype data
+- 🎲 deterministic Daily Hive seed shared by every player
+- ⌨️ fully configurable keyboard controls
+- 🇫🇷 friendly ZQSD/AZERTY preset
+- 🐳 Docker-ready deployment
+- 📦 zero runtime npm dependencies
+
+---
+
+## 🎮 Controls
+
+Open **⚙ Controls** in-game to rebind movement and the class ability.
+
+Quick presets:
+
+`WASD` · `ZQSD / AZERTY` · `Arrow Keys`
+
+The class ability defaults to `Space`, but every binding can be changed. Settings are stored locally in the browser and duplicate bindings are rejected.
+
+Normal attacks currently auto-target nearby enemies so the player's attention stays on **movement, positioning, abilities and build decisions**.
+
+---
+
+## ☀️ Daily Hive
+
+Every day, everyone can enter the same deterministic challenge.
+
+Same seed. Same underlying route generation. Same opportunity.
+
+The idea is simple:
+
+> **Who makes the most out of today's hive?**
+
+---
+
+## 🏆 Score chasing
+
+Hivebound is the first game in Vibe Arcade's shared leaderboard direction.
+
+A run rewards progression, kills, bosses, loot and risk. Gloam can push the multiplier higher — if the run survives long enough to cash it in.
+
+Long-term, Vibe Arcade is intended to expose a player profile with records across every cabinet.
+
+---
+
+# 🚀 Play locally
+
+### Node.js 20+
 
 ```bash
 export HIVEBOUND_SECRET='a-long-random-secret'
 node server.js
 ```
 
-Then open `http://localhost:8080`.
+Then visit:
 
-## Docker / VPS
+```text
+http://localhost:8080
+```
+
+### Docker / VPS
 
 ```bash
 cp .env.example .env
-# edit HIVEBOUND_SECRET in .env
+# Set HIVEBOUND_SECRET in .env
+
 docker compose up -d --build
 ```
 
-The container exposes port `8080`. Put it behind your existing reverse proxy / TLS configuration.
+The container exposes port `8080` and can sit behind an existing reverse proxy / TLS setup.
 
-## Controls
+---
 
-Keyboard bindings are configurable from **⚙ Controls** in the game. The chosen bindings are saved locally in the browser.
+## ⚠️ Prototype cave
 
-Quick presets are included for:
+This is a playable prototype, not a finished competitive game.
 
-- `WASD`
-- `ZQSD` / AZERTY
-- arrow keys
+The server performs basic run validation, but a determined player can still manipulate a browser client. A serious competitive leaderboard should eventually use replay/event validation or more server-authoritative simulation.
 
-The class ability defaults to `Space`, but it can be rebound too. Duplicate bindings are rejected so the same key cannot accidentally drive two actions.
+Persistence is deliberately lightweight for now. The current JSON layer keeps the prototype dependency-free; the shared Vibe Arcade identity and leaderboard layer can later move to PostgreSQL when the arcade grows.
 
-The auto-attack choice is deliberate: build decisions, movement and positioning should be the player's attention budget, and it leaves a clean path toward mobile controls.
+---
 
-## The identity of the game
-
-The main build-crafting system is **Resonance**. Relics carry one of five Sigils:
-
-- **Wax** — durability and retaliation
-- **Bloom** — raw damage and chain explosions
-- **Thorn** — speed and critical damage
-- **Echo** — ability tempo and echoes
-- **Gloam** — dangerous score multipliers
-
-The goal is to make players chase combinations that sometimes become gloriously overpowered. Boss victories offer Gloam Pacts, allowing an endless run to trade safety for scoring potential.
-
-## Important prototype limitations
-
-This is intentionally a first playable build, not a finished game. The current server has basic run validation, but a determined player can still manipulate a browser client. Competitive leaderboards should later use replay/event validation or server-authoritative simulation.
-
-The JSON persistence layer is intentionally dependency-free for v0.2. When the shared Vibe Arcade account system stabilizes, it should move to PostgreSQL and become its own service used by every game.
+<p align="center">
+  <strong>🌼 ENTER THE BLOOM · EMBRACE THE GLOAM 🌑</strong>
+</p>
