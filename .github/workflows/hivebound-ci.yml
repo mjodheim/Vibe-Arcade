@@ -30,5 +30,6 @@ jobs:
           node --check public/js/game.js
           node --check public/js/game-patches.js
           node --check public/js/bootstrap.js
+          node --check public/js/i18n.js
       - name: Run tests
         run: npm test
