@@ -28,6 +28,7 @@
   <meta name="twitter:image" content="https://arcade.mjodheim.be/assets/og-stack-panic.png" />
 
   <link rel="stylesheet" href="/stack-panic/style.css" />
+  <link rel="stylesheet" href="/stack-panic/polish.css" />
 </head>
 <body>
   <div class="noise" aria-hidden="true"></div>
@@ -68,7 +69,6 @@
         <div id="dailyBadge" class="daily-badge" hidden>DÉFI DU JOUR · MÊME CHAOS POUR TOUS</div>
         <div id="banner" class="banner" aria-live="polite"><small>INCIDENT INCOMING</small><strong>...</strong><span>...</span></div>
 
-        <!-- The crash screen is a lie: the run keeps going behind it. -->
         <div id="crash" class="crash" hidden aria-hidden="true">
           <b>:(</b>
           <p>Le système a rencontré un problème et doit faire semblant de redémarrer.</p>
@@ -83,6 +83,7 @@
           <span>Les mêmes blocs, mais avec un abonnement mensuel.</span>
           <button type="button" tabindex="-1">Fermer (ne fonctionne pas)</button>
         </div>
+
         <div id="startPanel" class="start-panel">
           <div class="logo-mini">STACK <b>PANIC</b></div>
           <p>Empile. Nettoie. Survis aux incidents.</p>
@@ -92,8 +93,9 @@
             <span>RECORD <b id="bestFree">000000</b></span>
             <span>DU JOUR <b id="bestDaily">000000</b></span>
           </div>
-          <small>← → déplacer · ↑ rotation · ↓ accélérer · ESPACE chute</small>
+          <small>← → déplacer · ↑/X rotation · ↓ accélérer · ESPACE chute · P pause</small>
         </div>
+
         <div id="gameOver" class="game-over hidden">
           <small>RUN TERMINATED</small>
           <strong id="finalScore">000000</strong>
@@ -109,7 +111,7 @@
           <small>SURVIVAL NOTES</small>
           <p>Les incidents sont parfois utiles. Souvent non.</p>
           <p>Plus le chaos monte, plus ils arrivent vite — et à partir d'un certain point, à deux en même temps.</p>
-          <p>Certains mini-mondes utilisent l'état réel de ta pile.</p>
+          <p>La brèche 3D utilise la vraie pile. Dans le tunnel : flèches/WASD pour piloter, ESPACE pour booster.</p>
         </div>
         <div class="legend">
           <span>🐑 Faune</span><span>💧 Physique</span><span>💣 Sabotage</span><span>☄️ Impacts</span><span>🏗️ Démolition</span><span>🧪 Corrosion</span><span>🧲 Magnétisme</span><span>🙃 Gravité</span><span>💀 Panne système</span><span>🌀 Reality break</span>
@@ -126,8 +128,8 @@
     </section>
 
     <section class="notes">
-      <span>BUILD 0.1 // EXPERIMENTAL</span>
-      <p>Chaque incident a sa propre musique, jouée en direct par un séquenceur Web Audio : batterie, basse, nappes et lead sont synthétisés note par note. Aucun fichier audio n'est téléchargé.</p>
+      <span>BUILD 0.2 // CHAOS STABILIZED</span>
+      <p>Chaque incident possède sa propre musique, synthétisée en direct. Le chaos est identique à 60, 120 ou 144 Hz ; le bon goût, lui, n'est pas garanti.</p>
     </section>
   </main>
 
@@ -135,8 +137,8 @@
   <script src="/stack-panic/core.js"></script>
   <script src="/stack-panic/events.js"></script>
   <script src="/stack-panic/audio.js"></script>
+  <script src="/stack-panic/runtime.js"></script>
   <script src="/stack-panic/controls.js"></script>
-  <!-- The 3D breach is a module; the game runs without it if WebGL is missing. -->
   <script type="module" src="/stack-panic/breach.js"></script>
 </body>
 </html>
