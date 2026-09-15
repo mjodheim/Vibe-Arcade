@@ -7,6 +7,7 @@
   <meta name="description" content="Vibe Arcade — une collection de jeux gratuits à lancer directement dans le navigateur." />
   <title>Vibe Arcade — Choisis un jeu</title>
   <link rel="stylesheet" href="/arcade.css" />
+  <link rel="stylesheet" href="/arcade-stack.css" />
 </head>
 <body>
   <div class="bg" aria-hidden="true"><div class="grid"></div><div class="orb o1"></div><div class="orb o2"></div></div>
@@ -26,10 +27,10 @@
       <h1><span data-fr="CHOISIS UN MONDE." data-en="PICK A WORLD.">CHOISIS UN MONDE.</span><br><em data-fr="LANCE UNE PARTIE." data-en="START A GAME.">LANCE UNE PARTIE.</em></h1>
       <p class="hero-text" data-fr="Des jeux à lancer directement dans ton navigateur. Pas de téléchargement : choisis une borne, découvre ses règles et essaie d’aller plus loin à chaque partie." data-en="Games you can launch straight from your browser. No downloads: pick a cabinet, learn its rules and see how far you can go.">Des jeux à lancer directement dans ton navigateur. Pas de téléchargement : choisis une borne, découvre ses règles et essaie d’aller plus loin à chaque partie.</p>
       <div class="hero-actions">
-        <a class="cta primary" href="/hivebound/" data-fr="Jouer à Hivebound" data-en="Play Hivebound">Jouer à Hivebound</a>
+        <a class="cta primary" href="/stack-panic/" data-fr="Jouer à Stack Panic" data-en="Play Stack Panic">Jouer à Stack Panic</a>
         <a class="cta" href="#games" data-fr="Voir tous les jeux" data-en="Browse all games">Voir tous les jeux</a>
       </div>
-      <div class="pulse-line"><span></span><small data-fr="1 jeu disponible · d’autres arrivent" data-en="1 game available · more are coming">1 jeu disponible · d’autres arrivent</small></div>
+      <div class="pulse-line"><span></span><small data-fr="2 jeux disponibles · d’autres arrivent" data-en="2 games available · more are coming">2 jeux disponibles · d’autres arrivent</small></div>
     </section>
 
     <section id="games" class="games-section">
@@ -54,8 +55,21 @@
           </div>
         </article>
 
-        <article class="cabinet locked"><div class="locked-screen"><span>#002</span><b>?</b><small>SOON</small></div><div class="locked-body"><h3 data-fr="Nouveau jeu" data-en="New game">Nouveau jeu</h3><p data-fr="Une nouvelle borne rejoindra bientôt l’arcade." data-en="A new cabinet will join the arcade soon.">Une nouvelle borne rejoindra bientôt l’arcade.</p></div></article>
-        <article class="cabinet locked"><div class="locked-screen"><span>#003</span><b>?</b><small>SOON</small></div><div class="locked-body"><h3 data-fr="Encore un monde" data-en="Another world">Encore un monde</h3><p data-fr="D’autres jeux viendront agrandir la collection." data-en="More games will expand the collection.">D’autres jeux viendront agrandir la collection.</p></div></article>
+        <article class="cabinet live stack-card">
+          <div class="cabinet-screen stack-preview">
+            <div class="screen-noise"></div>
+            <span class="cabinet-number">#002</span>
+            <span class="status"><i></i> EXPERIMENTAL</span>
+            <span class="chaos-sticker">CHAOS ENABLED</span>
+            <div class="stack-blocks" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+            <div class="game-title"><small>EVERYTHING IS UNDER CONTROL</small><strong>STACK PANIC</strong></div>
+          </div>
+          <div class="cabinet-body">
+            <div><span class="genre">CHAOTIC BLOCK PUZZLE</span><h3>Stack Panic</h3></div>
+            <p data-fr="Empile les blocs et garde ton calme pendant que moutons, eau, bombes, tanks, pannes et mini-mondes sabotent la partie. Chaque incident peut sauver ta pile… ou l’achever." data-en="Stack blocks and stay calm while sheep, water, bombs, tanks, blackouts and micro-worlds sabotage the run. Every incident can save your stack… or finish it.">Empile les blocs et garde ton calme pendant que moutons, eau, bombes, tanks, pannes et mini-mondes sabotent la partie. Chaque incident peut sauver ta pile… ou l’achever.</p>
+            <a class="play" href="/stack-panic/"><span data-fr="ENTRER DANS LE CHAOS" data-en="ENTER THE CHAOS">ENTRER DANS LE CHAOS</span><b>→</b></a>
+          </div>
+        </article>
       </div>
     </section>
 
