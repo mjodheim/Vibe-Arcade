@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="300" viewBox="0 0 1200 300" role="img" aria-label="Hivebound Relics of the Bloom animated banner">
+  <defs>
+    <linearGradient id="night" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#081a1a"/>
+      <stop offset=".5" stop-color="#153b2f"/>
+      <stop offset="1" stop-color="#2c183d"/>
+    </linearGradient>
+    <radialGradient id="bloom" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#f7d85b" stop-opacity=".75"/>
+      <stop offset=".45" stop-color="#8ce68c" stop-opacity=".24"/>
+      <stop offset="1" stop-color="#8ce68c" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="glow"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <rect width="1200" height="300" rx="24" fill="url(#night)"/>
+  <circle cx="600" cy="150" r="210" fill="url(#bloom)"><animate attributeName="r" values="185;225;185" dur="5s" repeatCount="indefinite"/></circle>
+
+  <g opacity=".35" fill="#c8ffb8">
+    <circle cx="95" cy="58" r="2"><animate attributeName="cy" values="58;38;58" dur="4s" repeatCount="indefinite"/></circle>
+    <circle cx="180" cy="235" r="3"><animate attributeName="cy" values="235;205;235" dur="5.3s" repeatCount="indefinite"/></circle>
+    <circle cx="1030" cy="70" r="2"><animate attributeName="cy" values="70;45;70" dur="3.5s" repeatCount="indefinite"/></circle>
+    <circle cx="1100" cy="220" r="3"><animate attributeName="cy" values="220;190;220" dur="4.6s" repeatCount="indefinite"/></circle>
+    <circle cx="910" cy="245" r="2"><animate attributeName="opacity" values=".2;1;.2" dur="2.3s" repeatCount="indefinite"/></circle>
+  </g>
+
+  <g transform="translate(235 155)" filter="url(#glow)">
+    <ellipse rx="25" ry="18" fill="#f1c84e"/><rect x="-11" y="-17" width="7" height="34" rx="3" fill="#291d13"/><rect x="5" y="-16" width="7" height="32" rx="3" fill="#291d13"/><circle cx="22" cy="-2" r="10" fill="#f1c84e"/><ellipse cx="-7" cy="-23" rx="16" ry="9" fill="#c9f5ff" fill-opacity=".75"/><ellipse cx="8" cy="-23" rx="16" ry="9" fill="#c9f5ff" fill-opacity=".75"/>
+    <path d="M-28 0l-22 7 22 7z" fill="#b98724"/><path d="M10 18l8 24 8-24" fill="#d8dce7"/>
+    <animateTransform attributeName="transform" type="translate" values="235 155;235 145;235 155" dur="2.2s" repeatCount="indefinite"/>
+  </g>
+
+  <g transform="translate(965 145) scale(.9)" opacity=".95">
+    <circle r="36" fill="#7d53b6" opacity=".25"><animate attributeName="r" values="30;44;30" dur="2.8s" repeatCount="indefinite"/></circle>
+    <ellipse rx="24" ry="17" fill="#f1c84e"/><rect x="-10" y="-16" width="7" height="32" rx="3" fill="#291d13"/><rect x="5" y="-15" width="7" height="30" rx="3" fill="#291d13"/><circle cx="21" cy="-2" r="10" fill="#f1c84e"/><ellipse cx="-6" cy="-23" rx="16" ry="9" fill="#d8e5ff" fill-opacity=".7"/><ellipse cx="8" cy="-23" rx="16" ry="9" fill="#d8e5ff" fill-opacity=".7"/>
+    <path d="M-5 28q10 16 20 0" fill="none" stroke="#c89cff" stroke-width="4"/>
+  </g>
+
+  <text x="600" y="117" text-anchor="middle" font-family="Georgia, serif" font-size="60" font-weight="700" fill="#fff1a8" filter="url(#glow)">HIVEBOUND</text>
+  <text x="600" y="160" text-anchor="middle" font-family="Georgia, serif" font-size="25" letter-spacing="5" fill="#d3ffca">RELICS OF THE BLOOM</text>
+  <text x="600" y="205" text-anchor="middle" font-family="Verdana, sans-serif" font-size="17" fill="#e4e8f0">Choose your bee · Forge your build · Defy the Gloam</text>
+  <text x="600" y="249" text-anchor="middle" font-family="Verdana, sans-serif" font-size="15" fill="#f1c84e">🐝  VIBE ARCADE · CABINET #001  🐝</text>
+</svg>
