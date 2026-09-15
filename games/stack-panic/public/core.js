@@ -46,6 +46,8 @@ const state = {
   lastDrop: 0, eventTimer: 0, nextEventAt: 15500,
   activeEvent: null, eventUntil: 0, eventCooldown: 0,
   sheep: [], bombs: [], smoke: [], particles: [], waterCells: [],
+  meteors: [], wreck: null, magnet: null, acid: null, lifted: 0,
+  side: null, nextSideAt: 0,
   mini: null, sound: true, audio: null, musicTimer: null,
   seed: 1, rngState: 1, daily: false, time: 0, inputLocked: false
 };
@@ -58,7 +60,16 @@ const EVENT_POOL = [
   {id:'blackout', name:'POWER SAVING MODE', icon:'🌑', weight:13, minLevel:2, duration:7000, desc:'Visibilité réduite pour économiser absolument rien.'},
   {id:'glitch', name:'REALITY BUFFERING', icon:'📼', weight:12, minLevel:3, duration:7500, desc:'La réalité a perdu quelques paquets.'},
   {id:'miniworld', name:'STRUCTURAL BREACH', icon:'🌀', weight:9, minLevel:3, duration:0, desc:'La pile vient de s’ouvrir sur autre chose.'},
-  {id:'duck', name:'DUCK INSPECTION', icon:'🦆', weight:10, minLevel:1, duration:4500, desc:'Aucun changement mécanique. Probablement.'}
+  {id:'duck', name:'DUCK INSPECTION', icon:'🦆', weight:10, minLevel:1, duration:4500, desc:'Aucun changement mécanique. Probablement.'},
+  // The destructive half of the catalogue: these ones actually take the stack
+  // apart instead of merely annoying it.
+  {id:'meteor', name:'PLUIE DE MÉTÉORES', icon:'☄️', weight:13, minLevel:2, duration:9000, desc:'Le ciel dépose des objets non sollicités. Cratères garantis.'},
+  {id:'wreck', name:'PERMIS DE DÉMOLIR', icon:'🏗️', weight:11, minLevel:3, duration:9500, desc:'Une boule de démolition traverse le chantier. Personne n’a signé.'},
+  {id:'magnet', name:'AIMANT INDUSTRIEL', icon:'🧲', weight:11, minLevel:3, duration:7500, desc:'Tout ce qui est métallique part d’un seul côté. Tout est métallique.'},
+  {id:'acid', name:'PLUIE ACIDE', icon:'🧪', weight:12, minLevel:2, duration:8000, desc:'Le pH du niveau est désormais un problème de sécurité.'},
+  {id:'gravity', name:'GRAVITÉ RÉSILIÉE', icon:'🙃', weight:10, minLevel:4, duration:8500, desc:'La pile décolle. Le contrat de gravité arrivait à échéance.'},
+  {id:'bsod', name:'ERREUR FATALE', icon:'💀', weight:9, minLevel:2, duration:4200, desc:'Le système a cessé de fonctionner. La partie, elle, continue.'},
+  {id:'ad', name:'PAUSE SPONSORISÉE', icon:'📺', weight:9, minLevel:1, duration:5200, desc:'Ce message est diffusé au milieu de ta grille. Bon courage.'}
 ];
 
 function emptyBoard(){ return Array.from({length:ROWS},()=>Array(COLS).fill(0)); }
@@ -131,8 +142,11 @@ function clearLines(){
     }
   }
   if(cleared){
+    // Incidents can level far more than four rows at once — a settling flood,
+    // a wrecking ball, the stack coming back down. Reading past the end of the
+    // table used to turn the score into NaN for the rest of the run.
     const table=[0,100,300,500,800];
-    state.score += table[cleared]*state.level;
+    state.score += (table[Math.min(cleared,4)] + Math.max(0,cleared-4)*400)*state.level;
     state.lines += cleared;
     state.level = 1 + Math.floor(state.lines/8);
     state.chaos = clamp(state.chaos + cleared*8,0,100);
@@ -177,6 +191,10 @@ function update(t){
     updateBombs(t);
     updateTank(t);
     updateWater(t);
+    updateMeteors(t);
+    updateWreck(t);
+    updateMagnet(t);
+    updateAcid(t);
     updateSmoke();
     if(state.mini) updateMini(t);
   }

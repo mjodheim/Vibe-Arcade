@@ -27,3 +27,20 @@ jobs:
           find public -name '*.js' -not -path 'public/vendor/*' -print0 | xargs -0 -n1 node --check
       - name: Check the vendored renderer is present
         run: test -f public/vendor/three.module.min.js
+      - name: Every incident has a soundtrack of its own
+        # A missing track is not an error at runtime: the incident just plays
+        # the default groove, which is exactly the kind of silent regression
+        # nobody notices until the game feels flat.
+        run: |
+          node --input-type=module -e "
+          import { readFileSync } from 'node:fs';
+          const core = readFileSync('public/core.js', 'utf8');
+          const music = readFileSync('public/music.js', 'utf8');
+          const pool = core.slice(core.indexOf('const EVENT_POOL'), core.indexOf('function emptyBoard'));
+          const ids = [...pool.matchAll(/\{id:'([a-z]+)'/g)].map(m => m[1]);
+          const tracks = music.slice(music.indexOf('const TRACKS'));
+          const missing = ids.filter(id => !new RegExp('\n    ' + id + ': \{').test(tracks));
+          if (!ids.length) { console.error('no incidents found — the parser needs updating'); process.exit(1); }
+          if (missing.length) { console.error('incidents without a track: ' + missing.join(', ')); process.exit(1); }
+          console.log(ids.length + ' incidents, all scored');
+          "

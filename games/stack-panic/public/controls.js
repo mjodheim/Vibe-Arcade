@@ -11,7 +11,7 @@ document.getElementById('startBtn').addEventListener('click',()=>{ensureAudio();
 document.getElementById('dailyBtn').addEventListener('click',()=>{ensureAudio();resetGame(true);});
 document.getElementById('restartBtn').addEventListener('click',()=>{ensureAudio();resetGame(state.daily);});
 pauseBtn.addEventListener('click',togglePause);
-soundBtn.addEventListener('click',()=>{state.sound=!state.sound;soundBtn.textContent=`SOUND: ${state.sound?'ON':'OFF'}`;soundBtn.setAttribute('aria-pressed',String(state.sound));if(state.sound){ensureAudio();if(state.running&&!state.musicTimer)musicTick();}else stopMusic();});
+soundBtn.addEventListener('click',()=>{state.sound=!state.sound;soundBtn.textContent=`SOUND: ${state.sound?'ON':'OFF'}`;soundBtn.setAttribute('aria-pressed',String(state.sound));ensureAudio();Music.setEnabled(state.sound);if(state.sound){if(state.running&&!state.gameOver)Music.start(state.activeEvent?state.activeEvent.id:'nominal');}else Music.stop();});
 
 let touchStart=null;
 cabinet.addEventListener('pointerdown',e=>{if(state.mini)touchStart={x:e.clientX,y:e.clientY};});
