@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="360" viewBox="0 0 1200 360" role="img" aria-label="Vibe Arcade animated banner">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#090a1f"/>
+      <stop offset="0.48" stop-color="#1b1240"/>
+      <stop offset="1" stop-color="#071d2b"/>
+    </linearGradient>
+    <radialGradient id="portalGlow" cx="50%" cy="46%" r="52%">
+      <stop offset="0" stop-color="#8b5cf6" stop-opacity=".36"/>
+      <stop offset=".48" stop-color="#22d3ee" stop-opacity=".18"/>
+      <stop offset="1" stop-color="#22d3ee" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="neon" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#22d3ee"/>
+      <stop offset=".5" stop-color="#a78bfa"/>
+      <stop offset="1" stop-color="#f472b6"/>
+    </linearGradient>
+    <filter id="glow" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="5" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="textGlow" x="-30%" y="-40%" width="160%" height="180%">
+      <feGaussianBlur stdDeviation="3" result="g"/>
+      <feMerge><feMergeNode in="g"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <pattern id="dots" width="34" height="34" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1.5" fill="#c4b5fd" opacity=".12"/>
+    </pattern>
+    <clipPath id="round"><rect width="1200" height="360" rx="26"/></clipPath>
+  </defs>
+
+  <g clip-path="url(#round)">
+    <rect width="1200" height="360" fill="url(#bg)"/>
+    <rect width="1200" height="360" fill="url(#dots)"/>
+    <ellipse cx="600" cy="150" rx="470" ry="220" fill="url(#portalGlow)">
+      <animate attributeName="opacity" values=".6;1;.6" dur="5s" repeatCount="indefinite"/>
+    </ellipse>
+
+    <g opacity=".22" stroke="#22d3ee" stroke-width="1.5">
+      <path d="M0 360 L470 220"/><path d="M150 360 L510 220"/><path d="M300 360 L545 220"/>
+      <path d="M450 360 L575 220"/><path d="M600 360 L600 220"/><path d="M750 360 L625 220"/>
+      <path d="M900 360 L655 220"/><path d="M1050 360 L690 220"/><path d="M1200 360 L730 220"/>
+      <path d="M0 330 H1200"/><path d="M110 300 H1090"/><path d="M225 270 H975"/><path d="M350 245 H850"/>
+      <animate attributeName="opacity" values=".12;.3;.12" dur="4s" repeatCount="indefinite"/>
+    </g>
+
+    <g transform="translate(600 150)" fill="none" stroke="url(#neon)" opacity=".65">
+      <ellipse rx="360" ry="105" stroke-width="2" stroke-dasharray="7 13">
+        <animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="28s" repeatCount="indefinite"/>
+      </ellipse>
+      <ellipse rx="285" ry="78" stroke-width="1.5" stroke-dasharray="3 16">
+        <animateTransform attributeName="transform" type="rotate" from="360" to="0" dur="22s" repeatCount="indefinite"/>
+      </ellipse>
+    </g>
+
+    <g filter="url(#glow)" opacity=".9">
+      <g transform="translate(150 92)">
+        <path d="M0 -16 L14 -5 L9 14 L-9 14 L-14 -5 Z" fill="#22d3ee" opacity=".78"/>
+        <animateTransform attributeName="transform" additive="sum" type="translate" values="0 0;0 10;0 0" dur="3.3s" repeatCount="indefinite"/>
+      </g>
+      <g transform="translate(1040 82)" fill="#f472b6" opacity=".72">
+        <rect x="-18" y="-9" width="16" height="16" rx="2"/><rect x="0" y="-9" width="16" height="16" rx="2"/>
+        <rect x="0" y="9" width="16" height="16" rx="2"/><rect x="18" y="9" width="16" height="16" rx="2"/>
+        <animateTransform attributeName="transform" additive="sum" type="rotate" values="-6;6;-6" dur="4.1s" repeatCount="indefinite"/>
+      </g>
+      <g transform="translate(1000 265)">
+        <circle r="13" fill="#a78bfa" opacity=".78"/>
+        <ellipse rx="26" ry="7" fill="none" stroke="#f9a8d4" stroke-width="3" transform="rotate(-18)"/>
+        <animateTransform attributeName="transform" additive="sum" type="translate" values="0 0;-8 -5;0 0" dur="4.6s" repeatCount="indefinite"/>
+      </g>
+      <g transform="translate(205 272)">
+        <path d="M4 -21 L-11 2 H0 L-5 22 L16 -7 H5 Z" fill="#facc15" opacity=".82"/>
+        <animate attributeName="opacity" values=".45;1;.45" dur="1.9s" repeatCount="indefinite"/>
+      </g>
+    </g>
+
+    <g fill="#67e8f9" opacity=".75">
+      <rect x="-18" y="58" width="7" height="7" rx="1"><animate attributeName="x" from="-18" to="1210" dur="11s" repeatCount="indefinite"/></rect>
+      <rect x="1210" y="118" width="5" height="5" rx="1" fill="#f9a8d4"><animate attributeName="x" from="1210" to="-18" dur="13s" repeatCount="indefinite"/></rect>
+      <rect x="-18" y="205" width="6" height="6" rx="1" fill="#c4b5fd"><animate attributeName="x" from="-18" to="1210" dur="17s" repeatCount="indefinite"/></rect>
+    </g>
+
+    <text x="600" y="128" text-anchor="middle" font-family="Verdana, Geneva, sans-serif" font-size="74" font-weight="800" letter-spacing="8" fill="#f8fafc" filter="url(#textGlow)">VIBE ARCADE</text>
+    <text x="600" y="181" text-anchor="middle" font-family="Verdana, Geneva, sans-serif" font-size="25" font-weight="700" letter-spacing="4" fill="#67e8f9">IDEAS IN · GAMES OUT</text>
+    <text x="600" y="218" text-anchor="middle" font-family="Verdana, Geneva, sans-serif" font-size="17" fill="#ddd6fe">Different worlds. Different genres. One way to build them.</text>
+
+    <g transform="translate(600 282)">
+      <rect x="-112" y="-24" width="224" height="48" rx="24" fill="#111827" stroke="url(#neon)" stroke-width="2.5">
+        <animate attributeName="stroke-width" values="2;4;2" dur="2.2s" repeatCount="indefinite"/>
+      </rect>
+      <circle cx="-79" cy="0" r="8" fill="#f472b6"/>
+      <path d="M-54 -8 L-40 0 L-54 8 Z" fill="#67e8f9"/>
+      <text x="20" y="7" text-anchor="middle" font-family="Verdana, Geneva, sans-serif" font-size="17" font-weight="800" fill="#f8fafc">PRESS START</text>
+    </g>
+
+    <rect x="0" y="-8" width="1200" height="3" fill="#ffffff" opacity=".08">
+      <animate attributeName="y" from="-8" to="368" dur="4.8s" repeatCount="indefinite"/>
+    </rect>
+  </g>
+</svg>
