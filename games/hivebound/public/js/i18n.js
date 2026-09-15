@@ -1,12 +1,11 @@
 const STORAGE_KEY='vibe-arcade.lang';
-const originals=new WeakMap();
+const sourceText=new WeakMap();
 let applying=false;
 
-const exact={
+const fr={
   'Leaderboard':'Classement','Controls':'Commandes','Guest':'Invité','Begin a Run':'Lancer une partie','Daily Hive':'Défi du jour',
-  '4 classes':'4 classes','Procedural paths':'Parcours procéduraux','Loot resonances':'Résonances de reliques','Endless corruption':'Corruption croissante',
-  'CHOOSE YOUR OATH':'CHOISIS TA VOIE','Who enters the Gloam?':'Qui affrontera le Gloam ?','Every class changes movement, attack rhythm, ability and talent pool.':'Chaque classe change les déplacements, le rythme d’attaque, la compétence et les talents disponibles.',
-  '← Back':'← Retour','Vitality':'Vitalité','Level':'Niveau','RESONANCE':'RÉSONANCE','Sigils carried':'Sigils portés','RELICS':'RELIQUES','RUN':'PARTIE','Region':'Région','Gloam':'Gloam','Kills':'Éliminations','Survive':'Survivre',
+  'CHOOSE YOUR OATH':'CHOISIS TA VOIE','Who enters the Gloam?':'Qui entre dans le Gloam ?','Every class changes movement, attack rhythm, ability and talent pool.':'Chaque classe change ton rythme de jeu, ta portée, ta compétence et tes talents.',
+  '← Back':'← Retour','Vitality':'Vitalité','Level':'Niveau','Ability':'Compétence','RESONANCE':'RÉSONANCE','Sigils carried':'Sigils portés','RELICS':'RELIQUES','RUN':'PARTIE','Region':'Région','Kills':'Éliminations','Survive':'Survivre',
   'Choose the next path.':'Choisis la prochaine route.','Every step feeds the Gloam. Greed scores higher.':'Chaque étape nourrit le Gloam. Plus tu prends de risques, plus le score grimpe.',
   'THE HIVE REMEMBERS':'LA RUCHE SE SOUVIENT','Your run has ended.':'Ta partie est terminée.','FINAL SCORE':'SCORE FINAL','One More Run':'Encore une partie','Submit Score':'Envoyer le score',
   'Choose a Talent':'Choisis un talent','The Hive changes with every decision.':'Chaque décision transforme la Ruche.','Choose a Relic':'Choisis une relique','Relics carry sigils. Matching sigils awaken Resonances.':'Les reliques portent des sigils. Les combiner éveille des Résonances.',
@@ -16,12 +15,12 @@ const exact={
   'The Bloom remembers your first steps.':'La Bloom se souvient de tes premiers pas.','Your score can be submitted to the Hive.':'Ton score peut être envoyé à la Ruche.','Log in to place this run on the leaderboard.':'Connecte-toi pour placer cette partie dans le classement.','Login to Submit':'Se connecter pour envoyer',
   'CONTROLS':'COMMANDES','Make the Hive yours.':'Adapte la Ruche à ton jeu.','Click a binding, then press the key you want. Escape cancels. Bindings are saved on this device.':'Clique sur une commande puis appuie sur la touche souhaitée. Échap annule. Les touches sont sauvegardées sur cet appareil.',
   'Move up':'Monter','Move down':'Descendre','Move left':'Aller à gauche','Move right':'Aller à droite','Class ability':'Compétence de classe','Arrows':'Flèches','Press a key…':'Appuie sur une touche…','Binding unchanged.':'Commande inchangée.',
-  'HIVE PROFILE':'PROFIL DE LA RUCHE','Best score:':'Meilleur score :','Hive essence:':'Essence de la Ruche :','Log out':'Se déconnecter','HIVE ACCOUNT':'COMPTE DE LA RUCHE','Carry your scores between games.':'Retrouve tes scores d’une partie à l’autre.','Login':'Connexion','Username':'Pseudo','Password':'Mot de passe','Enter the Hive':'Entrer dans la Ruche','Create account':'Créer un compte','Create':'Créer',
+  'HIVE PROFILE':'PROFIL DE LA RUCHE','Log out':'Se déconnecter','HIVE ACCOUNT':'COMPTE DE LA RUCHE','Carry your scores between games.':'Retrouve tes scores d’une partie à l’autre.','Login':'Connexion','Username':'Pseudo','Password':'Mot de passe','Enter the Hive':'Entrer dans la Ruche','Create account':'Créer un compte','Create':'Créer',
   'GLOBAL HIVE':'RUCHE MONDIALE','All-time':'Tous les temps','Loading…':'Chargement…','Player':'Joueur','Class':'Classe','No score yet. The first legend could be you.':'Aucun score pour le moment. La première légende pourrait être toi.','Submitted ✓':'Envoyé ✓',
   'No relics yet.':'Aucune relique pour le moment.','Free':'Gratuit','CHOICE':'CHOIX','TALENT':'TALENT','RANK':'RANG','PACT':'PACTE',
   'REGION GUARDIAN':'GARDIEN DE RÉGION','ELITE HUNT':'CHASSE ÉLITE','GLOAM SWARM':'ESSAIM DU GLOAM','Defeat the Guardian':'Vaincre le Gardien',
   'WARRIOR OF THE HIVE':'GUERRIER DE LA RUCHE','POLLEN MAGE':'MAGE DU POLLEN','RANGER OF THE WILD':'RÔDEUR SAUVAGE','ROYAL CANTOR':'CHANTRE ROYAL',
-  'Close combat · armour · retaliation':'Corps à corps · armure · riposte','Spells · area damage · chain reactions':'Sorts · dégâts de zone · réactions en chaîne','Speed · critical hits · poison':'Vitesse · coups critiques · poison','Motes · healing · blessings':'Motes · soins · bénédictions',
+  'Close combat · armour · retaliation':'Corps à corps · armure · riposte','Spells · area damage · chain reactions':'Sorts · dégâts de zone · réactions en chaîne','Speed · critical hits · poison':'Vitesse · critiques · poison','Motes · healing · blessings':'Motes · soins · bénédictions',
   'Stand inside the swarm. Your wax armour hardens under pressure and your stinger turns pain into momentum.':'Tiens bon au cœur de l’essaim. Ton armure de cire se durcit sous la pression et chaque coup reçu nourrit ta riposte.',
   'Shape forbidden pollen into volatile spells. Fragile at first; terrifying once Resonances begin to chain.':'Façonne le pollen interdit en sorts instables. Fragile au départ, terrifiant lorsque les Résonances commencent à s’enchaîner.',
   'Never stop moving. Thorn arrows reward distance, tempo and risky routes through the Bloom.':'Ne t’arrête jamais. Les flèches d’épine récompensent la distance, le rythme et les routes risquées à travers la Bloom.',
@@ -38,68 +37,76 @@ const exact={
   'Drink Black Nectar':'Boire le nectar noir','+22% damage, lose 20% current vitality, +8 Gloam.':'+22 % de dégâts, perd 20 % de la vitalité actuelle, +8 Gloam.','POWER / COST':'PUISSANCE / PRIX','Hear the Dead Queen':'Écouter la Reine morte','Gain a random talent, +6 Gloam.':'Gagne un talent aléatoire, +6 Gloam.','KNOWLEDGE / RISK':'SAVOIR / RISQUE','Close the Petal':'Refermer le pétale','Nothing happens. Perhaps that is wisdom.':'Rien ne se passe. C’est peut-être plus sage.','SAFE':'SÛR',
   'Pact of Hunger':'Pacte de Faim','Enemies gain 30% vitality. Score multiplier rises sharply.':'Les ennemis gagnent 30 % de vitalité. Le multiplicateur de score augmente fortement.','Pact of Glass':'Pacte de Verre','+28% damage, but lose 18 max vitality.':'+28 % de dégâts, mais perd 18 de vitalité max.','Pact of Wings':'Pacte des Ailes','+14% speed and attack speed. Enemies move 12% faster.':'+14 % de vitesse et de vitesse d’attaque. Les ennemis se déplacent 12 % plus vite.',
   'Verdant Reach':'Étendue verdoyante','Mycelian Deep':'Profondeurs mycéliennes','Ashen Orchard':'Verger de cendres','Moonlit Fen':'Marais au clair de lune','Crownless Garden':'Jardin sans couronne',
-  'Common':'Commun','Rare':'Rare','Epic':'Épique','Legendary':'Légendaire','damage':'dégâts','speed':'vitesse','attack speed':'vitesse d’attaque','crit':'critique',
-  'Ancient':'Ancien','Royal':'Royal','Gilded':'Doré','Hollow':'Creux','Thornbound':'Lié aux épines','Moonlit':'Lunaire','Ashen':'Cendré','Singing':'Chantant','Forbidden':'Interdit','Glass':'De verre','Stinger':'Dard','Carapace':'Carapace','Petal':'Pétale','Charm':'Charme','Crown':'Couronne','Vial':'Fiole','Needle':'Aiguille','Bell':'Cloche','Lantern':'Lanterne','Heart':'Cœur'
+  'Common':'Commun','Rare':'Rare','Epic':'Épique','Legendary':'Légendaire','Ancient':'Ancien','Royal':'Royal','Gilded':'Doré','Hollow':'Creux','Thornbound':'Lié aux épines','Moonlit':'Lunaire','Ashen':'Cendré','Singing':'Chantant','Forbidden':'Interdit','Glass':'De verre','Stinger':'Dard','Carapace':'Carapace','Petal':'Pétale','Charm':'Charme','Crown':'Couronne','Vial':'Fiole','Needle':'Aiguille','Bell':'Cloche','Lantern':'Lanterne','Heart':'Cœur'
 };
+
+function currentLang(){return localStorage.getItem(STORAGE_KEY)==='en'?'en':'fr'}
 
 function translateText(raw){
   const text=raw.trim();
   if(!text)return raw;
-  let out=exact[text];
-  if(!out){
-    let m;
-    if((m=text.match(/^Survive (\d+)s$/)))out=`Survivre ${m[1]} s`;
-    else if((m=text.match(/^Choose (.+)$/)))out=`Choisir ${exact[m[1]]||m[1]}`;
-    else if((m=text.match(/^Guardian of (.+)$/)))out=`Gardien de ${exact[m[1]]||m[1]}`;
-    else if((m=text.match(/^REGION (\d+) · (.+)$/)))out=`RÉGION ${m[1]} · ${(exact[m[2].replace(/\b\w/g,c=>c.toLowerCase())]||m[2])}`;
-    else if((m=text.match(/^The Gloam claimed a (.+)\.$/)))out=`Le Gloam a eu raison de ${m[1]}.`;
-    else if((m=text.match(/^(.+) · rank (\d+)$/)))out=`${exact[m[1]]||m[1]} · rang ${m[2]}`;
-    else if((m=text.match(/^Score submitted\. Your best: (.+)\.$/)))out=`Score envoyé. Ton record : ${m[1]}.`;
-    else if((m=text.match(/^(.+) is already assigned to (.+)\.$/)))out=`${m[1]} est déjà assigné à ${exact[m[2]]||m[2]}.`;
-    else if((m=text.match(/^(.+) → (.+)$/)))out=`${exact[m[1]]||m[1]} → ${m[2]}`;
-    else if((m=text.match(/^\+(\d+)% damage$/)))out=`+${m[1]} % de dégâts`;
-    else if((m=text.match(/^\+(\d+)% speed$/)))out=`+${m[1]} % de vitesse`;
-    else if((m=text.match(/^\+(\d+)% attack speed$/)))out=`+${m[1]} % de vitesse d’attaque`;
-    else if((m=text.match(/^\+(\d+)% crit$/)))out=`+${m[1]} % de critique`;
-    else if((m=text.match(/^(COMMON|RARE|EPIC|LEGENDARY) · (.+)$/))){const r={COMMON:'COMMUN',RARE:'RARE',EPIC:'ÉPIQUE',LEGENDARY:'LÉGENDAIRE'}[m[1]];out=`${r} · ${m[2]}`}
-  }
-  if(!out&&text.includes(' · '))out=text.split(' · ').map(part=>exact[part]||part).join(' · ');
-  if(!out){
-    const words=text.split(' ');
-    if(words.length===2&&exact[words[0]]&&exact[words[1]])out=`${exact[words[1]]} ${exact[words[0]].toLowerCase()}`;
-  }
+  let out=fr[text];
+  let m;
+  if(!out&&(m=text.match(/^Survive (\d+)s$/)))out=`Survivre ${m[1]} s`;
+  if(!out&&(m=text.match(/^Choose (.+)$/)))out=`Choisir ${fr[m[1]]||m[1]}`;
+  if(!out&&(m=text.match(/^Guardian of (.+)$/)))out=`Gardien de ${fr[m[1]]||m[1]}`;
+  if(!out&&(m=text.match(/^REGION (\d+) · (.+)$/)))out=`RÉGION ${m[1]} · ${fr[toTitleCase(m[2])]||m[2]}`;
+  if(!out&&(m=text.match(/^The Gloam claimed a (.+)\.$/)))out=`Le Gloam a eu raison de ${m[1]}.`;
+  if(!out&&(m=text.match(/^(.+) · rank (\d+)$/)))out=`${fr[m[1]]||m[1]} · rang ${m[2]}`;
+  if(!out&&(m=text.match(/^Score submitted\. Your best: (.+)\.$/)))out=`Score envoyé. Ton record : ${m[1]}.`;
+  if(!out&&(m=text.match(/^(.+) is already assigned to (.+)\.$/)))out=`${m[1]} est déjà assigné à ${fr[m[2]]||m[2]}.`;
+  if(!out&&(m=text.match(/^(COMMON|RARE|EPIC|LEGENDARY) · (.+)$/))){const r={COMMON:'COMMUN',RARE:'RARE',EPIC:'ÉPIQUE',LEGENDARY:'LÉGENDAIRE'}[m[1]];out=`${r} · ${translateCompound(m[2])}`}
+  if(!out&&(m=text.match(/^\+(\d+)% damage$/)))out=`+${m[1]} % de dégâts`;
+  if(!out&&(m=text.match(/^\+(\d+)% speed$/)))out=`+${m[1]} % de vitesse`;
+  if(!out&&(m=text.match(/^\+(\d+)% attack speed$/)))out=`+${m[1]} % de vitesse d’attaque`;
+  if(!out&&(m=text.match(/^\+(\d+)% crit$/)))out=`+${m[1]} % de critique`;
+  if(!out&&text.includes(' · '))out=text.split(' · ').map(part=>fr[part]||part).join(' · ');
   if(!out)return raw;
-  const lead=raw.match(/^\s*/)?.[0]||'';const tail=raw.match(/\s*$/)?.[0]||'';
-  return lead+out+tail;
+  return (raw.match(/^\s*/)?.[0]||'')+out+(raw.match(/\s*$/)?.[0]||'');
 }
 
-function translateNode(node){
-  if(node.nodeType===Node.TEXT_NODE){
-    if(!originals.has(node))originals.set(node,node.nodeValue);
-    const source=originals.get(node);
-    const next=currentLang()==='fr'?translateText(source):source;
-    if(node.nodeValue!==next){applying=true;node.nodeValue=next;applying=false}
-    return;
-  }
+function translateCompound(text){return text.split(' ').map(w=>fr[w]||w).join(' ')}
+function toTitleCase(s){return s.toLowerCase().replace(/(^|\s)\S/g,c=>c.toUpperCase())}
+
+function applyStatic(lang){
+  document.querySelectorAll('[data-fr][data-en]').forEach(el=>{
+    const next=el.dataset[lang];
+    if(next!==undefined&&el.textContent!==next){applying=true;el.textContent=next;applying=false}
+  });
+}
+
+function rememberAndTranslateText(node){
+  if(node.nodeType!==Node.TEXT_NODE)return;
+  if(!sourceText.has(node))sourceText.set(node,node.nodeValue);
+  const source=sourceText.get(node);
+  const next=currentLang()==='fr'?translateText(source):source;
+  if(node.nodeValue!==next){applying=true;node.nodeValue=next;applying=false}
+}
+
+function translateDynamic(node){
+  if(node.nodeType===Node.TEXT_NODE){rememberAndTranslateText(node);return}
   if(node.nodeType!==Node.ELEMENT_NODE)return;
+  if(node.matches?.('[data-fr][data-en]'))return;
+  [...node.childNodes].forEach(child=>translateDynamic(child));
   for(const attr of ['placeholder','title','aria-label']){
-    if(node.hasAttribute?.(attr)){
-      const key=`@${attr}`;
-      let rec=originals.get(node)||{};
-      if(typeof rec!=='object')rec={};
-      if(!(key in rec))rec[key]=node.getAttribute(attr);
-      originals.set(node,rec);
-      const source=rec[key];node.setAttribute(attr,currentLang()==='fr'?translateText(source):source);
-    }
+    if(!node.hasAttribute?.(attr))continue;
+    const key=`attr:${attr}`;
+    let bag=sourceText.get(node);
+    if(!bag||typeof bag!=='object')bag={};
+    if(!(key in bag))bag[key]=node.getAttribute(attr);
+    sourceText.set(node,bag);
+    const source=bag[key];
+    const next=currentLang()==='fr'?translateText(source):source;
+    if(node.getAttribute(attr)!==next){applying=true;node.setAttribute(attr,next);applying=false}
   }
-  [...node.childNodes].forEach(translateNode);
 }
 
-function currentLang(){return localStorage.getItem(STORAGE_KEY)==='en'?'en':'fr'}
 function apply(){
-  const lang=currentLang();document.documentElement.lang=lang;
+  const lang=currentLang();
+  document.documentElement.lang=lang;
   document.title=lang==='fr'?'Hivebound — Reliques de la Bloom':'Hivebound — Relics of the Bloom';
-  translateNode(document.body);
+  applyStatic(lang);
+  translateDynamic(document.body);
   const btn=document.querySelector('#langBtn');if(btn)btn.textContent=lang==='fr'?'EN':'FR';
 }
 
@@ -109,17 +116,16 @@ export function refreshLanguage(){apply()}
 const observer=new MutationObserver(records=>{
   if(applying)return;
   for(const record of records){
-    if(record.type==='childList')record.addedNodes.forEach(node=>translateNode(node));
-    else if(record.type==='characterData')translateNode(record.target);
+    if(record.type==='childList')record.addedNodes.forEach(node=>translateDynamic(node));
+    else if(record.type==='characterData')rememberAndTranslateText(record.target);
   }
 });
 
-addEventListener('DOMContentLoaded',()=>{
-  apply();document.querySelector('#langBtn')?.addEventListener('click',toggleLanguage);
-  observer.observe(document.body,{subtree:true,childList:true,characterData:true});
-});
-
-if(document.readyState!=='loading'){
-  apply();document.querySelector('#langBtn')?.addEventListener('click',toggleLanguage);
+function boot(){
+  apply();
+  document.querySelector('#langBtn')?.addEventListener('click',toggleLanguage);
   observer.observe(document.body,{subtree:true,childList:true,characterData:true});
 }
+
+if(document.readyState==='loading')addEventListener('DOMContentLoaded',boot,{once:true});
+else boot();
