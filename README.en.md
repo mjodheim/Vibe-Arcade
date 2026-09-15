@@ -63,6 +63,22 @@ Five biomes cycle — Verdant Reach, Mycelian Deep, Ashen Orchard, Moonlit Fen, 
 
 ---
 
+# 🧱 CABINET #002
+
+## **Stack Panic**
+
+> *Everything is under control.*
+
+A **falling-block game** that refuses to behave. You stack, you clear lines — and the chaos director sends in sheep that shove cells around, water that pours into the holes, a bomb, a tank, a blackout, an inspecting duck, or a **structural breach**: the game opens into 3D and you fly a ship through a tunnel built out of your own stack.
+
+Every incident can save the run… or finish it. The chaos still has rules: it never piles on twice in a row, and it holds back while your stack is scraping the ceiling.
+
+`🐑 sheep` · `💧 liquid blocks` · `💣 bombs` · `🪖 tank` · `🌑 blackout` · `📼 glitch` · `🦆 duck` · `🌀 3D breach` · `☀️ daily challenge` · `🏆 local records`
+
+➡️ **[Play Stack Panic](https://arcade.mjodheim.be/stack-panic/)** · [the code and the game notes](games/stack-panic)
+
+---
+
 ## 🧪 The Vibe Loop
 
 ```text
@@ -109,7 +125,7 @@ That last one is the important one. 😈
 | Cabinet | Game | Genre | Status |
 |:--:|---|---|:--:|
 | `#001` | 🐝 **Hivebound: Relics of the Bloom** | 3D adventure · action roguelite | 🟢 PLAYABLE |
-| `#002` | ❔ **???** | ??? | 🔒 LOCKED |
+| `#002` | 🧱 **Stack Panic** | Chaotic falling-block puzzle | 🟢 PLAYABLE |
 | `#003` | ❔ **???** | ??? | 🔒 LOCKED |
 | `#004` | ❔ **???** | ??? | 🔒 LOCKED |
 
@@ -143,6 +159,7 @@ The arcade is published at **[arcade.mjodheim.be](https://arcade.mjodheim.be)**:
 |---|---|
 | [arcade.mjodheim.be](https://arcade.mjodheim.be) | the arcade floor and its cabinets |
 | [arcade.mjodheim.be/hivebound](https://arcade.mjodheim.be/hivebound/) | 🐝 Cabinet #001 |
+| [arcade.mjodheim.be/stack-panic](https://arcade.mjodheim.be/stack-panic/) | 🧱 Cabinet #002 |
 
 There, Hivebound runs in **local play**: no Hive server answers, so the game notices at boot, keeps your scores in your browser and shows a local leaderboard instead of a login form that could not work. Accounts and the global leaderboard need the instructions below.
 

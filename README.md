@@ -63,6 +63,22 @@ Cinq biomes s'enchaînent — Étendue verdoyante, Profondeurs mycéliennes, Ver
 
 ---
 
+# 🧱 BORNE #002
+
+## **Stack Panic**
+
+> *Tout est sous contrôle.*
+
+Un **jeu de blocs qui tombent** dans lequel la partie refuse de rester sage. Tu empiles, tu nettoies des lignes — et le directeur du chaos envoie des moutons qui poussent les cases, de l'eau qui coule dans les trous, une bombe, un tank, une panne de courant, un canard inspecteur, ou une **brèche structurelle** : le jeu s'ouvre alors en 3D et tu pilotes un vaisseau dans un tunnel construit à partir de ta propre pile.
+
+Chaque incident peut sauver ta partie… ou l'achever. Le chaos a quand même ses règles : il ne s'acharne jamais deux fois de suite et se retient quand ta pile touche le plafond.
+
+`🐑 moutons` · `💧 blocs liquides` · `💣 bombes` · `🪖 tank` · `🌑 panne de courant` · `📼 glitch` · `🦆 canard` · `🌀 brèche 3D` · `☀️ défi du jour` · `🏆 records locaux`
+
+➡️ **[Jouer à Stack Panic](https://arcade.mjodheim.be/stack-panic/)** · [le code et les notes de jeu](games/stack-panic)
+
+---
+
 ## 🧪 La boucle Vibe
 
 ```text
@@ -109,7 +125,7 @@ La dernière phrase est la plus importante. 😈
 | Borne | Jeu | Genre | Statut |
 |:--:|---|---|:--:|
 | `#001` | 🐝 **Hivebound: Relics of the Bloom** | Aventure 3D · roguelite d'action | 🟢 JOUABLE |
-| `#002` | ❔ **???** | ??? | 🔒 VERROUILLÉ |
+| `#002` | 🧱 **Stack Panic** | Puzzle de blocs chaotique | 🟢 JOUABLE |
 | `#003` | ❔ **???** | ??? | 🔒 VERROUILLÉ |
 | `#004` | ❔ **???** | ??? | 🔒 VERROUILLÉ |
 
@@ -143,6 +159,7 @@ L'arcade est publiée sur **[arcade.mjodheim.be](https://arcade.mjodheim.be)** :
 |---|---|
 | [arcade.mjodheim.be](https://arcade.mjodheim.be) | la façade de l'arcade et ses bornes |
 | [arcade.mjodheim.be/hivebound](https://arcade.mjodheim.be/hivebound/) | 🐝 Borne #001 |
+| [arcade.mjodheim.be/stack-panic](https://arcade.mjodheim.be/stack-panic/) | 🧱 Borne #002 |
 
 Sur cette version, Hivebound tourne en **jeu local** : aucun serveur de la Ruche ne répond, donc le jeu le détecte au démarrage, garde tes scores dans ton navigateur et affiche un classement local au lieu d'un formulaire de connexion qui ne mènerait nulle part. Les comptes et le classement mondial demandent les instructions ci-dessous.
 
