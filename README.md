@@ -3,6 +3,10 @@
 </p>
 
 <p align="center">
+  <strong>🇬🇧 English</strong> · <a href="README.fr.md">🇫🇷 Français</a>
+</p>
+
+<p align="center">
   <strong>🎮 One idea. A few iterations. A new game to play.</strong><br/>
   <sub>A growing arcade built through vibe coding.</sub>
 </p>
