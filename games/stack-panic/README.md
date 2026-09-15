@@ -69,16 +69,16 @@ still runs, so the breach can never block a session.
 
 The split is intentionally simple so a rendering pass can replace visuals without touching the simulation.
 
-## Done since the handoff
+## Implemented upgrades
 
-- **2. STRUCTURAL BREACH is now Three.js** — a real tunnel built from your own
+- **STRUCTURAL BREACH is now Three.js** — a real tunnel built from your own
   board, with the original contract preserved (height, density, success removes
   rows, failure adds garbage, arrows/WASD and drag steering).
-- **6. Deterministic seeded mode** — every draw in the game now goes through one
+- **Deterministic seeded mode** — every draw in the game now goes through one
   seeded generator, so `DÉFI DU JOUR` deals the same pieces *and* the same
   incidents to everyone. Local high scores are kept for free play and for the
   day's challenge.
-- **7. Fairness rules** — heavy incidents (bomb, tank, glitch, breach) never
+- **Fairness rules** — heavy incidents (bomb, tank, glitch, breach) never
   chain, they buy a recovery window before the next one, and none of them fire
   while the well is close to topping out. The breach is the exception on
   purpose: it stays available when the stack is high, because it is the one
