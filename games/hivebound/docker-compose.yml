@@ -1,0 +1,11 @@
+services:
+  hivebound:
+    build: .
+    restart: unless-stopped
+    environment:
+      PORT: 8080
+      HIVEBOUND_SECRET: ${HIVEBOUND_SECRET:-change-me-before-production}
+    volumes:
+      - ./data:/app/data
+    ports:
+      - "8080:8080"
