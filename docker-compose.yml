@@ -1,0 +1,15 @@
+services:
+  hivebound:
+    build:
+      context: ./games/hivebound
+    environment:
+      PORT: 8080
+      HIVEBOUND_SECRET: ${HIVEBOUND_SECRET:-dev-only-secret-change-me}
+    ports:
+      - "8080:8080"
+    volumes:
+      - hivebound_data:/app/data
+    restart: unless-stopped
+
+volumes:
+  hivebound_data:
