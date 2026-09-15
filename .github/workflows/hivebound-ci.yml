@@ -1,0 +1,32 @@
+name: Hivebound CI
+
+on:
+  push:
+    paths:
+      - 'games/hivebound/**'
+      - '.github/workflows/hivebound-ci.yml'
+  pull_request:
+    paths:
+      - 'games/hivebound/**'
+      - '.github/workflows/hivebound-ci.yml'
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: games/hivebound
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Check server syntax
+        run: node --check server.js
+      - name: Check browser scripts
+        run: |
+          node --check public/js/api.js
+          node --check public/js/app.js
+          node --check public/js/game.js
+      - name: Run tests
+        run: npm test
