@@ -1,178 +1,179 @@
 <p align="center">
-  <img src="assets/vibe-arcade-banner-v2.svg" alt="Vibe Arcade — Ideas in, games out" width="100%" />
+  <img src="assets/vibe-arcade-banner-v2.svg" alt="Vibe Arcade — Des idées aux jeux" width="100%" />
 </p>
 
 <p align="center">
-  <strong>🇬🇧 English</strong> · <a href="README.fr.md">🇫🇷 Français</a>
+  <strong>🇫🇷 Français</strong> · <a href="README.en.md">🇬🇧 English</a>
 </p>
 
 <p align="center">
-  <strong>🎮 One idea. A few iterations. A new game to play.</strong><br/>
-  <sub>A growing arcade built through vibe coding.</sub>
+  <strong>🎮 Une idée. Quelques itérations. Un nouveau jeu auquel jouer.</strong><br/>
+  <sub>Une arcade qui grandit grâce au vibe coding.</sub>
 </p>
 
 <p align="center">
-  🧠 IDEA &nbsp;→&nbsp; 🤖 AI &nbsp;→&nbsp; 🕹️ PLAY &nbsp;→&nbsp; 💭 REACT &nbsp;→&nbsp; ✨ EVOLVE
+  🧠 IDÉE &nbsp;→&nbsp; 🤖 IA &nbsp;→&nbsp; 🕹️ JOUER &nbsp;→&nbsp; 💭 RÉAGIR &nbsp;→&nbsp; ✨ ÉVOLUER
 </p>
 
 ---
 
-## 🕹️ Welcome to Vibe Arcade
+## 🕹️ Bienvenue dans Vibe Arcade
 
-**Vibe Arcade** is a collection of games that begin with a feeling, a weird idea, or a simple *“wouldn't it be cool if…?”*
+**Vibe Arcade** est une collection de jeux qui commencent par une envie, une idée étrange ou un simple *« ce serait pas cool si… ? »*
 
-No traditional game-design document has to come first. No framework has to be chosen before the fun exists. The desired experience comes first; AI turns it into something playable; then we play it, react to it, change direction, add ideas, remove boring parts, and keep going until it feels right.
+Pas besoin de commencer par un document de game design traditionnel. Pas besoin de choisir un framework avant même de savoir si l'idée est amusante. L'expérience recherchée vient d'abord ; l'IA la transforme en quelque chose de jouable ; ensuite on joue, on réagit, on change de direction, on ajoute des idées, on enlève ce qui est ennuyeux et on continue jusqu'à ce que le résultat sonne juste.
 
-> **The code is not the attraction. The playable result is.**
+> **Le code n'est pas l'attraction. Le résultat jouable l'est.**
 
-The source is public. The private conversations used to steer development are **not archived in this repository**.
+Le code source est public. Les conversations privées utilisées pour orienter le développement **ne sont pas archivées dans ce dépôt**.
 
 ---
 
-# 🐝 CABINET #001
+# 🐝 BORNE #001
 
 ## **Hivebound: Relics of the Bloom**
 
 > *The Bloom is fading. The Hive remembers.*
 
-A fantasy action roguelite where heroic bees venture beyond the safety of the hive, chase strange relics, build ridiculous combinations, defeat corrupted creatures, and risk everything for a higher score.
+Un roguelite d'action fantasy dans lequel des abeilles héroïques quittent la sécurité de la ruche, poursuivent d'étranges reliques, construisent des combinaisons absurdes, affrontent des créatures corrompues et risquent toujours davantage pour battre leur meilleur score.
 
 | 🛡️ Waxguard | ✨ Bloomweaver | 🏹 Thornstrider | 🎶 Hymnkeeper |
 |:---:|:---:|:---:|:---:|
-| Warrior | Mage | Ranger | Support |
-| Armor & retaliation | Arcane pollen & bursts | Speed & critical hits | Auras & swarm power |
+| Guerrier | Mage | Rôdeur | Support |
+| Armure & riposte | Pollen arcanique & explosions | Vitesse & critiques | Auras & puissance de l'essaim |
 
-### 🍯 What's already inside?
+### 🍯 Qu'est-ce qui est déjà présent ?
 
-`⚔️ real-time combat` · `🗺️ procedural routes` · `💎 randomized loot` · `🌿 talents` · `🔨 crafting` · `👑 bosses` · `🌀 resonances` · `🌑 risk/reward pacts` · `🏆 leaderboards` · `☀️ Daily Hive`
+`⚔️ combats en temps réel` · `🗺️ routes procédurales` · `💎 loot aléatoire` · `🌿 talents` · `🔨 craft` · `👑 boss` · `🌀 résonances` · `🌑 pactes risque/récompense` · `🏆 classements` · `☀️ Daily Hive`
 
-Every run is about becoming increasingly unreasonable before the corruption catches up with you.
+Chaque run consiste à devenir de plus en plus déraisonnablement puissant avant que la corruption ne finisse par te rattraper.
 
-**Current build:** `v0.2 — playable prototype`
+**Version actuelle :** `v0.2 — prototype jouable`
 
-➡️ **[Enter Hivebound](games/hivebound)**
+➡️ **[Entrer dans Hivebound](games/hivebound)**
 
 ---
 
-## 🧪 The Vibe Loop
+## 🧪 La boucle Vibe
 
 ```text
-         💡 "What if...?"
+         💡 « Et si... ? »
                 │
                 ▼
-          🤖 BUILD IT
+          🤖 CONSTRUIRE
                 │
                 ▼
-          🎮 PLAY IT
+           🎮 JOUER
           ╱          ╲
-      😍 FUN        😐 MEH
+      😍 FUN        😐 BOF
         │             │
         │             ▼
-        │       💭 "Change this..."
+        │       💭 « Change ça... »
         │             │
         └──────┬──────┘
                ▼
-            ✨ EVOLVE
+            ✨ ÉVOLUER
                │
                └──────────↺
 ```
 
-You do not need to describe APIs, classes, engines, databases, or patterns to influence the game.
+Il n'est pas nécessaire de parler d'API, de classes, de moteurs, de bases de données ou de patterns pour faire évoluer le jeu.
 
-Useful input can simply be:
+Un retour utile peut être aussi simple que :
 
-> *“The mage doesn't feel powerful enough.”*
+> *« Le mage ne donne pas une impression de puissance. »*
 >
-> *“I want loot that can completely change my build.”*
+> *« Je veux du loot capable de changer complètement mon build. »*
 >
-> *“This boss is boring.”*
+> *« Ce boss est ennuyeux. »*
 >
-> *“Let me remap the controls.”*
+> *« Laisse-moi modifier les touches. »*
 >
-> *“I want to play one more run.”*
+> *« J'ai envie de relancer une partie. »*
 
-That last one is the important one. 😈
+La dernière phrase est la plus importante. 😈
 
 ---
 
-# 👾 The Arcade Floor
+# 👾 Les bornes de l'arcade
 
-| Cabinet | Game | Genre | Status |
+| Borne | Jeu | Genre | Statut |
 |:--:|---|---|:--:|
-| `#001` | 🐝 **Hivebound: Relics of the Bloom** | Fantasy action roguelite | 🟢 PLAYABLE |
-| `#002` | ❔ **???** | ??? | 🔒 LOCKED |
-| `#003` | ❔ **???** | ??? | 🔒 LOCKED |
-| `#004` | ❔ **???** | ??? | 🔒 LOCKED |
+| `#001` | 🐝 **Hivebound: Relics of the Bloom** | Roguelite d'action fantasy | 🟢 JOUABLE |
+| `#002` | ❔ **???** | ??? | 🔒 VERROUILLÉ |
+| `#003` | ❔ **???** | ??? | 🔒 VERROUILLÉ |
+| `#004` | ❔ **???** | ??? | 🔒 VERROUILLÉ |
 
-Future games can share the same arcade identity, player profiles, achievements, and per-game leaderboards while remaining completely different experiences.
-
----
-
-## 🏆 Arcade ambitions
-
-As the cabinet grows, Vibe Arcade is intended to gain a shared layer around the games:
-
-- 👤 one player identity across the arcade
-- 🏆 a leaderboard for every game
-- 🥇 daily and all-time challenges
-- 🎖️ cross-game achievements
-- 📊 personal records and arcade statistics
-- 🎲 wildly different games built from new ideas
-
-The important constraint remains the same: **the player steers the product through ideas, playtesting, and natural-language feedback rather than manually implementing the gameplay.**
+Les prochains jeux pourront partager la même identité d'arcade, les profils joueurs, les succès et un classement propre à chaque jeu, tout en proposant des expériences complètement différentes.
 
 ---
 
-## 🚀 Run the current arcade
+## 🏆 Ambitions de l'arcade
+
+À mesure que la collection grandit, Vibe Arcade doit obtenir une couche commune autour des jeux :
+
+- 👤 une seule identité joueur dans toute l'arcade
+- 🏆 un classement pour chaque jeu
+- 🥇 des défis quotidiens et permanents
+- 🎖️ des succès inter-jeux
+- 📊 des records personnels et statistiques d'arcade
+- 🎲 des jeux très différents nés de nouvelles idées
+
+La contrainte importante reste la même : **le joueur oriente le produit par ses idées, ses tests et ses retours en langage naturel plutôt qu'en implémentant lui-même le gameplay.**
+
+---
+
+## 🚀 Lancer l'arcade actuelle
 
 ### Docker
 
 ```bash
 cp games/hivebound/.env.example games/hivebound/.env
-# Set a strong HIVEBOUND_SECRET in the .env file
+# Définir une valeur HIVEBOUND_SECRET robuste dans le fichier .env
 
 docker compose up -d --build
 ```
 
-Then open:
+Puis ouvrir :
 
 ```text
 http://localhost:8080
 ```
 
-### Without Docker
+### Sans Docker
 
-Hivebound currently requires **Node.js 20+** and has zero runtime npm dependencies.
+Hivebound nécessite actuellement **Node.js 20+** et n'a aucune dépendance npm nécessaire à l'exécution.
 
 ```bash
 cd games/hivebound
-export HIVEBOUND_SECRET='a-long-random-secret'
+export HIVEBOUND_SECRET='un-secret-long-et-aleatoire'
 node server.js
 ```
 
-For controls, mechanics and game-specific notes, visit **[games/hivebound](games/hivebound)**.
+Pour les contrôles, les mécaniques et les informations propres au jeu, voir **[games/hivebound](games/hivebound)**.
 
 ---
 
-## 🗂️ Behind the cabinets
+## 🗂️ Derrière les bornes
 
 ```text
 Vibe-Arcade/
 ├── 🎮 games/
-│   └── 🐝 hivebound/       # Game #001
-├── 🎨 assets/               # Arcade visuals
+│   └── 🐝 hivebound/       # Jeu #001
+├── 🎨 assets/               # Visuels de l'arcade
 ├── 📚 docs/
-│   └── PHILOSOPHY.md        # What the experiment explores
+│   └── PHILOSOPHY.md        # Ce que l'expérience cherche à explorer
 ├── 🐳 docker-compose.yml
-└── 📖 README.md
+├── 📖 README.md             # Français
+└── 📖 README.en.md          # English
 ```
 
 ---
 
 <p align="center">
-  <strong>✨ HAVE AN IDEA. PLAY THE RESULT. ✨</strong>
+  <strong>✨ AVOIR UNE IDÉE. JOUER AU RÉSULTAT. ✨</strong>
 </p>
 
 <p align="center">
-  <sub>Vibe Arcade — built one strange idea at a time.</sub>
+  <sub>Vibe Arcade — un jeu étrange à la fois.</sub>
 </p>
