@@ -4,12 +4,12 @@ const key='vibe-arcade.lang';
 const metaDescription=document.querySelector('meta[name="description"]');
 const metadata={
   fr:{
-    title:'Vibe Arcade — Les idées deviennent jouables',
-    description:"Vibe Arcade — des idées qui deviennent des jeux jouables grâce au vibe coding, au playtest et à l’itération."
+    title:'Vibe Arcade — Choisis un jeu',
+    description:'Vibe Arcade — une collection de jeux gratuits à lancer directement dans le navigateur.'
   },
   en:{
-    title:'Vibe Arcade — Ideas become playable',
-    description:'Vibe Arcade — ideas turned into playable games through vibe coding, playtesting and iteration.'
+    title:'Vibe Arcade — Pick a game',
+    description:'Vibe Arcade — a collection of free games you can play directly in your browser.'
   }
 };
 function apply(lang){
