@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no" />
+  <meta name="theme-color" content="#070914" />
+  <meta name="description" content="STACK PANIC — un falling-block game chaotique de Vibe Arcade." />
+  <title>STACK PANIC — Vibe Arcade</title>
+  <link rel="stylesheet" href="/stack-panic/style.css" />
+</head>
+<body>
+  <div class="noise" aria-hidden="true"></div>
+  <header class="topbar">
+    <a class="brand" href="/">← VIBE ARCADE</a>
+    <div class="top-actions">
+      <button id="soundBtn" class="chip" type="button" aria-pressed="true">SOUND: ON</button>
+      <button id="pauseBtn" class="chip" type="button">PAUSE</button>
+    </div>
+  </header>
+
+  <main class="shell">
+    <section class="intro">
+      <p class="kicker">CABINET #002 · CHAOTIC FALLING-BLOCK INCIDENT</p>
+      <h1>STACK <span>PANIC</span></h1>
+      <p>Tout est sous contrôle. Probablement.</p>
+    </section>
+
+    <section class="game-layout">
+      <aside class="panel stats-panel">
+        <div class="stat"><small>SCORE</small><strong id="score">000000</strong></div>
+        <div class="stat"><small>LINES</small><strong id="lines">0</strong></div>
+        <div class="stat"><small>LEVEL</small><strong id="level">1</strong></div>
+        <div class="stat chaos-stat"><small>CHAOS</small><strong id="chaosLabel">NORMAL</strong><div class="meter"><i id="chaosFill"></i></div></div>
+        <div class="event-card">
+          <small>INCIDENT FEED</small>
+          <strong id="eventTitle">SYSTEM NOMINAL</strong>
+          <p id="eventText">Aucune anomalie détectée. C'est suspect.</p>
+        </div>
+      </aside>
+
+      <section id="cabinet" class="cabinet" aria-label="STACK PANIC game cabinet">
+        <div class="cabinet-lights" aria-hidden="true"></div>
+        <div id="screenFx" class="screen-fx"></div>
+        <canvas id="game" width="360" height="720"></canvas>
+        <canvas id="overlay" width="360" height="720"></canvas>
+        <div id="banner" class="banner" aria-live="polite"><small>INCIDENT INCOMING</small><strong>...</strong><span>...</span></div>
+        <div id="startPanel" class="start-panel">
+          <div class="logo-mini">STACK <b>PANIC</b></div>
+          <p>Empile. Nettoie. Survis aux incidents.</p>
+          <button id="startBtn" class="start-btn" type="button">INSERT COIN</button>
+          <small>← → déplacer · ↑ rotation · ↓ accélérer · ESPACE chute</small>
+        </div>
+        <div id="gameOver" class="game-over hidden">
+          <small>RUN TERMINATED</small>
+          <strong id="finalScore">000000</strong>
+          <p id="deathLine">La grille avait d'autres projets.</p>
+          <button id="restartBtn" class="start-btn" type="button">REBOOT</button>
+        </div>
+      </section>
+
+      <aside class="panel side-panel">
+        <div class="next-box"><small>NEXT</small><canvas id="next" width="144" height="144"></canvas></div>
+        <div class="rules">
+          <small>SURVIVAL NOTES</small>
+          <p>Les incidents sont parfois utiles. Souvent non.</p>
+          <p>Certains mini-mondes utilisent l'état réel de ta pile.</p>
+        </div>
+        <div class="legend">
+          <span>🐑 Faune</span><span>💧 Physique</span><span>💣 Sabotage</span><span>🪖 Support douteux</span><span>🌀 Reality break</span>
+        </div>
+      </aside>
+    </section>
+
+    <section class="mobile-controls" aria-label="Contrôles tactiles">
+      <button data-action="left">◀</button>
+      <button data-action="rotate">⟳</button>
+      <button data-action="right">▶</button>
+      <button data-action="down">▼</button>
+      <button class="drop" data-action="drop">DROP</button>
+    </section>
+
+    <section class="notes">
+      <span>BUILD 0.1 // EXPERIMENTAL</span>
+      <p>Musique et effets sont générés en temps réel via Web Audio. Aucun téléchargement audio requis.</p>
+    </section>
+  </main>
+
+  <script src="/stack-panic/game.js"></script>
+</body>
+</html>
