@@ -39,6 +39,7 @@ export class Hivebound {
 
     this.bindInput();
     addEventListener('resize', () => this.view.resize());
+    addEventListener('hivebound:language', () => this.gladeView.refreshLabels());
   }
 
   setControls(controls = {}) {

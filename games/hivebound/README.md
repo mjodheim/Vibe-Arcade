@@ -106,6 +106,9 @@ Also included:
 - 💾 persistent prototype data
 - 🎲 deterministic Daily Hive seed shared by every player
 - ⌨️ fully configurable keyboard controls
+- 🇫🇷 French first, English second — everything the player can read is translated,
+  including the signposts painted on the gates, and a test suite fails the build
+  if a new string forgets its French form
 - 🇫🇷 friendly ZQSD/AZERTY preset
 - 🐳 Docker-ready deployment
 - 📦 zero runtime npm dependencies (three.js is vendored in `public/vendor/`)
@@ -197,6 +200,7 @@ public/js/
 │   ├── props.js    procedural vegetation geometry
 │   ├── glade.js    terrain mesh, instanced props, landmarks, gates
 │   └── actors.js   the bee, the creatures, projectiles, impacts
+├── i18n/     the French layer: translations and composition rules, DOM-free
 ├── audio.js  synthesised music and sound effects
 ├── game3d.js input, frame loop, and the wiring between the three
 └── app.js    screens, HUD, modals, account

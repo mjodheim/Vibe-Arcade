@@ -445,6 +445,17 @@ export class GladeView {
     }
   }
 
+  // Signposts are baked into textures, so a language switch has to redraw them.
+  refreshLabels() {
+    for (const entry of this.gateMeshes || []) {
+      const texture = labelTexture(entry.gate.icon, entry.gate.title, entry.gate.risk);
+      this.disposables.push(texture);
+      entry.sign.material.map?.dispose();
+      entry.sign.material.map = texture;
+      entry.sign.material.needsUpdate = true;
+    }
+  }
+
   setGatesOpen(open) {
     for (const entry of this.gateMeshes) {
       entry.curtain.material.opacity = open ? 0.42 : 0.12;

@@ -122,6 +122,7 @@ As the cabinet grows, Vibe Arcade is intended to gain a shared layer around the 
 - 🎖️ cross-game achievements
 - 📊 personal records and arcade statistics
 - 🎲 wildly different games built from new ideas
+- 🌍 full localisation: French first, English second
 
 The important constraint remains the same: **the player steers the product through ideas, playtesting, and natural-language feedback rather than manually implementing the gameplay.**
 

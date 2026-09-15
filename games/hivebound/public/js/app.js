@@ -5,6 +5,7 @@
 import { api } from './api.js';
 import { Hivebound, DEFAULT_CONTROLS } from './game3d.js';
 import { CLASSES, SIGILS } from './core/rules.js';
+import { currentLanguage, translate } from './i18n.js';
 
 const $ = selector => document.querySelector(selector);
 const $$ = selector => [...document.querySelectorAll(selector)];
@@ -17,7 +18,7 @@ function esc(value) {
   return String(value).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 }
 function fmt(value) {
-  return Math.floor(value).toLocaleString('en-US');
+  return Math.floor(value).toLocaleString(currentLanguage() === 'fr' ? 'fr-FR' : 'en-US');
 }
 function costText(cost) {
   const icons = { nectar: '🍯', wax: '⬡', pollen: '✿' };
@@ -196,7 +197,7 @@ function updateHud(state) {
 
   $('#resonances').innerHTML = Object.entries(SIGILS).map(([name, sigil]) => {
     const count = state.sigils[name] || 0;
-    return `<div class="resonance ${count >= 2 ? 'active' : ''}"><span style="color:${sigil.color}">${sigil.icon}</span><b>${count}</b></div>`;
+    return `<div class="resonance ${count >= 2 ? 'active' : ''}" title="${esc(sigil.desc)}"><span style="color:${sigil.color}">${sigil.icon}</span><b>${count}</b></div>`;
   }).join('');
 
   $('#relics').innerHTML = state.relics.length
@@ -257,7 +258,7 @@ const game = new Hivebound(canvas, {
     damageNumber({ screen: { x: window.innerWidth / 2, y: window.innerHeight * 0.58, visible: true }, amount: event.amount, hurt: true });
   },
   onGlade: ({ glade }) => {
-    $('#biomeLabel').textContent = glade.biome.name.toUpperCase();
+    $('#biomeLabel').textContent = glade.biome.name;
     $('#nodeLabel').textContent = glade.node.title;
     showGladeTitle(glade);
     toast(glade.biome.lore);
@@ -319,7 +320,9 @@ async function beginRun(classId) {
       pendingDaily = false;
     });
   } catch (error) {
-    alert(`Could not start run: ${error.message}`);
+    // Not an alert(): text outside the document can never be translated.
+    showScreen('classScreen');
+    toast(translate(`Could not start run: ${error.message}`));
   }
 }
 

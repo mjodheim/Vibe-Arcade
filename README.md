@@ -122,6 +122,7 @@ Les prochains jeux pourront partager la même identité d'arcade, les profils jo
 - 🎖️ des succès inter-jeux
 - 📊 des records personnels et statistiques d'arcade
 - 🎲 des jeux très différents nés de nouvelles idées
+- 🌍 une localisation complète : français en première langue, anglais en seconde
 
 La contrainte importante reste la même : **le joueur oriente le produit par ses idées, ses tests et ses retours en langage naturel plutôt qu'en implémentant lui-même le gameplay.**
 
