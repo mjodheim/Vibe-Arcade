@@ -133,7 +133,10 @@ function boardDensity(){let n=0;state.board.forEach(r=>r.forEach(v=>n+=!!v));ret
 function updateMini(t){
   const m=state.mini;if(!m)return;
   const left=!!(m.keys.ArrowLeft||m.keys.a),right=!!(m.keys.ArrowRight||m.keys.d),up=!!(m.keys.ArrowUp||m.keys.w),down=!!(m.keys.ArrowDown||m.keys.s);
-  m.velX+=((right?1:0)-(left?1:0))*.018;m.velX*=.88;m.playerX=clamp(m.playerX+m.velX,-4.8,4.8);m.playerZ-=.055+(up?.04:0)-(down?.025:0);
+  m.velX+=((right?1:0)-(left?1:0))*.018;
+  m.velX*=.88;
+  m.playerX=clamp(m.playerX+m.velX,-4.8,4.8);
+  m.playerZ-=.055+(up ? .04 : 0)-(down ? .025 : 0);
   const corridor=3.6-m.density*2.2; const wave=Math.sin(m.playerZ*.34)*(.7+m.height*.025);
   if(Math.abs(m.playerX-wave)>corridor){m.playerZ+=.13;m.velX*=-.5;sfx('bump');}
   if(m.playerZ<=m.targetZ){m.success=true;finishMini();}
