@@ -15,6 +15,11 @@
   🧠 IDEA &nbsp;→&nbsp; 🤖 AI &nbsp;→&nbsp; 🕹️ PLAY &nbsp;→&nbsp; 💭 REACT &nbsp;→&nbsp; ✨ EVOLVE
 </p>
 
+<p align="center">
+  <a href="https://arcade.mjodheim.be"><strong>▶ PLAY NOW — arcade.mjodheim.be</strong></a><br/>
+  <sub>Nothing to install, nothing to build: the arcade opens in the browser.</sub>
+</p>
+
 ---
 
 ## 🕹️ Welcome to Vibe Arcade
@@ -54,7 +59,7 @@ Five biomes cycle — Verdant Reach, Mycelian Deep, Ashen Orchard, Moonlit Fen, 
 
 **Current build:** `v0.3 — playable 3D adventure`
 
-➡️ **[Enter Hivebound](games/hivebound)**
+➡️ **[Play Hivebound](https://arcade.mjodheim.be/hivebound/)** · [the code and the game notes](games/hivebound)
 
 ---
 
@@ -128,7 +133,18 @@ The important constraint remains the same: **the player steers the product throu
 
 ---
 
-## 🚀 Run the current arcade
+## 🚀 Play, or run the arcade yourself
+
+### Online
+
+The arcade is published at **[arcade.mjodheim.be](https://arcade.mjodheim.be)**: a static site, no account to create and nothing to install.
+
+| Address | What you get |
+|---|---|
+| [arcade.mjodheim.be](https://arcade.mjodheim.be) | the arcade floor and its cabinets |
+| [arcade.mjodheim.be/hivebound](https://arcade.mjodheim.be/hivebound/) | 🐝 Cabinet #001 |
+
+There, Hivebound runs in **local play**: no Hive server answers, so the game notices at boot, keeps your scores in your browser and shows a local leaderboard instead of a login form that could not work. Accounts and the global leaderboard need the instructions below.
 
 ### Docker
 
@@ -163,15 +179,20 @@ For controls, mechanics and game-specific notes, visit **[games/hivebound](games
 
 ```text
 Vibe-Arcade/
+├── 🕹️ index.html            # The arcade floor
 ├── 🎮 games/
 │   └── 🐝 hivebound/       # Game #001
-├── 🎨 assets/               # Arcade visuals
+├── 🎨 assets/               # Arcade visuals, icons and share cards
 ├── 📚 docs/
 │   └── PHILOSOPHY.md        # What the experiment explores
+├── 🌐 vercel.json           # The short addresses: /hivebound/…
+├── 🤖 robots.txt · sitemap.xml · site.webmanifest
 ├── 🐳 docker-compose.yml
 ├── 📖 README.md             # Français
 └── 📖 README.en.md          # English
 ```
+
+Each game stays self-contained in its own folder; `vercel.json` only gives it a short address under the arcade's domain.
 
 ---
 

@@ -15,6 +15,11 @@
   🧠 IDÉE &nbsp;→&nbsp; 🤖 IA &nbsp;→&nbsp; 🕹️ JOUER &nbsp;→&nbsp; 💭 RÉAGIR &nbsp;→&nbsp; ✨ ÉVOLUER
 </p>
 
+<p align="center">
+  <a href="https://arcade.mjodheim.be"><strong>▶ JOUER MAINTENANT — arcade.mjodheim.be</strong></a><br/>
+  <sub>Rien à installer, rien à compiler : l'arcade s'ouvre dans le navigateur.</sub>
+</p>
+
 ---
 
 ## 🕹️ Bienvenue dans Vibe Arcade
@@ -54,7 +59,7 @@ Cinq biomes s'enchaînent — Étendue verdoyante, Profondeurs mycéliennes, Ver
 
 **Version actuelle :** `v0.3 — aventure 3D jouable`
 
-➡️ **[Entrer dans Hivebound](games/hivebound)**
+➡️ **[Jouer à Hivebound](https://arcade.mjodheim.be/hivebound/)** · [le code et les notes de jeu](games/hivebound)
 
 ---
 
@@ -128,7 +133,18 @@ La contrainte importante reste la même : **le joueur oriente le produit par ses
 
 ---
 
-## 🚀 Lancer l'arcade actuelle
+## 🚀 Jouer, et faire tourner l'arcade chez soi
+
+### En ligne
+
+L'arcade est publiée sur **[arcade.mjodheim.be](https://arcade.mjodheim.be)** : un site statique, sans compte à créer et sans rien à installer.
+
+| Adresse | Ce que tu y trouves |
+|---|---|
+| [arcade.mjodheim.be](https://arcade.mjodheim.be) | la façade de l'arcade et ses bornes |
+| [arcade.mjodheim.be/hivebound](https://arcade.mjodheim.be/hivebound/) | 🐝 Borne #001 |
+
+Sur cette version, Hivebound tourne en **jeu local** : aucun serveur de la Ruche ne répond, donc le jeu le détecte au démarrage, garde tes scores dans ton navigateur et affiche un classement local au lieu d'un formulaire de connexion qui ne mènerait nulle part. Les comptes et le classement mondial demandent les instructions ci-dessous.
 
 ### Docker
 
@@ -163,15 +179,20 @@ Pour les contrôles, les mécaniques et les informations propres au jeu, voir **
 
 ```text
 Vibe-Arcade/
+├── 🕹️ index.html            # La façade de l'arcade
 ├── 🎮 games/
 │   └── 🐝 hivebound/       # Jeu #001
-├── 🎨 assets/               # Visuels de l'arcade
+├── 🎨 assets/               # Visuels de l'arcade, icônes et cartes de partage
 ├── 📚 docs/
 │   └── PHILOSOPHY.md        # Ce que l'expérience cherche à explorer
+├── 🌐 vercel.json           # Les adresses courtes : /hivebound/…
+├── 🤖 robots.txt · sitemap.xml · site.webmanifest
 ├── 🐳 docker-compose.yml
 ├── 📖 README.md             # Français
 └── 📖 README.en.md          # English
 ```
+
+Chaque jeu reste autonome dans son dossier : `vercel.json` se contente de lui donner une adresse courte sous le domaine de l'arcade.
 
 ---
 

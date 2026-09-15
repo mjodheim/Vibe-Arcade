@@ -5,6 +5,7 @@
 import { api } from './api.js';
 import { Hivebound, DEFAULT_CONTROLS } from './game3d.js';
 import { CLASSES, SIGILS } from './core/rules.js';
+import * as localScores from './core/localscores.js';
 import { currentLanguage, translate } from './i18n.js';
 
 const $ = selector => document.querySelector(selector);
@@ -27,7 +28,13 @@ function costText(cost) {
 
 let user = null;
 let lastResult = null;
+let savedRun = null;
 let pendingDaily = false;
+
+// Local play: what the game falls back to when no Hive server answers.
+const store = typeof localStorage === 'undefined' ? null : localStorage;
+const localName = () => localScores.readName(store);
+const localBoard = () => localScores.readScores(store);
 let toastTimer = null;
 let titleTimer = null;
 let hurtTimer = null;
@@ -292,6 +299,29 @@ function showEnd(result) {
     <span>✦ Level <b>${result.level}</b></span>
     <span>🗝 Secrets <b>${result.secrets || 0}</b></span>
     <span>🌒 Gloam <b>${Math.round(result.gloam)}%</b></span>`;
+  // Local play records the run itself: there is nothing to press, and no
+  // account to create for a board that never leaves this browser.
+  if (!api.online) {
+    $('#submitBtn').hidden = true;
+    const previousBest = localScores.best(localBoard());
+    if (savedRun !== result) {
+      savedRun = result;
+      localScores.saveScore(store, {
+        username: localName() || 'Guest',
+        classId: result.classId,
+        region: result.region,
+        score: result.score,
+        at: new Date().toISOString()
+      });
+    }
+    const best = localScores.best(localBoard());
+    $('#submitStatus').textContent = result.score > previousBest
+      ? `New best on this device: ${fmt(best)}.`
+      : `Run saved on this device. Best: ${fmt(best)}.`;
+    return;
+  }
+
+  $('#submitBtn').hidden = false;
   $('#submitStatus').textContent = user ? 'Your score can be submitted to the Hive.' : 'Log in to place this run on the leaderboard.';
   $('#submitBtn').textContent = user ? 'Submit Score' : 'Login to Submit';
 }
@@ -396,6 +426,25 @@ function syncQualityButtons() {
 // ----------------------------------------------------------------- account
 
 function openAuth() {
+  if (!api.online) {
+    const board = localBoard();
+    openModal(`
+      <p class="eyebrow">LOCAL HIVE</p>
+      <h2>${esc(localName() || 'Local play')}</h2>
+      <p class="muted">This arcade has no Hive server, so your runs stay on this device.</p>
+      <p class="muted">Best on this device: ${fmt(localScores.best(board))}</p>
+      <form id="localNameForm" class="local-name">
+        <input name="username" maxlength="24" placeholder="Nickname" value="${esc(localName())}">
+        <button class="primary">Save</button>
+      </form>`);
+    $('#localNameForm').onsubmit = event => {
+      event.preventDefault();
+      localScores.saveName(store, new FormData(event.currentTarget).get('username'));
+      refreshAccount();
+      modal.classList.add('hidden');
+    };
+    return;
+  }
   if (user) {
     openModal(`
       <p class="eyebrow">HIVE PROFILE</p>
@@ -442,10 +491,29 @@ async function authSubmit(event, mode) {
 }
 
 function refreshAccount() {
-  $('#accountBtn').textContent = user ? `🐝 ${user.username}` : 'Guest';
+  if (user) { $('#accountBtn').textContent = `🐝 ${user.username}`; return; }
+  $('#accountBtn').textContent = api.online ? 'Guest' : `🐝 ${localName() || 'Local play'}`;
+}
+
+function scoreTable(scores) {
+  return `<table class="leaderboard"><thead><tr><th>#</th><th>Player</th><th>Class</th><th>Region</th><th>Score</th></tr></thead><tbody>${
+    scores.map(score => `<tr><td>${score.rank}</td><td>${esc(score.username)}</td><td>${esc(CLASSES[score.classId]?.name || score.classId)}</td><td>${score.region}</td><td><b>${fmt(score.score)}</b></td></tr>`).join('')
+  }</tbody></table>`;
+}
+
+// Without a server there is still a board worth showing: the one this device
+// has earned.
+function openLocalLeaderboard() {
+  const board = localBoard();
+  openModal(`
+    <p class="eyebrow">LOCAL HIVE</p>
+    <h2>Leaderboard</h2>
+    <p class="muted">This arcade has no Hive server, so your runs stay on this device.</p>
+    <div id="leaderboardBody">${board.length ? scoreTable(board) : '<p class="muted">No run recorded on this device yet.</p>'}</div>`);
 }
 
 async function openLeaderboard(daily = false) {
+  if (!api.online) { openLocalLeaderboard(); return; }
   openModal(`
     <p class="eyebrow">GLOBAL HIVE</p>
     <h2>Leaderboard</h2>
@@ -459,9 +527,7 @@ async function openLeaderboard(daily = false) {
   try {
     const scores = await api.leaderboard(daily);
     $('#leaderboardBody').innerHTML = scores.length
-      ? `<table class="leaderboard"><thead><tr><th>#</th><th>Player</th><th>Class</th><th>Region</th><th>Score</th></tr></thead><tbody>${
-        scores.map(score => `<tr><td>${score.rank}</td><td>${esc(score.username)}</td><td>${esc(CLASSES[score.classId]?.name || score.classId)}</td><td>${score.region}</td><td><b>${fmt(score.score)}</b></td></tr>`).join('')
-      }</tbody></table>`
+      ? scoreTable(scores)
       : '<p class="muted">No score yet. The first legend could be you.</p>';
   } catch (error) {
     $('#leaderboardBody').innerHTML = `<p class="muted">${esc(error.message)}</p>`;
@@ -509,7 +575,7 @@ $('#submitBtn').onclick = async () => {
 renderClasses();
 syncQualityButtons();
 (async () => {
-  if (api.token) {
+  if (await api.probe() && api.token) {
     try { user = await api.me(); } catch { api.token = ''; }
   }
   refreshAccount();

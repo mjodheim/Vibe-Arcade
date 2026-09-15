@@ -154,6 +154,17 @@ A run rewards progression, kills, bosses, loot and risk. Gloam can push the mult
 
 Long-term, Vibe Arcade is intended to expose a player profile with records across every cabinet.
 
+### Two deployments, two boards
+
+The same files run in two places, and the game asks which one it is in (`GET /api/health`) before it offers anything:
+
+| Where | What the player gets |
+|---|---|
+| [arcade.mjodheim.be/hivebound](https://arcade.mjodheim.be/hivebound/) — static files, no server | **Local play**: runs are saved in the browser, with a local board and a nickname. No login form is shown, because there is nothing to log into. |
+| `node server.js` or Docker | Accounts, server-validated runs, the all-time board and the Daily Hive. |
+
+The rules of the local board live in `public/js/core/localscores.js` and are covered by `test/localscores.test.js`.
+
 ---
 
 # 🚀 Play locally
@@ -194,7 +205,8 @@ public/js/
 │   ├── biomes.js   palettes, lighting, creature tables
 │   ├── world.js    glade generation (terrain, props, gates, secrets)
 │   ├── sim.js      movement, combat, creature AI, waves, Guardian phases
-│   └── run.js      run progression and the choices it offers
+│   ├── run.js      run progression and the choices it offers
+│   └── localscores.js  the on-device board used when no server answers
 ├── render/   three.js presentation — reads the simulation, never writes to it
 │   ├── view.js     renderer, sky, light, fog, bloom, camera rig
 │   ├── props.js    procedural vegetation geometry

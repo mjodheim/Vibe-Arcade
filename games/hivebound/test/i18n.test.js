@@ -90,7 +90,11 @@ const INTERFACE_STRINGS = [
   // Account and leaderboard
   'HIVE ACCOUNT', 'HIVE PROFILE', 'Carry your scores between games.', 'Login', 'Create account',
   'Create', 'Username', 'Password', 'Enter the Hive', 'Log out', 'GLOBAL HIVE', 'All-time',
-  'Loading…', 'Player', 'Class', 'Region', 'Score', 'No score yet. The first legend could be you.'
+  'Loading…', 'Player', 'Class', 'Region', 'Score', 'No score yet. The first legend could be you.',
+  // Local play, used when the arcade is served without its account server
+  'LOCAL HIVE', 'Local play', 'Nickname', 'Save',
+  'This arcade has no Hive server, so your runs stay on this device.',
+  'No run recorded on this device yet.', 'The Hive is unreachable from here.'
 ];
 
 test('Every interface string reads in French', () => {
@@ -116,6 +120,9 @@ const RUNTIME_STRINGS = [
   'Choose Waxguard',
   'The Gloam claimed a Waxguard.',
   'Score submitted. Your best: 12,340.',
+  'Best on this device: 12,340',
+  'New best on this device: 12,340.',
+  'Run saved on this device. Best: 12,340.',
   'Best score: 1,200 · Hive essence: 4',
   'Shift is already assigned to Dash.',
   'Class ability → Space',

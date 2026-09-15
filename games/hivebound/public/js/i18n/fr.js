@@ -44,6 +44,10 @@ export const fr = {
   'CONTROLS':'COMMANDES','Make the Hive yours.':'Adapte la Ruche à ton jeu.','Click a binding, then press the key you want. Escape cancels. Bindings are saved on this device.':'Clique sur une commande puis appuie sur la touche souhaitée. Échap annule. Les touches sont sauvegardées sur cet appareil.',
   'Move up':'Monter','Move down':'Descendre','Move left':'Aller à gauche','Move right':'Aller à droite','Class ability':'Compétence de classe','Arrows':'Flèches','Press a key…':'Appuie sur une touche…','Binding unchanged.':'Commande inchangée.',
   'HIVE PROFILE':'PROFIL DE LA RUCHE','Log out':'Se déconnecter','HIVE ACCOUNT':'COMPTE DE LA RUCHE','Carry your scores between games.':'Retrouve tes scores d’une partie à l’autre.','Login':'Connexion','Username':'Pseudo','Password':'Mot de passe','Enter the Hive':'Entrer dans la Ruche','Create account':'Créer un compte','Create':'Créer',
+  'Local Hive':'Ruche locale','Local play':'Joueur local','Nickname':'Pseudo','Save':'Enregistrer',
+  'This arcade has no Hive server, so your runs stay on this device.':'Cette arcade n’a pas de serveur de la Ruche : tes parties restent sur cet appareil.',
+  'No run recorded on this device yet.':'Aucune partie enregistrée sur cet appareil pour le moment.',
+  'The Hive is unreachable from here.':'La Ruche est injoignable depuis ici.',
   'GLOBAL HIVE':'RUCHE MONDIALE','All-time':'Tous les temps','Loading…':'Chargement…','Player':'Joueur','Class':'Classe','No score yet. The first legend could be you.':'Aucun score pour le moment. La première légende pourrait être toi.','Submitted ✓':'Envoyé ✓',
   'No relics yet.':'Aucune relique pour le moment.','Free':'Gratuit','CHOICE':'CHOIX','TALENT':'TALENT','RANK':'RANG','PACT':'PACTE',
   'REGION GUARDIAN':'GARDIEN DE RÉGION','ELITE HUNT':'CHASSE ÉLITE','GLOAM SWARM':'ESSAIM DU GLOAM','Defeat the Guardian':'Vaincre le Gardien',
@@ -115,6 +119,9 @@ function lookup(text){
   if((m=text.match(/^(.+) · rank (\d+)$/)))return `${lookup(m[1]) ?? m[1]} · rang ${m[2]}`;
   if((m=text.match(/^(.+) · RANK (\d+)$/)))return `${lookup(m[1]) ?? m[1]} · RANG ${m[2]}`;
   if((m=text.match(/^Score submitted\. Your best: (.+)\.$/)))return `Score envoyé. Ton record : ${m[1]}.`;
+  if((m=text.match(/^Best on this device: (.+)$/)))return `Meilleur score sur cet appareil : ${m[1]}`;
+  if((m=text.match(/^New best on this device: (.+)\.$/)))return `Nouveau record sur cet appareil : ${m[1]}.`;
+  if((m=text.match(/^Run saved on this device\. Best: (.+)\.$/)))return `Partie enregistrée sur cet appareil. Record : ${m[1]}.`;
   if((m=text.match(/^Best score: (.+) · Hive essence: (.+)$/)))return `Meilleur score : ${m[1]} · Essence de la Ruche : ${m[2]}`;
   if((m=text.match(/^Could not start run: (.+)$/)))return `Impossible de lancer la partie : ${lookup(m[1]) ?? m[1]}`;
   if((m=text.match(/^(.+) is already assigned to (.+)\.$/)))return `${m[1]} est déjà assigné à ${lookup(m[2]) ?? m[2]}.`;
