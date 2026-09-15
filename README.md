@@ -15,6 +15,11 @@
   🧠 IDÉE &nbsp;→&nbsp; 🤖 IA &nbsp;→&nbsp; 🕹️ JOUER &nbsp;→&nbsp; 💭 RÉAGIR &nbsp;→&nbsp; ✨ ÉVOLUER
 </p>
 
+<p align="center">
+  <a href="https://arcade.mjodheim.be"><strong>▶ JOUER MAINTENANT — arcade.mjodheim.be</strong></a><br/>
+  <sub>Rien à installer, rien à compiler : l'arcade s'ouvre dans le navigateur.</sub>
+</p>
+
 ---
 
 ## 🕹️ Bienvenue dans Vibe Arcade
@@ -35,7 +40,9 @@ Le code source est public. Les conversations privées utilisées pour orienter l
 
 > *The Bloom is fading. The Hive remembers.*
 
-Un roguelite d'action fantasy dans lequel des abeilles héroïques quittent la sécurité de la ruche, poursuivent d'étranges reliques, construisent des combinaisons absurdes, affrontent des créatures corrompues et risquent toujours davantage pour battre leur meilleur score.
+Un **jeu d'aventure 3D** dans lequel des abeilles héroïques quittent la sécurité de la ruche, traversent des clairières générées à la volée, fouillent l'herbe, poursuivent d'étranges reliques, construisent des combinaisons absurdes, affrontent des créatures corrompues et risquent toujours davantage pour battre leur meilleur score.
+
+Tu voles toi-même. Chaque étape d'une partie est une clairière à explorer : relief, champignons géants, piliers de cire en ruine, pollen qui dérive — et, au fond, trois portes qui annoncent exactement ce que tu choisis d'affronter ensuite.
 
 | 🛡️ Waxguard | ✨ Bloomweaver | 🏹 Thornstrider | 🎶 Hymnkeeper |
 |:---:|:---:|:---:|:---:|
@@ -44,13 +51,15 @@ Un roguelite d'action fantasy dans lequel des abeilles héroïques quittent la s
 
 ### 🍯 Qu'est-ce qui est déjà présent ?
 
-`⚔️ combats en temps réel` · `🗺️ routes procédurales` · `💎 loot aléatoire` · `🌿 talents` · `🔨 craft` · `👑 boss` · `🌀 résonances` · `🌑 pactes risque/récompense` · `🏆 classements` · `☀️ Daily Hive`
+`🌍 clairières 3D procédurales` · `⚔️ combats en temps réel` · `🐛 4 créatures du Gloam` · `👑 Gardien à 3 phases` · `💎 loot aléatoire` · `🌿 talents` · `🔨 craft` · `🌀 résonances` · `🌑 pactes risque/récompense` · `🗝 caches secrètes` · `🏆 classements` · `☀️ Daily Hive`
 
 Chaque run consiste à devenir de plus en plus déraisonnablement puissant avant que la corruption ne finisse par te rattraper.
 
-**Version actuelle :** `v0.2 — prototype jouable`
+Cinq biomes s'enchaînent — Étendue verdoyante, Profondeurs mycéliennes, Verger de cendres, Marais au clair de lune, Jardin sans couronne — chacun avec sa lumière, sa météo, sa végétation et sa couleur d'angoisse.
 
-➡️ **[Entrer dans Hivebound](games/hivebound)**
+**Version actuelle :** `v0.3 — aventure 3D jouable`
+
+➡️ **[Jouer à Hivebound](https://arcade.mjodheim.be/hivebound/)** · [le code et les notes de jeu](games/hivebound)
 
 ---
 
@@ -115,7 +124,7 @@ La dernière phrase est la plus importante. 😈
 
 | Borne | Jeu | Genre | Statut |
 |:--:|---|---|:--:|
-| `#001` | 🐝 **Hivebound: Relics of the Bloom** | Roguelite d'action fantasy | 🟢 JOUABLE |
+| `#001` | 🐝 **Hivebound: Relics of the Bloom** | Aventure 3D · roguelite d'action | 🟢 JOUABLE |
 | `#002` | 🧱 **Stack Panic** | Puzzle de blocs chaotique | 🟢 JOUABLE |
 | `#003` | ❔ **???** | ??? | 🔒 VERROUILLÉ |
 | `#004` | ❔ **???** | ??? | 🔒 VERROUILLÉ |
@@ -134,12 +143,25 @@ Les prochains jeux pourront partager la même identité d'arcade, les profils jo
 - 🎖️ des succès inter-jeux
 - 📊 des records personnels et statistiques d'arcade
 - 🎲 des jeux très différents nés de nouvelles idées
+- 🌍 une localisation complète : français en première langue, anglais en seconde
 
 La contrainte importante reste la même : **le joueur oriente le produit par ses idées, ses tests et ses retours en langage naturel plutôt qu'en implémentant lui-même le gameplay.**
 
 ---
 
-## 🚀 Lancer l'arcade actuelle
+## 🚀 Jouer, et faire tourner l'arcade chez soi
+
+### En ligne
+
+L'arcade est publiée sur **[arcade.mjodheim.be](https://arcade.mjodheim.be)** : un site statique, sans compte à créer et sans rien à installer.
+
+| Adresse | Ce que tu y trouves |
+|---|---|
+| [arcade.mjodheim.be](https://arcade.mjodheim.be) | la façade de l'arcade et ses bornes |
+| [arcade.mjodheim.be/hivebound](https://arcade.mjodheim.be/hivebound/) | 🐝 Borne #001 |
+| [arcade.mjodheim.be/stack-panic](https://arcade.mjodheim.be/stack-panic/) | 🧱 Borne #002 |
+
+Sur cette version, Hivebound tourne en **jeu local** : aucun serveur de la Ruche ne répond, donc le jeu le détecte au démarrage, garde tes scores dans ton navigateur et affiche un classement local au lieu d'un formulaire de connexion qui ne mènerait nulle part. Les comptes et le classement mondial demandent les instructions ci-dessous.
 
 ### Docker
 
@@ -158,7 +180,7 @@ http://localhost:8080
 
 ### Sans Docker
 
-Hivebound nécessite actuellement **Node.js 20+** et n'a aucune dépendance npm nécessaire à l'exécution.
+Hivebound nécessite **Node.js 20+** côté serveur et un navigateur compatible **WebGL2** côté joueur. Aucune dépendance npm n'est nécessaire à l'exécution : three.js est embarqué dans `games/hivebound/public/vendor/`.
 
 ```bash
 cd games/hivebound
@@ -174,15 +196,19 @@ Pour les contrôles, les mécaniques et les informations propres au jeu, voir **
 
 ```text
 Vibe-Arcade/
-├── 🎮 games/
-│   └── 🐝 hivebound/       # Jeu #001
-├── 🎨 assets/               # Visuels de l'arcade
+├── 🕹️ index.html            # La façade de l'arcade
+├── 🎮 games/                # Une borne par dossier
+├── 🎨 assets/               # Visuels de l'arcade, icônes et cartes de partage
 ├── 📚 docs/
 │   └── PHILOSOPHY.md        # Ce que l'expérience cherche à explorer
+├── 🌐 vercel.json           # Les adresses courtes de chaque borne
+├── 🤖 robots.txt · sitemap.xml · site.webmanifest
 ├── 🐳 docker-compose.yml
 ├── 📖 README.md             # Français
 └── 📖 README.en.md          # English
 ```
+
+Chaque jeu reste autonome dans son dossier : `vercel.json` se contente de lui donner une adresse courte sous le domaine de l'arcade.
 
 ---
 

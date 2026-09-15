@@ -15,6 +15,11 @@
   🧠 IDEA &nbsp;→&nbsp; 🤖 AI &nbsp;→&nbsp; 🕹️ PLAY &nbsp;→&nbsp; 💭 REACT &nbsp;→&nbsp; ✨ EVOLVE
 </p>
 
+<p align="center">
+  <a href="https://arcade.mjodheim.be"><strong>▶ PLAY NOW — arcade.mjodheim.be</strong></a><br/>
+  <sub>Nothing to install, nothing to build: the arcade opens in the browser.</sub>
+</p>
+
 ---
 
 ## 🕹️ Welcome to Vibe Arcade
@@ -35,7 +40,9 @@ The source is public. The private conversations used to steer development are **
 
 > *The Bloom is fading. The Hive remembers.*
 
-A fantasy action roguelite where heroic bees venture beyond the safety of the hive, chase strange relics, build ridiculous combinations, defeat corrupted creatures, and risk everything for a higher score.
+A **3D adventure** where heroic bees venture beyond the safety of the hive, cross procedurally generated glades, search the grass, chase strange relics, build ridiculous combinations, defeat corrupted creatures, and risk everything for a higher score.
+
+You fly it yourself. Every step of a run is a glade to explore: rolling ground, giant mushrooms, ruined wax pillars, drifting pollen — and, at the far end, three gates that tell you exactly what you are choosing to walk into next.
 
 | 🛡️ Waxguard | ✨ Bloomweaver | 🏹 Thornstrider | 🎶 Hymnkeeper |
 |:---:|:---:|:---:|:---:|
@@ -44,13 +51,15 @@ A fantasy action roguelite where heroic bees venture beyond the safety of the hi
 
 ### 🍯 What's already inside?
 
-`⚔️ real-time combat` · `🗺️ procedural routes` · `💎 randomized loot` · `🌿 talents` · `🔨 crafting` · `👑 bosses` · `🌀 resonances` · `🌑 risk/reward pacts` · `🏆 leaderboards` · `☀️ Daily Hive`
+`🌍 procedural 3D glades` · `⚔️ real-time combat` · `🐛 4 Gloam creatures` · `👑 three-phase Guardian` · `💎 randomized loot` · `🌿 talents` · `🔨 crafting` · `🌀 resonances` · `🌑 risk/reward pacts` · `🗝 hidden caches` · `🏆 leaderboards` · `☀️ Daily Hive`
 
 Every run is about becoming increasingly unreasonable before the corruption catches up with you.
 
-**Current build:** `v0.2 — playable prototype`
+Five biomes cycle — Verdant Reach, Mycelian Deep, Ashen Orchard, Moonlit Fen, Crownless Garden — each with its own light, weather, vegetation and colour of dread.
 
-➡️ **[Enter Hivebound](games/hivebound)**
+**Current build:** `v0.3 — playable 3D adventure`
+
+➡️ **[Play Hivebound](https://arcade.mjodheim.be/hivebound/)** · [the code and the game notes](games/hivebound)
 
 ---
 
@@ -115,7 +124,7 @@ That last one is the important one. 😈
 
 | Cabinet | Game | Genre | Status |
 |:--:|---|---|:--:|
-| `#001` | 🐝 **Hivebound: Relics of the Bloom** | Fantasy action roguelite | 🟢 PLAYABLE |
+| `#001` | 🐝 **Hivebound: Relics of the Bloom** | 3D adventure · action roguelite | 🟢 PLAYABLE |
 | `#002` | 🧱 **Stack Panic** | Chaotic falling-block puzzle | 🟢 PLAYABLE |
 | `#003` | ❔ **???** | ??? | 🔒 LOCKED |
 | `#004` | ❔ **???** | ??? | 🔒 LOCKED |
@@ -134,12 +143,25 @@ As the cabinet grows, Vibe Arcade is intended to gain a shared layer around the 
 - 🎖️ cross-game achievements
 - 📊 personal records and arcade statistics
 - 🎲 wildly different games built from new ideas
+- 🌍 full localisation: French first, English second
 
 The important constraint remains the same: **the player steers the product through ideas, playtesting, and natural-language feedback rather than manually implementing the gameplay.**
 
 ---
 
-## 🚀 Run the current arcade
+## 🚀 Play, or run the arcade yourself
+
+### Online
+
+The arcade is published at **[arcade.mjodheim.be](https://arcade.mjodheim.be)**: a static site, no account to create and nothing to install.
+
+| Address | What you get |
+|---|---|
+| [arcade.mjodheim.be](https://arcade.mjodheim.be) | the arcade floor and its cabinets |
+| [arcade.mjodheim.be/hivebound](https://arcade.mjodheim.be/hivebound/) | 🐝 Cabinet #001 |
+| [arcade.mjodheim.be/stack-panic](https://arcade.mjodheim.be/stack-panic/) | 🧱 Cabinet #002 |
+
+There, Hivebound runs in **local play**: no Hive server answers, so the game notices at boot, keeps your scores in your browser and shows a local leaderboard instead of a login form that could not work. Accounts and the global leaderboard need the instructions below.
 
 ### Docker
 
@@ -158,7 +180,7 @@ http://localhost:8080
 
 ### Without Docker
 
-Hivebound currently requires **Node.js 20+** and has zero runtime npm dependencies.
+Hivebound requires **Node.js 20+** on the server and a **WebGL2** browser on the player's side. It has zero runtime npm dependencies: three.js is vendored in `games/hivebound/public/vendor/`.
 
 ```bash
 cd games/hivebound
@@ -174,15 +196,19 @@ For controls, mechanics and game-specific notes, visit **[games/hivebound](games
 
 ```text
 Vibe-Arcade/
-├── 🎮 games/
-│   └── 🐝 hivebound/       # Game #001
-├── 🎨 assets/               # Arcade visuals
+├── 🕹️ index.html            # The arcade floor
+├── 🎮 games/                # One cabinet per folder
+├── 🎨 assets/               # Arcade visuals, icons and share cards
 ├── 📚 docs/
 │   └── PHILOSOPHY.md        # What the experiment explores
+├── 🌐 vercel.json           # Each cabinet's short address
+├── 🤖 robots.txt · sitemap.xml · site.webmanifest
 ├── 🐳 docker-compose.yml
 ├── 📖 README.md             # Français
 └── 📖 README.en.md          # English
 ```
+
+Each game stays self-contained in its own folder; `vercel.json` only gives it a short address under the arcade's domain.
 
 ---
 

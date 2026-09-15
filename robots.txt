@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# The games are published under their own short paths; the files behind them
+# are served from /games/ too, so keep crawlers on the canonical URLs.
+Disallow: /games/
+
+Sitemap: https://arcade.mjodheim.be/sitemap.xml

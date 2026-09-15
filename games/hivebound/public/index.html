@@ -5,7 +5,37 @@
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <title>Hivebound — Relics of the Bloom</title>
   <meta name="theme-color" content="#0b0910" />
+  <meta name="description" content="Hivebound — un jeu d'aventure 3D dans le navigateur : cinq biomes générés à la volée, des reliques absurdes et un Gardien à trois phases." />
+
+  <link rel="canonical" href="https://arcade.mjodheim.be/hivebound/" />
+  <link rel="icon" href="/assets/icon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="/assets/icon-192.png" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Vibe Arcade" />
+  <meta property="og:url" content="https://arcade.mjodheim.be/hivebound/" />
+  <meta property="og:title" content="Hivebound — Relics of the Bloom" />
+  <meta property="og:description" content="Une abeille, cinq biomes générés à la volée, un Gardien à trois phases. Vole, fouille, survis." />
+  <meta property="og:image" content="https://arcade.mjodheim.be/assets/og-hivebound.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Hivebound — Relics of the Bloom, borne #001 de Vibe Arcade." />
+  <meta property="og:locale" content="fr_FR" />
+  <meta property="og:locale:alternate" content="en_US" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Hivebound — Relics of the Bloom" />
+  <meta name="twitter:description" content="Une abeille, cinq biomes générés à la volée, un Gardien à trois phases. Vole, fouille, survis." />
+  <meta name="twitter:image" content="https://arcade.mjodheim.be/assets/og-hivebound.png" />
+
   <link rel="stylesheet" href="./styles.css" />
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "./vendor/three/three.module.min.js",
+        "three/addons/": "./vendor/three/addons/"
+      }
+    }
+  </script>
 </head>
 <body>
   <div id="app">
@@ -13,7 +43,7 @@
       <a class="brand" href="/">
         <span class="brand-mark">⬡</span>
         <span>HIVEBOUND</span>
-        <small>Relics of the Bloom</small>
+        <small data-fr="Reliques de la Bloom" data-en="Relics of the Bloom">Reliques de la Bloom</small>
       </a>
       <div class="top-actions">
         <a class="ghost arcade-link" href="/" data-fr="← Arcade" data-en="← Arcade">← Arcade</a>
@@ -27,13 +57,13 @@
     <main>
       <section id="homeScreen" class="screen active hero-screen">
         <div class="hero-copy">
-          <div class="game-index"><span>#001</span><i></i><b data-fr="ROGUELITE D’ACTION" data-en="ACTION ROGUELITE">ROGUELITE D’ACTION</b></div>
+          <div class="game-index"><span>#001</span><i></i><b data-fr="AVENTURE 3D · ROGUELITE" data-en="3D ADVENTURE · ROGUELITE">AVENTURE 3D · ROGUELITE</b></div>
           <p class="eyebrow" data-fr="LA BLOOM SE MEURT. LE GLOAM ARRIVE." data-en="THE BLOOM IS DYING. THE GLOAM IS COMING.">LA BLOOM SE MEURT. LE GLOAM ARRIVE.</p>
           <h1>
             <span data-fr="ENTRE DANS" data-en="ENTER THE">ENTRE DANS</span><br>
             <em data-fr="L’ESSAIM." data-en="HIVE.">L’ESSAIM.</em>
           </h1>
-          <p class="lede" data-fr="Choisis une classe, traverse des routes qui changent à chaque partie, combine les reliques et pousse ton build jusqu’à ce que le Gloam ait le dernier mot." data-en="Choose a class, cross routes that change every run, combine relics and push your build until the Gloam finally wins.">Choisis une classe, traverse des routes qui changent à chaque partie, combine les reliques et pousse ton build jusqu’à ce que le Gloam ait le dernier mot.</p>
+          <p class="lede" data-fr="Vole à travers des clairières générées en 3D, fouille l’herbe, choisis ta porte, affronte ce qui sort des failles et pousse ton build jusqu’à ce que le Gloam ait le dernier mot." data-en="Fly through procedurally generated 3D glades, search the grass, choose your gate, fight what crawls out of the rifts and push your build until the Gloam finally wins.">Vole à travers des clairières générées en 3D, fouille l’herbe, choisis ta porte, affronte ce qui sort des failles et pousse ton build jusqu’à ce que le Gloam ait le dernier mot.</p>
 
           <div class="hero-actions">
             <button class="primary big" id="newRunBtn"><span data-fr="Jouer" data-en="Play">Jouer</span><b>→</b></button>
@@ -42,9 +72,17 @@
 
           <div class="feature-strip">
             <span><b>4</b> <i data-fr="classes" data-en="classes">classes</i></span>
-            <span><b>∞</b> <i data-fr="routes" data-en="routes">routes</i></span>
-            <span><b>5</b> <i data-fr="biomes" data-en="biomes">biomes</i></span>
+            <span><b>5</b> <i data-fr="biomes 3D" data-en="3D biomes">biomes 3D</i></span>
+            <span><b>∞</b> <i data-fr="clairières" data-en="glades">clairières</i></span>
             <span><b>1</b> <i data-fr="objectif : aller plus loin" data-en="goal: go farther">objectif : aller plus loin</i></span>
+          </div>
+
+          <div class="control-hint">
+            <span><kbd>ZQSD</kbd> <i data-fr="voler" data-en="fly">voler</i></span>
+            <span><kbd data-fr="Clic" data-en="Click">Clic</kbd> <i data-fr="attaquer" data-en="attack">attaquer</i></span>
+            <span><kbd>Espace</kbd> <i data-fr="compétence" data-en="ability">compétence</i></span>
+            <span><kbd>Maj</kbd> <i data-fr="esquive" data-en="dash">esquive</i></span>
+            <span><kbd>E</kbd> <i data-fr="interagir" data-en="interact">interagir</i></span>
           </div>
         </div>
 
@@ -55,7 +93,7 @@
           <div class="bee-silhouette">🐝</div>
           <div class="art-card">
             <span data-fr="RUN EN COURS" data-en="CURRENT RUN">RUN EN COURS</span>
-            <strong data-fr="Construis. Risque. Survis." data-en="Build. Risk. Survive.">Construis. Risque. Survis.</strong>
+            <strong data-fr="Explore. Risque. Survis." data-en="Explore. Risk. Survive.">Explore. Risque. Survis.</strong>
           </div>
         </div>
       </section>
@@ -71,48 +109,106 @@
       </section>
 
       <section id="gameScreen" class="screen game-screen">
-        <div class="game-layout">
-          <aside class="hud-panel left-panel">
-            <div class="portrait" id="classPortrait">🐝</div>
-            <div><strong id="className">Warden</strong><small id="classSubtitle" data-fr="Classe" data-en="Class">Classe</small></div>
-            <div class="meter"><label><span data-fr="Vitalité" data-en="Vitality">Vitalité</span> <span id="hpText"></span></label><div><i id="hpBar"></i></div></div>
-            <div class="meter xp"><label><span data-fr="Niveau" data-en="Level">Niveau</span> <span id="levelText">1</span></label><div><i id="xpBar"></i></div></div>
-            <div class="stats-grid">
-              <span>⚔ <b id="damageStat">0</b></span><span>⚡ <b id="speedStat">0</b></span><span>✦ <b id="critStat">0</b></span><span>⌛ <b id="cooldownStat">0</b></span>
-            </div>
-            <div class="ability-card"><span id="abilityKeyLabel">SPACE</span><strong id="abilityName" data-fr="Compétence" data-en="Ability">Compétence</strong><small id="abilityDesc"></small><div class="cooldown"><i id="abilityCd"></i></div></div>
-            <div class="materials"><span>🍯 <b id="nectarCount">0</b></span><span>⬡ <b id="waxCount">0</b></span><span>✿ <b id="pollenCount">0</b></span></div>
-          </aside>
+        <canvas id="gameCanvas"></canvas>
 
-          <div class="arena-wrap">
-            <canvas id="gameCanvas" width="960" height="540"></canvas>
-            <div class="arena-top">
-              <div><small id="biomeLabel">VERDANT REACH</small><strong id="nodeLabel">Encounter</strong></div>
-              <div class="scorebox"><small>SCORE</small><b id="scoreText">0</b><span id="multiplierText">×1.00</span></div>
+        <div class="hud" id="hud">
+          <div class="hud-top">
+            <div class="hud-place">
+              <small id="biomeLabel">Étendue verdoyante</small>
+              <strong id="nodeLabel">Essaim du Gloam</strong>
+              <span id="regionLabel">Région 1</span>
             </div>
-            <div id="objective" class="objective" data-fr="Survivre" data-en="Survive">Survivre</div>
-            <div id="toast" class="toast"></div>
+
+            <div class="hud-center">
+              <div class="objective" id="objective" data-fr="Survivre" data-en="Survive">Survivre</div>
+              <div class="compass" id="compass"></div>
+              <div class="boss-bar hidden" id="bossBar">
+                <label><span id="bossName">Guardian</span><span id="bossPhase">I</span></label>
+                <div><i id="bossHp"></i></div>
+              </div>
+            </div>
+
+            <div class="hud-score">
+              <small>SCORE</small>
+              <b id="scoreText">0</b>
+              <span id="multiplierText">×1.00</span>
+            </div>
           </div>
 
-          <aside class="hud-panel right-panel">
-            <div class="side-title"><span data-fr="RÉSONANCE" data-en="RESONANCE">RÉSONANCE</span><small data-fr="Sigils portés" data-en="Sigils carried">Sigils portés</small></div>
-            <div id="resonances" class="resonances"></div>
-            <div class="side-title"><span data-fr="RELIQUES" data-en="RELICS">RELIQUES</span><small id="relicCount">0 / 8</small></div>
-            <div id="relics" class="relics"></div>
-            <div class="side-title"><span data-fr="PARTIE" data-en="RUN">PARTIE</span></div>
-            <div class="run-stats"><span><span data-fr="Région" data-en="Region">Région</span> <b id="regionStat">1</b></span><span>Gloam <b id="gloamStat">0%</b></span><span><span data-fr="Éliminations" data-en="Kills">Éliminations</span> <b id="killsStat">0</b></span></div>
-          </aside>
+          <div class="hud-bottom">
+            <div class="hud-vitals">
+              <div class="portrait" id="classPortrait">🐝</div>
+              <div class="vitals-bars">
+                <strong id="className">Waxguard</strong><span class="level-tag" id="levelText">LV 1</span>
+                <div class="meter hp"><i id="hpBar"></i><span id="hpText">0 / 0</span></div>
+                <div class="meter xp"><i id="xpBar"></i></div>
+              </div>
+              <div class="materials">
+                <span>🍯 <b id="nectarCount">0</b></span>
+                <span>⬡ <b id="waxCount">0</b></span>
+                <span>✿ <b id="pollenCount">0</b></span>
+              </div>
+            </div>
+
+            <div class="hud-actions">
+              <div class="action-slot" id="abilitySlot">
+                <i id="abilityCd"></i>
+                <b id="abilityIcon">✨</b>
+                <small id="abilityKeyLabel">SPACE</small>
+              </div>
+              <div class="action-slot small" id="dashSlot">
+                <i id="dashCd"></i>
+                <b>»</b>
+                <small id="dashKeyLabel">SHIFT</small>
+              </div>
+              <div class="ability-name">
+                <strong id="abilityName">Compétence</strong>
+                <small id="abilityDesc"></small>
+              </div>
+            </div>
+
+            <div class="hud-relics">
+              <div class="resonances" id="resonances"></div>
+              <div class="relic-strip" id="relics"></div>
+            </div>
+          </div>
+
+          <div class="crosshair" id="crosshair"></div>
+          <div class="prompt hidden" id="prompt"><kbd>E</kbd> <span id="promptLabel"></span></div>
+          <div class="toast" id="toast"></div>
+          <div class="damage-layer" id="damageLayer"></div>
+          <div class="hurt-flash" id="hurtFlash"></div>
+          <div class="glade-title" id="gladeTitle"><strong></strong><small></small></div>
+        </div>
+
+        <div class="pause-overlay hidden" id="pauseOverlay">
+          <div class="pause-card">
+            <p class="eyebrow" data-fr="PAUSE" data-en="PAUSED">PAUSE</p>
+            <h2 data-fr="La Ruche attend." data-en="The Hive waits.">La Ruche attend.</h2>
+            <div class="pause-actions">
+              <button class="primary" id="resumeBtn" data-fr="Reprendre" data-en="Resume">Reprendre</button>
+              <button class="secondary" id="pauseControlsBtn" data-fr="Commandes" data-en="Controls">Commandes</button>
+              <button class="ghost" id="quitBtn" data-fr="Abandonner la partie" data-en="Abandon run">Abandonner la partie</button>
+            </div>
+            <div class="quality-row">
+              <span data-fr="Qualité graphique" data-en="Graphics quality">Qualité graphique</span>
+              <div>
+                <button class="ghost quality" data-quality="low">Low</button>
+                <button class="ghost quality" data-quality="medium">Medium</button>
+                <button class="ghost quality" data-quality="high">High</button>
+              </div>
+            </div>
+            <div class="quality-row">
+              <span data-fr="Son" data-en="Sound">Son</span>
+              <div><button class="ghost" id="audioBtn">🔊</button></div>
+            </div>
+          </div>
         </div>
       </section>
 
-      <section id="pathScreen" class="screen path-screen">
-        <div class="section-heading"><p class="eyebrow" id="pathEyebrow">THE VERDANT REACH</p><h2 data-fr="Choisis la prochaine route." data-en="Choose the next path.">Choisis la prochaine route.</h2><p id="pathHint" data-fr="Chaque étape nourrit le Gloam. Plus tu prends de risques, plus le score grimpe." data-en="Every step feeds the Gloam. Greed scores higher.">Chaque étape nourrit le Gloam. Plus tu prends de risques, plus le score grimpe.</p></div>
-        <div id="pathCards" class="path-cards"></div>
-        <div id="runSummaryBar" class="run-summary-bar"></div>
-      </section>
-
       <section id="endScreen" class="screen end-screen">
-        <p class="eyebrow" data-fr="LA RUCHE SE SOUVIENT" data-en="THE HIVE REMEMBERS">LA RUCHE SE SOUVIENT</p><h2 id="endTitle" data-fr="Ta partie est terminée." data-en="Your run has ended.">Ta partie est terminée.</h2>
+        <p class="eyebrow" data-fr="LA RUCHE SE SOUVIENT" data-en="THE HIVE REMEMBERS">LA RUCHE SE SOUVIENT</p>
+        <h2 id="endTitle" data-fr="Ta partie est terminée." data-en="Your run has ended.">Ta partie est terminée.</h2>
         <div class="final-score"><small data-fr="SCORE FINAL" data-en="FINAL SCORE">SCORE FINAL</small><strong id="finalScore">0</strong></div>
         <div id="finalStats" class="final-stats"></div>
         <div class="hero-actions"><button class="primary big" id="againBtn" data-fr="Encore une partie" data-en="One More Run">Encore une partie</button><button class="secondary big" id="submitBtn" data-fr="Envoyer le score" data-en="Submit Score">Envoyer le score</button></div>

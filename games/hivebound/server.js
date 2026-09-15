@@ -88,6 +88,12 @@ function todaySeed() {
 }
 
 async function api(req, res, url) {
+  // The client asks this first. On a static deployment nothing answers it and
+  // the game switches to local play instead of offering accounts it cannot
+  // create.
+  if (req.method === 'GET' && url.pathname === '/api/health') {
+    return json(res, 200, { ok: true, service: 'hivebound' });
+  }
   if (req.method === 'POST' && url.pathname === '/api/register') {
     const data = await body(req);
     const username = normalizeUsername(data.username);
