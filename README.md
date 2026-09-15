@@ -180,12 +180,11 @@ Pour les contrôles, les mécaniques et les informations propres au jeu, voir **
 ```text
 Vibe-Arcade/
 ├── 🕹️ index.html            # La façade de l'arcade
-├── 🎮 games/
-│   └── 🐝 hivebound/       # Jeu #001
+├── 🎮 games/                # Une borne par dossier
 ├── 🎨 assets/               # Visuels de l'arcade, icônes et cartes de partage
 ├── 📚 docs/
 │   └── PHILOSOPHY.md        # Ce que l'expérience cherche à explorer
-├── 🌐 vercel.json           # Les adresses courtes : /hivebound/…
+├── 🌐 vercel.json           # Les adresses courtes de chaque borne
 ├── 🤖 robots.txt · sitemap.xml · site.webmanifest
 ├── 🐳 docker-compose.yml
 ├── 📖 README.md             # Français

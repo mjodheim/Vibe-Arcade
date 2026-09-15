@@ -180,12 +180,11 @@ For controls, mechanics and game-specific notes, visit **[games/hivebound](games
 ```text
 Vibe-Arcade/
 ├── 🕹️ index.html            # The arcade floor
-├── 🎮 games/
-│   └── 🐝 hivebound/       # Game #001
+├── 🎮 games/                # One cabinet per folder
 ├── 🎨 assets/               # Arcade visuals, icons and share cards
 ├── 📚 docs/
 │   └── PHILOSOPHY.md        # What the experiment explores
-├── 🌐 vercel.json           # The short addresses: /hivebound/…
+├── 🌐 vercel.json           # Each cabinet's short address
 ├── 🤖 robots.txt · sitemap.xml · site.webmanifest
 ├── 🐳 docker-compose.yml
 ├── 📖 README.md             # Français
