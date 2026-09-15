@@ -78,11 +78,3 @@ The goal is to make players chase combinations that sometimes become gloriously 
 This is intentionally a first playable build, not a finished game. The current server has basic run validation, but a determined player can still manipulate a browser client. Competitive leaderboards should later use replay/event validation or server-authoritative simulation.
 
 The JSON persistence layer is intentionally dependency-free for v0.2. When the shared Vibe Arcade account system stabilizes, it should move to PostgreSQL and become its own service used by every game.
-
-## Vibe log
-
-The product began from one conversation:
-
-> A fantasy web game starring bees, with selectable roles such as mage and warrior, loot, crafting, talents, maps, long-term replayability, and a per-user leaderboard. It should be the first game in a series and be built through iterative AI conversation rather than traditional hand-coding.
-
-The next iterations should be driven by actual play: what is boring, confusing, too easy, ugly, satisfying, surprising, or missing?
