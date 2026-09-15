@@ -5,6 +5,11 @@
       "source": "/hivebound",
       "destination": "/hivebound/",
       "permanent": false
+    },
+    {
+      "source": "/stack-panic",
+      "destination": "/stack-panic/",
+      "permanent": false
     }
   ],
   "rewrites": [
@@ -15,6 +20,14 @@
     {
       "source": "/hivebound/:path*",
       "destination": "/games/hivebound/public/:path*"
+    },
+    {
+      "source": "/stack-panic/",
+      "destination": "/games/stack-panic/public/index.html"
+    },
+    {
+      "source": "/stack-panic/:path*",
+      "destination": "/games/stack-panic/public/:path*"
     }
   ]
 }

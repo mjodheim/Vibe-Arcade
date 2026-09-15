@@ -54,6 +54,22 @@ Every run is about becoming increasingly unreasonable before the corruption catc
 
 ---
 
+# 🧱 CABINET #002
+
+## **Stack Panic**
+
+> *Everything is under control.*
+
+A **falling-block game** that refuses to behave. You stack, you clear lines — and the chaos director sends in sheep that shove cells around, water that pours into the holes, a bomb, a tank, a blackout, an inspecting duck, or a **structural breach**: the game opens into 3D and you fly a ship through a tunnel built out of your own stack.
+
+Every incident can save the run… or finish it. The chaos still has rules: it never piles on twice in a row, and it holds back while your stack is scraping the ceiling.
+
+`🐑 sheep` · `💧 liquid blocks` · `💣 bombs` · `🪖 tank` · `🌑 blackout` · `📼 glitch` · `🦆 duck` · `🌀 3D breach` · `☀️ daily challenge` · `🏆 local records`
+
+➡️ **[Play Stack Panic](https://arcade.mjodheim.be/stack-panic/)** · [the code and the game notes](games/stack-panic)
+
+---
+
 ## 🧪 The Vibe Loop
 
 ```text
@@ -100,7 +116,7 @@ That last one is the important one. 😈
 | Cabinet | Game | Genre | Status |
 |:--:|---|---|:--:|
 | `#001` | 🐝 **Hivebound: Relics of the Bloom** | Fantasy action roguelite | 🟢 PLAYABLE |
-| `#002` | ❔ **???** | ??? | 🔒 LOCKED |
+| `#002` | 🧱 **Stack Panic** | Chaotic falling-block puzzle | 🟢 PLAYABLE |
 | `#003` | ❔ **???** | ??? | 🔒 LOCKED |
 | `#004` | ❔ **???** | ??? | 🔒 LOCKED |
 

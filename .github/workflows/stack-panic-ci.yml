@@ -1,0 +1,29 @@
+name: Stack Panic CI
+
+on:
+  push:
+    paths:
+      - 'games/stack-panic/**'
+      - '.github/workflows/stack-panic-ci.yml'
+  pull_request:
+    paths:
+      - 'games/stack-panic/**'
+      - '.github/workflows/stack-panic-ci.yml'
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: games/stack-panic
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Check game scripts
+        # Everything the cabinet ships, minus the vendored three.js build.
+        run: |
+          find public -name '*.js' -not -path 'public/vendor/*' -print0 | xargs -0 -n1 node --check
+      - name: Check the vendored renderer is present
+        run: test -f public/vendor/three.module.min.js
