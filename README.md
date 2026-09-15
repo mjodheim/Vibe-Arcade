@@ -1,60 +1,174 @@
-# Vibe Arcade
+<p align="center">
+  <img src="assets/vibe-arcade-banner.svg" alt="Vibe Arcade — Ideas in, games out" width="100%" />
+</p>
 
-**Games born from ideas, conversation, playtesting, and iteration with AI.**
+<p align="center">
+  <strong>🎮 One idea. A few iterations. A new game to play.</strong><br/>
+  <sub>A growing arcade built through vibe coding.</sub>
+</p>
 
-Vibe Arcade is an experiment in **vibe coding**: instead of starting from code, frameworks, or a fixed technical specification, each game starts from a desired experience.
+<p align="center">
+  🧠 IDEA &nbsp;→&nbsp; 🤖 AI &nbsp;→&nbsp; 🕹️ PLAY &nbsp;→&nbsp; 💭 REACT &nbsp;→&nbsp; ✨ EVOLVE
+</p>
 
-The loop is intentionally simple:
+---
 
-> idea → discuss with AI → playable build → play → react → adapt → repeat
+## 🕹️ Welcome to Vibe Arcade
 
-The human role is to imagine, judge, steer, reject, refine, and decide when the result feels right. The code is an implementation detail handled through the AI workflow.
+**Vibe Arcade** is a collection of games that begin with a feeling, a weird idea, or a simple *“wouldn't it be cool if…?”*
 
-## Games
+No traditional game-design document has to come first. No framework has to be chosen before the fun exists. The desired experience comes first; AI turns it into something playable; then we play it, react to it, change direction, add ideas, remove boring parts, and keep going until it feels right.
 
-### #001 — Hivebound: Relics of the Bloom
+> **The code is not the attraction. The playable result is.**
 
-A fantasy action roguelite starring warrior, mage, ranger, and support bees. Runs combine procedural paths, combat, loot, crafting, talents, bosses, build-defining Sigil Resonances, Gloam risk/reward, Daily Hive seeds, and per-user scores.
+The source is public. The private conversations used to steer development are **not archived in this repository**.
 
-**Status:** playable prototype — v0.2
+---
 
-See [`games/hivebound`](games/hivebound).
+# 🐝 CABINET #001
 
-## Repository layout
+## **Hivebound: Relics of the Bloom**
+
+> *The Bloom is fading. The Hive remembers.*
+
+A fantasy action roguelite where heroic bees venture beyond the safety of the hive, chase strange relics, build ridiculous combinations, defeat corrupted creatures, and risk everything for a higher score.
+
+| 🛡️ Waxguard | ✨ Bloomweaver | 🏹 Thornstrider | 🎶 Hymnkeeper |
+|:---:|:---:|:---:|:---:|
+| Warrior | Mage | Ranger | Support |
+| Armor & retaliation | Arcane pollen & bursts | Speed & critical hits | Auras & swarm power |
+
+### 🍯 What's already inside?
+
+`⚔️ real-time combat` · `🗺️ procedural routes` · `💎 randomized loot` · `🌿 talents` · `🔨 crafting` · `👑 bosses` · `🌀 resonances` · `🌑 risk/reward pacts` · `🏆 leaderboards` · `☀️ Daily Hive`
+
+Every run is about becoming increasingly unreasonable before the corruption catches up with you.
+
+**Current build:** `v0.2 — playable prototype`
+
+➡️ **[Enter Hivebound](games/hivebound)**
+
+---
+
+## 🧪 The Vibe Loop
 
 ```text
-Vibe-Arcade/
-├── games/
-│   └── hivebound/        # Game #001
-├── docs/
-│   └── PHILOSOPHY.md     # What this experiment is trying to explore
-├── docker-compose.yml    # Run the current arcade stack
-└── README.md
+         💡 "What if...?"
+                │
+                ▼
+          🤖 BUILD IT
+                │
+                ▼
+          🎮 PLAY IT
+          ╱          ╲
+      😍 FUN        😐 MEH
+        │             │
+        │             ▼
+        │       💭 "Change this..."
+        │             │
+        └──────┬──────┘
+               ▼
+            ✨ EVOLVE
+               │
+               └──────────↺
 ```
 
-Future games will live beside Hivebound and share platform services such as identity, profiles, achievements, and leaderboards as those services mature.
+You do not need to describe APIs, classes, engines, databases, or patterns to influence the game.
 
-## Run Hivebound
+Useful input can simply be:
 
-Requires Docker, or Node.js 20+ if running the game directly.
+> *“The mage doesn't feel powerful enough.”*
+>
+> *“I want loot that can completely change my build.”*
+>
+> *“This boss is boring.”*
+>
+> *“Let me remap the controls.”*
+>
+> *“I want to play one more run.”*
+
+That last one is the important one. 😈
+
+---
+
+# 👾 The Arcade Floor
+
+| Cabinet | Game | Genre | Status |
+|:--:|---|---|:--:|
+| `#001` | 🐝 **Hivebound: Relics of the Bloom** | Fantasy action roguelite | 🟢 PLAYABLE |
+| `#002` | ❔ **???** | ??? | 🔒 LOCKED |
+| `#003` | ❔ **???** | ??? | 🔒 LOCKED |
+| `#004` | ❔ **???** | ??? | 🔒 LOCKED |
+
+Future games can share the same arcade identity, player profiles, achievements, and per-game leaderboards while remaining completely different experiences.
+
+---
+
+## 🏆 Arcade ambitions
+
+As the cabinet grows, Vibe Arcade is intended to gain a shared layer around the games:
+
+- 👤 one player identity across the arcade
+- 🏆 a leaderboard for every game
+- 🥇 daily and all-time challenges
+- 🎖️ cross-game achievements
+- 📊 personal records and arcade statistics
+- 🎲 wildly different games built from new ideas
+
+The important constraint remains the same: **the player steers the product through ideas, playtesting, and natural-language feedback rather than manually implementing the gameplay.**
+
+---
+
+## 🚀 Run the current arcade
+
+### Docker
 
 ```bash
 cp games/hivebound/.env.example games/hivebound/.env
-# set a strong HIVEBOUND_SECRET
+# Set a strong HIVEBOUND_SECRET in the .env file
 
 docker compose up -d --build
 ```
 
-Open `http://localhost:8080`.
+Then open:
 
-For game-specific instructions, controls, mechanics, and known limitations, see [`games/hivebound/README.md`](games/hivebound/README.md).
+```text
+http://localhost:8080
+```
 
-## Current experiment rule
+### Without Docker
 
-For this project, Anthony steers the product through conversation and playtesting rather than manually implementing gameplay code.
+Hivebound currently requires **Node.js 20+** and has zero runtime npm dependencies.
 
-The question is not *“Can AI generate code?”*.
+```bash
+cd games/hivebound
+export HIVEBOUND_SECRET='a-long-random-secret'
+node server.js
+```
 
-It is:
+For controls, mechanics and game-specific notes, visit **[games/hivebound](games/hivebound)**.
 
-> **How far can an idea be turned into a real, enjoyable, evolving game through conversation alone?**
+---
+
+## 🗂️ Behind the cabinets
+
+```text
+Vibe-Arcade/
+├── 🎮 games/
+│   └── 🐝 hivebound/       # Game #001
+├── 🎨 assets/               # Arcade visuals
+├── 📚 docs/
+│   └── PHILOSOPHY.md        # What the experiment explores
+├── 🐳 docker-compose.yml
+└── 📖 README.md
+```
+
+---
+
+<p align="center">
+  <strong>✨ HAVE AN IDEA. PLAY THE RESULT. ✨</strong>
+</p>
+
+<p align="center">
+  <sub>Vibe Arcade — built one strange idea at a time.</sub>
+</p>
