@@ -1,12 +1,26 @@
+function refreshBest(){
+  bestFreeEl.textContent=formatScore(bestFor(false));
+  bestDailyEl.textContent=formatScore(bestFor(true));
+}
+
 function screenKick(cls,ms){cabinet.classList.remove(cls);void cabinet.offsetWidth;cabinet.classList.add(cls);setTimeout(()=>cabinet.classList.remove(cls),ms);}
 
 function endGame(){
   state.gameOver=true;state.running=false;state.inputLocked=true;stopMusic();sfx('fail');
+  // A run can end mid-breach: put the tunnel away or it stays over the well.
+  if(state.mini){state.mini=null;if(window.Breach)window.Breach.stop(document.getElementById('breach'));cabinet.classList.remove('miniworld');}
+  const improved=recordBest(state.score,state.daily);
+  newBestEl.hidden=!improved;
+  refreshBest();
   finalScoreEl.textContent=formatScore(state.score);deathLine.textContent=['Les blocs ont gagné le conflit social.','La physique a déposé une réclamation.','Un mouton nie toute implication.','Le tank affirme avoir suivi le protocole.'][rand(4)];gameOverPanel.classList.remove('hidden');
 }
 
-function resetGame(){
-  state.board=emptyBoard();state.score=0;state.lines=0;state.level=1;state.chaos=0;state.gameOver=false;state.paused=false;state.running=true;state.inputLocked=false;state.activeEvent=null;state.eventUntil=0;state.sheep=[];state.bombs=[];state.smoke=[];state.particles=[];state.mini=null;state.tank=null;state.duck=null;cabinet.className='cabinet';state.next=makePiece();spawn();state.lastDrop=performance.now();scheduleNextEvent(performance.now()+2500);gameOverPanel.classList.add('hidden');startPanel.classList.add('hidden');eventTitle.textContent='SYSTEM NOMINAL';eventText.textContent='Aucune anomalie détectée. C’est suspect.';startMusic();
+function resetGame(daily=false){
+  state.daily=daily;
+  seedRun(daily?todaySeed():crypto.getRandomValues(new Uint32Array(1))[0]);
+  state.recentEvents=[];state.eventCooldown=null;
+  dailyBadge.hidden=!daily;
+  state.board=emptyBoard();state.score=0;state.lines=0;state.level=1;state.chaos=0;state.gameOver=false;state.paused=false;state.running=true;state.inputLocked=false;state.activeEvent=null;state.eventUntil=0;state.sheep=[];state.bombs=[];state.smoke=[];state.particles=[];state.mini=null;if(window.Breach)window.Breach.stop(document.getElementById('breach'));state.tank=null;state.duck=null;cabinet.className='cabinet';state.next=makePiece();spawn();state.lastDrop=performance.now();scheduleNextEvent(performance.now()+2500);gameOverPanel.classList.add('hidden');startPanel.classList.add('hidden');eventTitle.textContent='SYSTEM NOMINAL';eventText.textContent='Aucune anomalie détectée. C’est suspect.';startMusic();
 }
 
 function togglePause(){

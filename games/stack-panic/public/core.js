@@ -24,6 +24,10 @@ const finalScoreEl = document.getElementById('finalScore');
 const deathLine = document.getElementById('deathLine');
 const soundBtn = document.getElementById('soundBtn');
 const pauseBtn = document.getElementById('pauseBtn');
+const dailyBadge = document.getElementById('dailyBadge');
+const bestFreeEl = document.getElementById('bestFree');
+const bestDailyEl = document.getElementById('bestDaily');
+const newBestEl = document.getElementById('newBest');
 
 const COLORS = ['#000000','#43efff','#8f7cff','#ff5ab7','#ffd166','#b9ff66','#ff7a59','#62a8ff','#d17cff','#ffffff'];
 const SHAPES = [
@@ -43,7 +47,7 @@ const state = {
   activeEvent: null, eventUntil: 0, eventCooldown: 0,
   sheep: [], bombs: [], smoke: [], particles: [], waterCells: [],
   mini: null, sound: true, audio: null, musicTimer: null,
-  seed: Math.random() * 10000, time: 0, inputLocked: false
+  seed: 1, rngState: 1, daily: false, time: 0, inputLocked: false
 };
 
 const EVENT_POOL = [
@@ -58,7 +62,39 @@ const EVENT_POOL = [
 ];
 
 function emptyBoard(){ return Array.from({length:ROWS},()=>Array(COLS).fill(0)); }
-function rand(n){ return Math.floor(Math.random()*n); }
+
+// Every draw in the game goes through this one generator, so a daily run deals
+// the same pieces and the same incidents to everyone.
+function seedRun(seed){ state.seed=seed>>>0||1; state.rngState=state.seed; }
+function rng(){
+  let t=state.rngState+=0x6d2b79f5;
+  t=Math.imul(t^t>>>15,t|1);
+  t^=t+Math.imul(t^t>>>7,t|61);
+  return ((t^t>>>14)>>>0)/4294967296;
+}
+function rand(n){ return Math.floor(rng()*n); }
+function todaySeed(d=new Date()){
+  const key=`${d.getUTCFullYear()}-${String(d.getUTCMonth()+1).padStart(2,'0')}-${String(d.getUTCDate()).padStart(2,'0')}`;
+  let h=2166136261;
+  for(const ch of key){h^=ch.charCodeAt(0);h=Math.imul(h,16777619);}
+  return Math.abs(h>>>0);
+}
+
+const BEST_KEY='stack-panic.best.v1';
+function readBest(){ try{ return JSON.parse(localStorage.getItem(BEST_KEY)||'{}'); }catch{ return {}; } }
+function bestFor(daily){
+  const best=readBest();
+  if(daily) return best.dailySeed===todaySeed()?(best.daily||0):0;
+  return best.free||0;
+}
+function recordBest(score,daily){
+  const best=readBest();
+  const previous=bestFor(daily);
+  if(score<=previous) return false;
+  if(daily){ best.daily=score; best.dailySeed=todaySeed(); } else { best.free=score; }
+  try{ localStorage.setItem(BEST_KEY,JSON.stringify(best)); }catch{ /* private window */ }
+  return true;
+}
 function clamp(v,a,b){ return Math.max(a,Math.min(b,v)); }
 function formatScore(v){ return String(v).padStart(6,'0'); }
 

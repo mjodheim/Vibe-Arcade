@@ -43,16 +43,24 @@
         <div id="screenFx" class="screen-fx"></div>
         <canvas id="game" width="360" height="720"></canvas>
         <canvas id="overlay" width="360" height="720"></canvas>
+        <canvas id="breach" width="360" height="720" hidden aria-hidden="true"></canvas>
+        <div id="dailyBadge" class="daily-badge" hidden>DÉFI DU JOUR · MÊME CHAOS POUR TOUS</div>
         <div id="banner" class="banner" aria-live="polite"><small>INCIDENT INCOMING</small><strong>...</strong><span>...</span></div>
         <div id="startPanel" class="start-panel">
           <div class="logo-mini">STACK <b>PANIC</b></div>
           <p>Empile. Nettoie. Survis aux incidents.</p>
           <button id="startBtn" class="start-btn" type="button">INSERT COIN</button>
+          <button id="dailyBtn" class="start-btn ghost-btn" type="button">DÉFI DU JOUR</button>
+          <div class="best-scores">
+            <span>RECORD <b id="bestFree">000000</b></span>
+            <span>DU JOUR <b id="bestDaily">000000</b></span>
+          </div>
           <small>← → déplacer · ↑ rotation · ↓ accélérer · ESPACE chute</small>
         </div>
         <div id="gameOver" class="game-over hidden">
           <small>RUN TERMINATED</small>
           <strong id="finalScore">000000</strong>
+          <span id="newBest" class="new-best" hidden>NOUVEAU RECORD</span>
           <p id="deathLine">La grille avait d'autres projets.</p>
           <button id="restartBtn" class="start-btn" type="button">REBOOT</button>
         </div>
@@ -89,5 +97,7 @@
   <script src="/stack-panic/events.js"></script>
   <script src="/stack-panic/audio.js"></script>
   <script src="/stack-panic/controls.js"></script>
+  <!-- The 3D breach is a module; the game runs without it if WebGL is missing. -->
+  <script type="module" src="/stack-panic/breach.js"></script>
 </body>
 </html>
