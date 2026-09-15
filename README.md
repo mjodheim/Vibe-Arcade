@@ -27,8 +27,7 @@ Vibe-Arcade/
 ├── games/
 │   └── hivebound/        # Game #001
 ├── docs/
-│   ├── PHILOSOPHY.md     # What this experiment is trying to explore
-│   └── ARCADE_LOG.md     # Cross-game conversation / iteration log
+│   └── PHILOSOPHY.md     # What this experiment is trying to explore
 ├── docker-compose.yml    # Run the current arcade stack
 └── README.md
 ```
@@ -49,18 +48,6 @@ docker compose up -d --build
 Open `http://localhost:8080`.
 
 For game-specific instructions, controls, mechanics, and known limitations, see [`games/hivebound/README.md`](games/hivebound/README.md).
-
-## Why keep the history public?
-
-The interesting artifact is not only the final source code. It is the progression from a vague idea to something playable through repeated natural-language feedback.
-
-That is why Vibe Arcade deliberately keeps **vibe logs** documenting product-level feedback such as:
-
-- “I want to choose whether my bee is a warrior or a mage.”
-- “This should be deep enough to play for hours.”
-- “Keyboard shortcuts need to be configurable.”
-
-Those comments are treated as first-class development inputs.
 
 ## Current experiment rule
 
