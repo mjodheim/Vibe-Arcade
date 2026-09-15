@@ -33,6 +33,6 @@ It is an experiment in how far modern AI systems can reduce the distance between
 
 Games are an especially good test bed because feedback is immediate and human: the result either feels enjoyable, understandable, responsive, and worth replaying — or it does not.
 
-## Public history
+## What stays public
 
-The source code is public, but the evolution is part of the artifact too. Each game should keep a VIBELOG recording the natural-language feedback that materially changed it.
+The public repository contains the source code, game documentation, deployment setup, tests, and the playable results of the experiment. The conversations used to steer development are not archived in the repository.
