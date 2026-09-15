@@ -3,6 +3,22 @@ const sourceText=new WeakMap();
 let applying=false;
 
 const fr={
+  'Move forward':'Avancer','Move back':'Reculer','Strafe left':'Pas à gauche','Strafe right':'Pas à droite','Dash':'Esquive','Interact':'Interagir',
+  'Click a binding, then press the key you want. Escape cancels. Move with the keyboard, aim with the mouse, hold left click to attack, right-drag to turn the camera.':'Clique sur une commande puis appuie sur la touche voulue. Échap annule. Tu voles au clavier, tu vises à la souris, tu attaques en maintenant le clic gauche, et tu tournes la caméra avec le clic droit.',
+  'Explore the glade':'Explorer la clairière','Take a gate onward':'Franchis une porte','Defeat the Guardian':'Vaincre le Gardien',
+  'The way onward is open.':'La voie est ouverte.','The Guardian falls. The way opens.':'Le Gardien tombe. La voie s’ouvre.',
+  'A hidden comb, forgotten by everyone.':'Un rayon caché, oublié de tous.','The Guardian of the region awakens.':'Le Gardien de la région s’éveille.',
+  'The Guardian calls the swarm.':'Le Gardien appelle l’essaim.','Echo Resonance: your ability reverberates.':'Résonance d’Écho : ta compétence se répercute.',
+  'A Hidden Comb':'Un rayon caché','Nobody was meant to find this one.':'Personne n’était censé trouver celui-ci.',
+  'Deeper Bloom':'Bloom plus profonde','Leave this region behind. The next one is worse.':'Quitte cette région. La suivante est pire.','REGION · new biome':'RÉGION · nouveau biome',
+  'Gloam Mite':'Mite du Gloam','Petal Husk':'Carcasse de pétale','Spore Spitter':'Cracheur de spores','Thorn Stalker':'Traqueur d’épines','Region Guardian':'Gardien de région',
+  'Sunlight still reaches the clover here. It will not last.':'La lumière atteint encore le trèfle ici. Ça ne durera pas.',
+  'The spores remember every bee that breathed them in.':'Les spores se souviennent de chaque abeille qui les a respirées.',
+  'Something burned the blossom. The orchard kept standing anyway.':'Quelque chose a brûlé la floraison. Le verger est resté debout quand même.',
+  'Still water, and something patient underneath it.':'Une eau immobile, et quelque chose de patient en dessous.',
+  'The old hive of the Queen. Gold, and nobody left to wear it.':'L’ancienne ruche de la Reine. De l’or, et plus personne pour le porter.',
+  'Guardian':'Gardien','+18% melee reach.':'+18 % d’allonge au corps à corps.','Graphics quality':'Qualité graphique','Sound':'Son',
+  'Secrets':'Secrets','Bosses':'Boss','Kills':'Éliminations','Level':'Niveau',
   'Leaderboard':'Classement','Controls':'Commandes','Guest':'Invité','Begin a Run':'Lancer une partie','Daily Hive':'Défi du jour',
   'CHOOSE YOUR OATH':'CHOISIS TA VOIE','Who enters the Gloam?':'Qui entre dans le Gloam ?','Every class changes movement, attack rhythm, ability and talent pool.':'Chaque classe change ton rythme de jeu, ta portée, ta compétence et tes talents.',
   '← Back':'← Retour','Vitality':'Vitalité','Level':'Niveau','Ability':'Compétence','RESONANCE':'RÉSONANCE','Sigils carried':'Sigils portés','RELICS':'RELIQUES','RUN':'PARTIE','Region':'Région','Kills':'Éliminations','Survive':'Survivre',
@@ -48,6 +64,15 @@ function translateText(raw){
   let out=fr[text];
   let m;
   if(!out&&(m=text.match(/^Survive (\d+)s$/)))out=`Survivre ${m[1]} s`;
+  if(!out&&(m=text.match(/^Wave (\d+) \/ (\d+)$/)))out=`Vague ${m[1]} / ${m[2]}`;
+  if(!out&&(m=text.match(/^Wave (\d+) of (\d+)$/)))out=`Vague ${m[1]} sur ${m[2]}`;
+  if(!out&&(m=text.match(/^LV (\d+)$/)))out=`NIV ${m[1]}`;
+  if(!out&&(m=text.match(/^Region (\d+)$/)))out=`Région ${m[1]}`;
+  if(!out&&(m=text.match(/^Region (\d+) · Gloam (\d+)%$/)))out=`Région ${m[1]} · Gloam ${m[2]} %`;
+  if(!out&&(m=text.match(/^The Guardian sheds its shell\. Phase (\d+)\.$/)))out=`Le Gardien abandonne sa carapace. Phase ${m[1]}.`;
+  if(!out&&(m=text.match(/^Overflow (\d+): (.+)$/)))out=`Débordement ${m[1]} : ${translateText(m[2])}`;
+  if(!out&&(m=text.match(/^\+(\d+)% damage · \+(\d+) vitality$/)))out=`+${m[1]} % de dégâts · +${m[2]} de vitalité`;
+  if(!out&&(m=text.match(/^Hidden Cache$/)))out='Cache secrète';
   if(!out&&(m=text.match(/^Choose (.+)$/)))out=`Choisir ${fr[m[1]]||m[1]}`;
   if(!out&&(m=text.match(/^Guardian of (.+)$/)))out=`Gardien de ${fr[m[1]]||m[1]}`;
   if(!out&&(m=text.match(/^REGION (\d+) · (.+)$/)))out=`RÉGION ${m[1]} · ${fr[toTitleCase(m[2])]||m[2]}`;
@@ -109,6 +134,9 @@ function apply(){
   translateDynamic(document.body);
   const btn=document.querySelector('#langBtn');if(btn)btn.textContent=lang==='fr'?'EN':'FR';
 }
+
+// Text drawn outside the DOM (canvas signposts) asks for its translation here.
+export function translate(text){return currentLang()==='fr'?translateText(text):text}
 
 export function toggleLanguage(){localStorage.setItem(STORAGE_KEY,currentLang()==='fr'?'en':'fr');apply()}
 export function refreshLanguage(){apply()}

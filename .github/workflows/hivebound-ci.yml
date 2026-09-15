@@ -24,12 +24,12 @@ jobs:
       - name: Check server syntax
         run: node --check server.js
       - name: Check browser scripts
+        # Everything the game ships, minus the vendored three.js build.
         run: |
-          node --check public/js/api.js
-          node --check public/js/app.js
-          node --check public/js/game.js
-          node --check public/js/game-patches.js
-          node --check public/js/bootstrap.js
-          node --check public/js/i18n.js
+          find public/js -name '*.js' -print0 | xargs -0 -n1 node --check
+      - name: Check the vendored renderer is present
+        run: |
+          test -f public/vendor/three/three.module.min.js
+          test -f public/vendor/three/addons/postprocessing/UnrealBloomPass.js
       - name: Run tests
         run: npm test

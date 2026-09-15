@@ -35,7 +35,9 @@ Le code source est public. Les conversations privées utilisées pour orienter l
 
 > *The Bloom is fading. The Hive remembers.*
 
-Un roguelite d'action fantasy dans lequel des abeilles héroïques quittent la sécurité de la ruche, poursuivent d'étranges reliques, construisent des combinaisons absurdes, affrontent des créatures corrompues et risquent toujours davantage pour battre leur meilleur score.
+Un **jeu d'aventure 3D** dans lequel des abeilles héroïques quittent la sécurité de la ruche, traversent des clairières générées à la volée, fouillent l'herbe, poursuivent d'étranges reliques, construisent des combinaisons absurdes, affrontent des créatures corrompues et risquent toujours davantage pour battre leur meilleur score.
+
+Tu voles toi-même. Chaque étape d'une partie est une clairière à explorer : relief, champignons géants, piliers de cire en ruine, pollen qui dérive — et, au fond, trois portes qui annoncent exactement ce que tu choisis d'affronter ensuite.
 
 | 🛡️ Waxguard | ✨ Bloomweaver | 🏹 Thornstrider | 🎶 Hymnkeeper |
 |:---:|:---:|:---:|:---:|
@@ -44,11 +46,13 @@ Un roguelite d'action fantasy dans lequel des abeilles héroïques quittent la s
 
 ### 🍯 Qu'est-ce qui est déjà présent ?
 
-`⚔️ combats en temps réel` · `🗺️ routes procédurales` · `💎 loot aléatoire` · `🌿 talents` · `🔨 craft` · `👑 boss` · `🌀 résonances` · `🌑 pactes risque/récompense` · `🏆 classements` · `☀️ Daily Hive`
+`🌍 clairières 3D procédurales` · `⚔️ combats en temps réel` · `🐛 4 créatures du Gloam` · `👑 Gardien à 3 phases` · `💎 loot aléatoire` · `🌿 talents` · `🔨 craft` · `🌀 résonances` · `🌑 pactes risque/récompense` · `🗝 caches secrètes` · `🏆 classements` · `☀️ Daily Hive`
 
 Chaque run consiste à devenir de plus en plus déraisonnablement puissant avant que la corruption ne finisse par te rattraper.
 
-**Version actuelle :** `v0.2 — prototype jouable`
+Cinq biomes s'enchaînent — Étendue verdoyante, Profondeurs mycéliennes, Verger de cendres, Marais au clair de lune, Jardin sans couronne — chacun avec sa lumière, sa météo, sa végétation et sa couleur d'angoisse.
+
+**Version actuelle :** `v0.3 — aventure 3D jouable`
 
 ➡️ **[Entrer dans Hivebound](games/hivebound)**
 
@@ -99,7 +103,7 @@ La dernière phrase est la plus importante. 😈
 
 | Borne | Jeu | Genre | Statut |
 |:--:|---|---|:--:|
-| `#001` | 🐝 **Hivebound: Relics of the Bloom** | Roguelite d'action fantasy | 🟢 JOUABLE |
+| `#001` | 🐝 **Hivebound: Relics of the Bloom** | Aventure 3D · roguelite d'action | 🟢 JOUABLE |
 | `#002` | ❔ **???** | ??? | 🔒 VERROUILLÉ |
 | `#003` | ❔ **???** | ??? | 🔒 VERROUILLÉ |
 | `#004` | ❔ **???** | ??? | 🔒 VERROUILLÉ |
@@ -142,7 +146,7 @@ http://localhost:8080
 
 ### Sans Docker
 
-Hivebound nécessite actuellement **Node.js 20+** et n'a aucune dépendance npm nécessaire à l'exécution.
+Hivebound nécessite **Node.js 20+** côté serveur et un navigateur compatible **WebGL2** côté joueur. Aucune dépendance npm n'est nécessaire à l'exécution : three.js est embarqué dans `games/hivebound/public/vendor/`.
 
 ```bash
 cd games/hivebound

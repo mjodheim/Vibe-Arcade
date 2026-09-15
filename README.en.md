@@ -35,7 +35,9 @@ The source is public. The private conversations used to steer development are **
 
 > *The Bloom is fading. The Hive remembers.*
 
-A fantasy action roguelite where heroic bees venture beyond the safety of the hive, chase strange relics, build ridiculous combinations, defeat corrupted creatures, and risk everything for a higher score.
+A **3D adventure** where heroic bees venture beyond the safety of the hive, cross procedurally generated glades, search the grass, chase strange relics, build ridiculous combinations, defeat corrupted creatures, and risk everything for a higher score.
+
+You fly it yourself. Every step of a run is a glade to explore: rolling ground, giant mushrooms, ruined wax pillars, drifting pollen — and, at the far end, three gates that tell you exactly what you are choosing to walk into next.
 
 | 🛡️ Waxguard | ✨ Bloomweaver | 🏹 Thornstrider | 🎶 Hymnkeeper |
 |:---:|:---:|:---:|:---:|
@@ -44,11 +46,13 @@ A fantasy action roguelite where heroic bees venture beyond the safety of the hi
 
 ### 🍯 What's already inside?
 
-`⚔️ real-time combat` · `🗺️ procedural routes` · `💎 randomized loot` · `🌿 talents` · `🔨 crafting` · `👑 bosses` · `🌀 resonances` · `🌑 risk/reward pacts` · `🏆 leaderboards` · `☀️ Daily Hive`
+`🌍 procedural 3D glades` · `⚔️ real-time combat` · `🐛 4 Gloam creatures` · `👑 three-phase Guardian` · `💎 randomized loot` · `🌿 talents` · `🔨 crafting` · `🌀 resonances` · `🌑 risk/reward pacts` · `🗝 hidden caches` · `🏆 leaderboards` · `☀️ Daily Hive`
 
 Every run is about becoming increasingly unreasonable before the corruption catches up with you.
 
-**Current build:** `v0.2 — playable prototype`
+Five biomes cycle — Verdant Reach, Mycelian Deep, Ashen Orchard, Moonlit Fen, Crownless Garden — each with its own light, weather, vegetation and colour of dread.
+
+**Current build:** `v0.3 — playable 3D adventure`
 
 ➡️ **[Enter Hivebound](games/hivebound)**
 
@@ -99,7 +103,7 @@ That last one is the important one. 😈
 
 | Cabinet | Game | Genre | Status |
 |:--:|---|---|:--:|
-| `#001` | 🐝 **Hivebound: Relics of the Bloom** | Fantasy action roguelite | 🟢 PLAYABLE |
+| `#001` | 🐝 **Hivebound: Relics of the Bloom** | 3D adventure · action roguelite | 🟢 PLAYABLE |
 | `#002` | ❔ **???** | ??? | 🔒 LOCKED |
 | `#003` | ❔ **???** | ??? | 🔒 LOCKED |
 | `#004` | ❔ **???** | ??? | 🔒 LOCKED |
@@ -142,7 +146,7 @@ http://localhost:8080
 
 ### Without Docker
 
-Hivebound currently requires **Node.js 20+** and has zero runtime npm dependencies.
+Hivebound requires **Node.js 20+** on the server and a **WebGL2** browser on the player's side. It has zero runtime npm dependencies: three.js is vendored in `games/hivebound/public/vendor/`.
 
 ```bash
 cd games/hivebound
