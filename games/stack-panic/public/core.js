@@ -41,13 +41,14 @@ const SHAPES = [
 ];
 
 const state = {
-  board: [], piece: null, next: null, score: 0, lines: 0, level: 1,
+  board: [], piece: null, next: null, bag: [], score: 0, lines: 0, level: 1,
   chaos: 0, running: false, paused: false, gameOver: false,
-  lastDrop: 0, eventTimer: 0, nextEventAt: 15500,
+  lastDrop: 0, lastFrame: 0, frameDt: 1/60, eventTimer: 0, nextEventAt: 15500,
   activeEvent: null, eventUntil: 0, eventCooldown: 0,
   sheep: [], bombs: [], smoke: [], particles: [], waterCells: [],
-  mini: null, sound: true, audio: null, musicTimer: null,
-  seed: 1, rngState: 1, daily: false, time: 0, inputLocked: false
+  mini: null, sound: true, audio: null, master: null, musicTimer: null,
+  seed: 1, rngState: 1, fxState: 1, daily: false, time: 0, inputLocked: false,
+  pauseStartedAt: 0
 };
 
 const EVENT_POOL = [
@@ -63,16 +64,26 @@ const EVENT_POOL = [
 
 function emptyBoard(){ return Array.from({length:ROWS},()=>Array(COLS).fill(0)); }
 
-// Every draw in the game goes through this one generator, so a daily run deals
-// the same pieces and the same incidents to everyone.
-function seedRun(seed){ state.seed=seed>>>0||1; state.rngState=state.seed; }
+function seedRun(seed){
+  state.seed=seed>>>0||1;
+  state.rngState=state.seed;
+  state.fxState=(state.seed^0xa5a5a5a5)>>>0||1;
+  state.bag=[];
+}
 function rng(){
   let t=state.rngState+=0x6d2b79f5;
   t=Math.imul(t^t>>>15,t|1);
   t^=t+Math.imul(t^t>>>7,t|61);
   return ((t^t>>>14)>>>0)/4294967296;
 }
+function fxRng(){
+  let x=state.fxState|0;
+  x^=x<<13; x^=x>>>17; x^=x<<5;
+  state.fxState=x>>>0;
+  return state.fxState/4294967296;
+}
 function rand(n){ return Math.floor(rng()*n); }
+function fxRand(n){ return Math.floor(fxRng()*n); }
 function todaySeed(d=new Date()){
   const key=`${d.getUTCFullYear()}-${String(d.getUTCMonth()+1).padStart(2,'0')}-${String(d.getUTCDate()).padStart(2,'0')}`;
   let h=2166136261;
@@ -92,15 +103,23 @@ function recordBest(score,daily){
   const previous=bestFor(daily);
   if(score<=previous) return false;
   if(daily){ best.daily=score; best.dailySeed=todaySeed(); } else { best.free=score; }
-  try{ localStorage.setItem(BEST_KEY,JSON.stringify(best)); }catch{ /* private window */ }
+  try{ localStorage.setItem(BEST_KEY,JSON.stringify(best)); }catch{ }
   return true;
 }
 function clamp(v,a,b){ return Math.max(a,Math.min(b,v)); }
 function formatScore(v){ return String(v).padStart(6,'0'); }
 
+function refillBag(){
+  state.bag=Array.from({length:SHAPES.length},(_,i)=>i);
+  for(let i=state.bag.length-1;i>0;i--){
+    const j=Math.floor(rng()*(i+1));
+    [state.bag[i],state.bag[j]]=[state.bag[j],state.bag[i]];
+  }
+}
+function nextType(){ if(!state.bag.length) refillBag(); return state.bag.pop(); }
 function makePiece(){
-  const type = rand(SHAPES.length);
-  return { matrix: SHAPES[type].map(r=>r.slice()), x: Math.floor(COLS/2)-2, y:-1, color:1+rand(7), type };
+  const type=nextType();
+  return {matrix:SHAPES[type].map(r=>r.slice()),x:Math.floor(COLS/2)-2,y:-1,color:1+(type%7),type};
 }
 
 function rotate(matrix){ return matrix[0].map((_,i)=>matrix.map(row=>row[i]).reverse()); }
@@ -152,7 +171,16 @@ function spawn(){
 }
 
 function move(dx){ if(canInput()&&!collides(state.piece,dx,0)){state.piece.x+=dx;sfx('move');} }
-function softDrop(){ if(!canInput())return; if(!collides(state.piece,0,1)){state.piece.y++;state.score+=1;} else merge(); state.lastDrop=performance.now(); }
+function stepDown(manual=false){
+  if(!canInput())return;
+  if(!collides(state.piece,0,1)){
+    state.piece.y++;
+    if(manual) state.score+=1;
+  }else merge();
+  state.lastDrop=performance.now();
+}
+function softDrop(){ stepDown(true); }
+function gravityDrop(){ stepDown(false); }
 function hardDrop(){
   if(!canInput())return;
   let d=0; while(!collides(state.piece,0,1)){state.piece.y++;d++;}
@@ -168,16 +196,20 @@ function canInput(){ return state.running&&!state.paused&&!state.gameOver&&!stat
 function dropInterval(){ return Math.max(105, 720 - (state.level-1)*55); }
 
 function update(t){
+  const dt=state.lastFrame?clamp((t-state.lastFrame)/1000,0,0.05):1/60;
+  state.lastFrame=t;
+  state.frameDt=dt;
   state.time=t;
   if(state.running&&!state.paused&&!state.gameOver){
-    if(!state.mini && t-state.lastDrop>dropInterval()){ softDrop(); }
-    updateEvents(t);
-    updateParticles();
-    updateSheep(t);
-    updateBombs(t);
-    updateTank(t);
-    updateWater(t);
-    updateSmoke();
+    if(!state.mini && t-state.lastDrop>dropInterval()) gravityDrop();
+    updateEvents(t,dt);
+    updateParticles(dt);
+    updateSheep(t,dt);
+    updateBombs(t,dt);
+    updateTank(t,dt);
+    updateWater(dt);
+    updateSmoke(dt);
+    updateDuck(t,dt);
     if(state.mini) updateMini(t);
   }
   draw();
@@ -236,4 +268,7 @@ function updateHud(){
   scoreEl.textContent=formatScore(state.score);linesEl.textContent=state.lines;levelEl.textContent=state.level;
   chaosFill.style.width=state.chaos+'%';
   chaosLabel.textContent = state.chaos<25?'NORMAL':state.chaos<50?'WEIRD':state.chaos<75?'UNSTABLE':state.chaos<95?'WTF':'REALITY FAIL';
+  const topRow=state.board.findIndex(row=>row.some(Boolean));
+  const highDanger=topRow>=0&&topRow<=4;
+  cabinet.classList.toggle('danger-high',highDanger&&!state.mini);
 }
