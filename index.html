@@ -3,11 +3,12 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <meta name="theme-color" content="#070912" />
-  <meta name="description" content="Vibe Arcade — une collection de jeux gratuits à lancer directement dans le navigateur." />
-  <title>Vibe Arcade — Choisis un jeu</title>
+  <meta name="theme-color" content="#05070d" />
+  <meta name="description" content="Vibe Arcade — deux mondes gratuits à lancer directement dans le navigateur : Hivebound, action-RPG 3D, et Stack Panic, puzzle chaotique." />
+  <title>Vibe Arcade — Deux mondes, zéro installation</title>
   <link rel="stylesheet" href="/arcade.css" />
   <link rel="stylesheet" href="/arcade-stack.css" />
+  <link rel="stylesheet" href="/arcade-v2.css" />
 </head>
 <body>
   <div class="bg" aria-hidden="true"><div class="grid"></div><div class="orb o1"></div><div class="orb o2"></div></div>
@@ -23,50 +24,76 @@
 
   <main>
     <section class="hero">
-      <div class="hero-kicker" data-fr="ARCADE EN LIGNE · GRATUIT · SANS INSTALLATION" data-en="ONLINE ARCADE · FREE · NO INSTALL">ARCADE EN LIGNE · GRATUIT · SANS INSTALLATION</div>
-      <h1><span data-fr="CHOISIS UN MONDE." data-en="PICK A WORLD.">CHOISIS UN MONDE.</span><br><em data-fr="LANCE UNE PARTIE." data-en="START A GAME.">LANCE UNE PARTIE.</em></h1>
-      <p class="hero-text" data-fr="Des jeux à lancer directement dans ton navigateur. Pas de téléchargement : choisis une borne, découvre ses règles et essaie d’aller plus loin à chaque partie." data-en="Games you can launch straight from your browser. No downloads: pick a cabinet, learn its rules and see how far you can go.">Des jeux à lancer directement dans ton navigateur. Pas de téléchargement : choisis une borne, découvre ses règles et essaie d’aller plus loin à chaque partie.</p>
-      <div class="hero-actions">
-        <a class="cta primary" href="/stack-panic/" data-fr="Jouer à Stack Panic" data-en="Play Stack Panic">Jouer à Stack Panic</a>
-        <a class="cta" href="#games" data-fr="Voir tous les jeux" data-en="Browse all games">Voir tous les jeux</a>
+      <div class="hero-copy">
+        <div class="hero-kicker" data-fr="VIBE ARCADE · DEUX MONDES JOUABLES · ZÉRO INSTALLATION" data-en="VIBE ARCADE · TWO PLAYABLE WORLDS · ZERO INSTALLS">VIBE ARCADE · DEUX MONDES JOUABLES · ZÉRO INSTALLATION</div>
+        <h1><span data-fr="ENTRE DANS UN MONDE." data-en="STEP INTO A WORLD.">ENTRE DANS UN MONDE.</span><br><em data-fr="PAS DANS UN MENU." data-en="NOT A MENU.">PAS DANS UN MENU.</em></h1>
+        <p class="hero-text" data-fr="Une petite arcade web où chaque jeu essaie d’avoir sa propre identité. Explore une ruche 3D envahie par le Gloam, ou empile des blocs pendant que la réalité sabote ta partie." data-en="A small web arcade where every game tries to feel like its own place. Explore a 3D hive world invaded by the Gloam, or stack blocks while reality sabotages your run.">Une petite arcade web où chaque jeu essaie d’avoir sa propre identité. Explore une ruche 3D envahie par le Gloam, ou empile des blocs pendant que la réalité sabote ta partie.</p>
+        <div class="hero-actions">
+          <a class="cta primary" href="/hivebound/" data-fr="Explorer Hivebound" data-en="Explore Hivebound">Explorer Hivebound</a>
+          <a class="cta" href="/stack-panic/" data-fr="Entrer dans Stack Panic" data-en="Enter Stack Panic">Entrer dans Stack Panic</a>
+        </div>
+        <div class="pulse-line"><span></span><small data-fr="2 jeux jouables maintenant · navigateur desktop recommandé" data-en="2 games playable now · desktop browser recommended">2 jeux jouables maintenant · navigateur desktop recommandé</small></div>
       </div>
-      <div class="pulse-line"><span></span><small data-fr="2 jeux disponibles · d’autres arrivent" data-en="2 games available · more are coming">2 jeux disponibles · d’autres arrivent</small></div>
+
+      <div class="hero-worlds" aria-hidden="true">
+        <div class="world-orbit">
+          <div class="world-card hive">
+            <div class="honey-field"></div>
+            <div class="hive-city"><i></i><i></i><i></i></div>
+            <div class="preview-swarm"><b style="left:0;top:25%;--delay:-1s"></b><b style="left:5%;top:55%;--delay:-4s;--d:8s"></b><b style="left:-8%;top:73%;--delay:-6s;--d:9s"></b></div>
+            <div class="world-label"><small>3D ACTION RPG</small><strong>HIVEBOUND</strong></div>
+          </div>
+          <div class="world-card stack">
+            <div class="stack-mini-grid"></div><div class="stack-meteor"></div>
+            <div class="stack-mini-blocks"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+            <div class="world-label"><small>CHAOTIC BLOCK SURVIVAL</small><strong>STACK PANIC</strong></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="world-strip" aria-label="Arcade highlights">
+      <div class="world-strip-inner">
+        <div class="world-stat"><small data-fr="HIVEBOUND" data-en="HIVEBOUND">HIVEBOUND</small><strong data-fr="Monde 3D explorable" data-en="Explorable 3D world">Monde 3D explorable</strong></div>
+        <div class="world-stat"><small data-fr="PROGRESSION" data-en="PROGRESSION">PROGRESSION</small><strong data-fr="Talents · craft · potions" data-en="Talents · craft · potions">Talents · craft · potions</strong></div>
+        <div class="world-stat"><small data-fr="STACK PANIC" data-en="STACK PANIC">STACK PANIC</small><strong data-fr="Incidents qui touchent vraiment la grille" data-en="Incidents that really hit the board">Incidents qui touchent vraiment la grille</strong></div>
+        <div class="world-stat"><small data-fr="REALITY FAIL" data-en="REALITY FAIL">REALITY FAIL</small><strong data-fr="Cataclysmes 3D à 100% chaos" data-en="3D cataclysms at 100% chaos">Cataclysmes 3D à 100% chaos</strong></div>
+      </div>
     </section>
 
     <section id="games" class="games-section">
       <div class="section-head">
-        <div><span class="eyebrow" data-fr="JEUX DISPONIBLES" data-en="AVAILABLE GAMES">JEUX DISPONIBLES</span><h2 data-fr="Choisis ta prochaine partie." data-en="Choose your next game.">Choisis ta prochaine partie.</h2></div>
-        <p data-fr="Chaque jeu possède son propre univers, ses propres règles et sa manière de te faire dire « encore une partie »." data-en="Every game has its own world, its own rules and its own way of making you say ‘one more run’.">Chaque jeu possède son propre univers, ses propres règles et sa manière de te faire dire « encore une partie ».</p>
+        <div><span class="eyebrow" data-fr="CHOISIS TA BORNE" data-en="CHOOSE YOUR CABINET">CHOISIS TA BORNE</span><h2 data-fr="Deux jeux. Deux personnalités." data-en="Two games. Two personalities.">Deux jeux. Deux personnalités.</h2></div>
+        <p data-fr="Pas de launcher, pas de téléchargement. Clique, apprends le monde en jouant et reviens quand une mise à jour a encore empiré les choses." data-en="No launcher, no download. Click, learn the world by playing, and come back when an update has made things even stranger.">Pas de launcher, pas de téléchargement. Clique, apprends le monde en jouant et reviens quand une mise à jour a encore empiré les choses.</p>
       </div>
 
       <div class="cabinet-grid">
         <article class="cabinet live">
           <div class="cabinet-screen hivebound-preview">
-            <div class="screen-noise"></div>
-            <span class="cabinet-number">#001</span>
-            <span class="status"><i></i> ONLINE</span>
-            <div class="game-symbol">⬡</div>
+            <div class="screen-noise"></div><div class="honey-field"></div>
+            <span class="cabinet-number">#001</span><span class="status"><i></i> WORLD ONLINE</span>
+            <div class="hive-city"><i></i><i></i><i></i></div>
+            <div class="preview-swarm"><b></b><b></b><b></b><b></b></div>
             <div class="game-title"><small>RELICS OF THE BLOOM</small><strong>HIVEBOUND</strong></div>
           </div>
           <div class="cabinet-body">
-            <div><span class="genre">ACTION ROGUELITE</span><h3>Hivebound: Relics of the Bloom</h3></div>
-            <p data-fr="Choisis l’une des quatre classes, construis ton build avec des reliques et des talents, affronte le Gloam et pousse ta partie aussi loin que possible." data-en="Choose one of four classes, build around relics and talents, face the Gloam and push your run as far as you can.">Choisis l’une des quatre classes, construis ton build avec des reliques et des talents, affronte le Gloam et pousse ta partie aussi loin que possible.</p>
-            <a class="play" href="/hivebound/"><span data-fr="JOUER MAINTENANT" data-en="PLAY NOW">JOUER MAINTENANT</span><b>→</b></a>
+            <div><span class="genre">3D ACTION RPG · EXPLORATION</span><h3>Hivebound: Relics of the Bloom</h3></div>
+            <p data-fr="Traverse Verdant Reach comme un éclaireur de la ruche. Explore, récolte, résous des sanctuaires, combats le Gloam, apprends des talents et transforme nectar, cire et pollen en outils de survie." data-en="Cross Verdant Reach as a hive wanderer. Explore, harvest, solve shrines, fight the Gloam, learn talents and turn nectar, wax and pollen into survival tools.">Traverse Verdant Reach comme un éclaireur de la ruche. Explore, récolte, résous des sanctuaires, combats le Gloam, apprends des talents et transforme nectar, cire et pollen en outils de survie.</p>
+            <div class="feature-tags"><span>3D WORLD</span><span>PUZZLES</span><span>COMBAT</span><span>TALENTS</span><span>CRAFT</span></div>
+            <a class="play" href="/hivebound/"><span data-fr="ENTRER DANS VERDANT REACH" data-en="ENTER VERDANT REACH">ENTRER DANS VERDANT REACH</span><b>→</b></a>
           </div>
         </article>
 
         <article class="cabinet live stack-card">
           <div class="cabinet-screen stack-preview">
-            <div class="screen-noise"></div>
-            <span class="cabinet-number">#002</span>
-            <span class="status"><i></i> EXPERIMENTAL</span>
-            <span class="chaos-sticker">CHAOS ENABLED</span>
-            <div class="stack-blocks" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
-            <div class="game-title"><small>EVERYTHING IS UNDER CONTROL</small><strong>STACK PANIC</strong></div>
+            <div class="screen-noise"></div><span class="cabinet-number">#002</span><span class="status"><i></i> UNSTABLE</span><span class="chaos-sticker">CHAOS ENABLED</span>
+            <div class="stack-blocks" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><div class="stack-meteor"></div>
+            <div class="game-title"><small>THE BOARD HATES YOU NOW</small><strong>STACK PANIC</strong></div>
           </div>
           <div class="cabinet-body">
-            <div><span class="genre">CHAOTIC BLOCK PUZZLE</span><h3>Stack Panic</h3></div>
-            <p data-fr="Empile les blocs pendant que météores, boule de démolition, pluie acide et gravité résiliée démontent ta pile. Quinze incidents, une bande-son par incident, et deux catastrophes à la fois quand ça dégénère." data-en="Stack blocks while meteors, a wrecking ball, acid rain and cancelled gravity take your stack apart. Fifteen incidents, a soundtrack for each, and two disasters at once once it gets out of hand.">Empile les blocs pendant que météores, boule de démolition, pluie acide et gravité résiliée démontent ta pile. Quinze incidents, une bande-son par incident, et deux catastrophes à la fois quand ça dégénère.</p>
+            <div><span class="genre">CHAOTIC BLOCK SURVIVAL</span><h3>Stack Panic</h3></div>
+            <p data-fr="Empile vite. Ensuite surviennent moutons, tanks, météores, acide, reconfiguration hostile et REALITY FAIL. Les événements ne te parlent plus : ils touchent directement la grille." data-en="Stack fast. Then come sheep, tanks, meteors, acid, hostile reconfiguration and REALITY FAIL. Events no longer talk at you: they hit the board directly.">Empile vite. Ensuite surviennent moutons, tanks, météores, acide, reconfiguration hostile et REALITY FAIL. Les événements ne te parlent plus : ils touchent directement la grille.</p>
+            <div class="feature-tags"><span>HOSTILE EVENTS</span><span>3D FX</span><span>DAILY SEED</span><span>REALITY FAIL</span></div>
             <a class="play" href="/stack-panic/"><span data-fr="ENTRER DANS LE CHAOS" data-en="ENTER THE CHAOS">ENTRER DANS LE CHAOS</span><b>→</b></a>
           </div>
         </article>
@@ -75,8 +102,8 @@
 
     <section class="manifesto">
       <span class="eyebrow">VIBE ARCADE</span>
-      <div class="loop"><span>⚡ <b data-fr="JOUER DIRECTEMENT" data-en="PLAY INSTANTLY">JOUER DIRECTEMENT</b></span><span>🎮 <b data-fr="SANS INSTALLATION" data-en="NO INSTALL">SANS INSTALLATION</b></span><span>🏆 <b data-fr="BATTRE TON SCORE" data-en="BEAT YOUR SCORE">BATTRE TON SCORE</b></span><span>🌍 <b data-fr="DÉCOUVRIR DE NOUVEAUX MONDES" data-en="DISCOVER NEW WORLDS">DÉCOUVRIR DE NOUVEAUX MONDES</b></span></div>
-      <p data-fr="Pas besoin de compte pour commencer. Choisis un jeu et joue." data-en="No account needed to start. Pick a game and play.">Pas besoin de compte pour commencer. Choisis un jeu et joue.</p>
+      <div class="loop"><span>⚡ <b data-fr="JOUER DIRECTEMENT" data-en="PLAY INSTANTLY">JOUER DIRECTEMENT</b></span><span>🌍 <b data-fr="DES MONDES, PAS DES MENUS" data-en="WORLDS, NOT MENUS">DES MONDES, PAS DES MENUS</b></span><span>🧪 <b data-fr="EXPÉRIMENTER" data-en="EXPERIMENT">EXPÉRIMENTER</b></span><span>🎮 <b data-fr="REVENIR APRÈS CHAQUE UPDATE" data-en="COME BACK AFTER EVERY UPDATE">REVENIR APRÈS CHAQUE UPDATE</b></span></div>
+      <p data-fr="Pas besoin de compte pour commencer. Choisis un monde et entre dedans." data-en="No account needed to start. Pick a world and step inside.">Pas besoin de compte pour commencer. Choisis un monde et entre dedans.</p>
     </section>
   </main>
 
