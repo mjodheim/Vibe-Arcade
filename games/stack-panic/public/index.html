@@ -33,6 +33,7 @@
   <link rel="stylesheet" href="/stack-panic/cataclysms.css" />
   <link rel="stylesheet" href="/stack-panic/incident-3d.css" />
   <link rel="stylesheet" href="/stack-panic/sabotage.css" />
+  <link rel="stylesheet" href="/stack-panic/events-only.css" />
 </head>
 <body>
   <div class="noise" aria-hidden="true"></div>
@@ -60,7 +61,7 @@
         <div class="event-card">
           <small>INCIDENT FEED</small>
           <strong id="eventTitle">SYSTEM NOMINAL</strong>
-          <p id="eventText">Aucune anomalie détectée. C'est suspect.</p>
+          <p id="eventText">Aucune anomalie détectée.</p>
         </div>
       </aside>
 
@@ -71,22 +72,10 @@
         <canvas id="overlay" width="360" height="720"></canvas>
         <canvas id="breach" width="360" height="720" hidden aria-hidden="true"></canvas>
         <div id="dailyBadge" class="daily-badge" hidden>DÉFI DU JOUR · MÊME CHAOS POUR TOUS</div>
-        <div id="banner" class="banner" aria-live="polite"><small>INCIDENT INCOMING</small><strong>...</strong><span>...</span></div>
+        <div id="banner" class="banner" aria-live="polite"><small>INCIDENT</small><strong>...</strong><span>...</span></div>
 
-        <div id="crash" class="crash" hidden aria-hidden="true">
-          <b>:(</b>
-          <p>Le système a rencontré un problème et doit faire semblant de redémarrer.</p>
-          <p class="crash-progress">Collecte d'informations sur l'erreur… <i>100%</i></p>
-          <small class="crash-code">STOP 0x000000</small>
-          <small>La partie, elle, continue. Bonne chance.</small>
-        </div>
-
-        <div id="advert" class="advert" hidden aria-hidden="true">
-          <em>PUBLICITÉ</em>
-          <strong>BLOCS PREMIUM</strong>
-          <span>Les mêmes blocs, mais avec un abonnement mensuel.</span>
-          <button type="button" tabindex="-1">Fermer (ne fonctionne pas)</button>
-        </div>
+        <div id="crash" class="crash" hidden aria-hidden="true"></div>
+        <div id="advert" class="advert" hidden aria-hidden="true"></div>
 
         <div id="startPanel" class="start-panel">
           <div class="logo-mini">STACK <b>PANIC</b></div>
@@ -113,14 +102,14 @@
         <div class="next-box"><small>NEXT</small><canvas id="next" width="144" height="144"></canvas></div>
         <div class="rules">
           <small>SURVIVAL NOTES</small>
-          <p>Les incidents ne sont plus obligés d'être utiles. Ils peuvent maintenant saboter une pile propre.</p>
+          <p>Les incidents agissent directement sur la partie : pas de pop-up, pas de pub, pas de faux message système.</p>
           <p>Plus le chaos monte, plus la chute accélère et plus les gros incidents peuvent s'enchaîner.</p>
           <p>🔀 La reconfiguration mélange des rangées et remonte des blocs sans en supprimer : à toi de réparer le carnage.</p>
           <p>À 100% : REALITY FAIL. La grille bascule dans un cataclysme 3D qui modifie réellement la pile.</p>
           <p>La brèche 3D utilise la vraie pile. Dans le tunnel : flèches/WASD pour piloter, ESPACE pour booster.</p>
         </div>
         <div class="legend">
-          <span>🐑 Piétinement</span><span>🔀 Reconfiguration</span><span>💧 Physique</span><span>💣 Sabotage</span><span>☄️ Impacts</span><span>🏗️ Démolition</span><span>🧪 Corrosion</span><span>🧲 Magnétisme</span><span>🙃 Gravité</span><span>💀 Panne système</span><span>🌀 Reality break</span>
+          <span>🐑 Piétinement</span><span>🔀 Reconfiguration</span><span>💧 Physique</span><span>💣 Sabotage</span><span>☄️ Impacts</span><span>🏗️ Démolition</span><span>🧪 Corrosion</span><span>🧲 Magnétisme</span><span>🙃 Gravité</span><span>🌀 Reality break</span>
         </div>
       </aside>
     </section>
@@ -134,8 +123,8 @@
     </section>
 
     <section class="notes">
-      <span>BUILD 0.7 // MEANER CHAOS</span>
-      <p>Gravité plus nerveuse, récupération réduite, moutons réellement destructeurs et nouvelle reconfiguration hostile de la pile. À haut chaos, le jeu arrête de te protéger.</p>
+      <span>BUILD 0.8 // EVENTS ONLY</span>
+      <p>Le chaos se montre par des animations, du son et des dégâts réels. Les pubs, faux écrans système et annonces textuelles d'incident ont été retirés.</p>
     </section>
   </main>
 
@@ -146,6 +135,7 @@
   <script src="/stack-panic/runtime.js"></script>
   <script src="/stack-panic/sabotage.js"></script>
   <script src="/stack-panic/ui-cinematics.js"></script>
+  <script src="/stack-panic/events-only.js"></script>
   <script src="/stack-panic/fx-director.js"></script>
   <script src="/stack-panic/cataclysms.js"></script>
   <script src="/stack-panic/controls.js"></script>
