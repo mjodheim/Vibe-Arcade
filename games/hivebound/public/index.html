@@ -4,19 +4,28 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <meta name="theme-color" content="#17281d" />
-  <meta name="description" content="Hivebound — explore the Bloom, solve ancient shrine puzzles, fight Gloam creatures, learn talents and craft potions." />
+  <meta name="description" content="Hivebound — explore Verdant Reach, solve ancient shrine puzzles, fight Gloam creatures, learn talents and craft potions in a living 3D bee world." />
   <title>HIVEBOUND — Relics of the Bloom</title>
   <link rel="stylesheet" href="/hivebound/world.css" />
+  <link rel="stylesheet" href="/hivebound/hive-polish.css" />
 </head>
 <body>
   <canvas id="world" aria-label="Hivebound 3D world"></canvas>
   <div class="shade" aria-hidden="true"></div><div class="grain" aria-hidden="true"></div>
+  <div class="hive-atmosphere" aria-hidden="true"></div>
+  <div class="pollen-field" aria-hidden="true">
+    <i style="left:8%;--d:13s;--delay:-4s;--drift:42px"></i><i style="left:17%;--d:16s;--delay:-9s;--drift:-30px"></i>
+    <i style="left:29%;--d:12s;--delay:-2s;--drift:24px"></i><i style="left:43%;--d:18s;--delay:-12s;--drift:-48px"></i>
+    <i style="left:55%;--d:14s;--delay:-6s;--drift:33px"></i><i style="left:67%;--d:17s;--delay:-11s;--drift:-25px"></i>
+    <i style="left:79%;--d:11s;--delay:-3s;--drift:38px"></i><i style="left:91%;--d:15s;--delay:-8s;--drift:-36px"></i>
+  </div>
 
   <div class="hud">
     <div class="topbar">
-      <a class="brand" href="/">⬡ HIVEBOUND<small>RELICS OF THE BLOOM · WORLD PROTOTYPE</small></a>
+      <a class="brand" href="/">⬡ HIVEBOUND<small>RELICS OF THE BLOOM · 3D ACTION RPG</small></a>
       <div class="objective"><small>ACTIVE QUEST</small><strong id="objectiveText">Find the three Bloom Shrines and awaken them in the right order.</strong></div>
     </div>
+    <div class="hive-zone-tag"><strong>VERDANT REACH</strong>HIVE TERRITORY // GLOAM ACTIVITY DETECTED</div>
 
     <div id="bossWrap" class="bossbar">
       <label><b id="bossName">GLOAM WARDEN</b><span>GUARDIAN</span></label>
@@ -24,7 +33,7 @@
     </div>
 
     <div class="status">
-      <div class="portrait-row"><div class="portrait">🐝</div><div class="nameplate"><strong>Bloomstrider</strong><small>WANDERER OF THE VERDANT REACH</small></div></div>
+      <div class="portrait-row"><div class="portrait" aria-label="Bloomstrider sigil">🐝</div><div class="nameplate"><strong>Bloomstrider</strong><small>WANDERER OF THE VERDANT REACH</small></div></div>
       <div class="bar hp"><i id="hpFill"></i></div><div class="meta"><span id="hpText">120 / 120</span><span>LVL <b id="levelText">1</b></span></div>
       <div class="bar xp"><i id="xpFill"></i></div>
     </div>
@@ -34,12 +43,12 @@
       <button class="slot"><small>2</small><b>✿</b><span>Pollen Nova</span><i class="cd"></i></button>
       <button class="slot"><small>3</small><b>➳</b><span>Briarstep</span><i class="cd"></i></button>
       <button class="slot"><small>4</small><b>⬡</b><span>Wax Ward</span><i class="cd"></i></button>
-      <button class="slot"><small>Q</small><b>🧪</b><span>Healing Potion</span><i class="cd"></i></button>
+      <button class="slot"><small>R</small><b>🧪</b><span>Royal Jelly</span><i class="cd"></i></button>
     </div>
 
     <div class="mini">
       <div class="resource-strip"><span>🍯 <b id="nectar">1</b></span><span>⬡ <b id="wax">1</b></span><span>✿ <b id="pollen">0</b></span><span>🧪 <b id="potions">1</b></span></div>
-      <div class="hint"><strong>ZQSD / WASD</strong> move · <strong>E</strong> interact · <strong>1–4</strong> abilities · <strong>Q</strong> potion<br><strong>I</strong> inventory · <strong>N</strong> talents · <strong>B</strong> crafting</div>
+      <div class="hint"><strong>ZQSD / WASD</strong> move · <strong>E</strong> interact · <strong>1–4</strong> abilities · <strong>R</strong> potion<br><strong>I</strong> inventory · <strong>N</strong> talents · <strong>B</strong> crafting</div>
     </div>
 
     <div id="interact" class="interact"></div><div id="toast" class="toast"></div>
@@ -53,5 +62,6 @@
 
   <script src="/hivebound/js/input-shim.js"></script>
   <script type="module" src="/hivebound/js/world.js"></script>
+  <script type="module" src="/hivebound/js/bee-ambience.js"></script>
 </body>
 </html>
