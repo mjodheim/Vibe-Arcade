@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no" />
   <meta name="theme-color" content="#070914" />
-  <meta name="description" content="STACK PANIC — un falling-block game chaotique : moutons, météores, boule de démolition, gravité résiliée et une bande-son différente par incident." />
+  <meta name="description" content="STACK PANIC — un falling-block game chaotique : moutons, météores, boule de démolition, gravité résiliée et cataclysmes 3D à 100% de chaos." />
   <title>STACK PANIC — Vibe Arcade</title>
 
   <link rel="canonical" href="https://arcade.mjodheim.be/stack-panic/" />
@@ -15,7 +15,7 @@
   <meta property="og:site_name" content="Vibe Arcade" />
   <meta property="og:url" content="https://arcade.mjodheim.be/stack-panic/" />
   <meta property="og:title" content="STACK PANIC — Vibe Arcade" />
-  <meta property="og:description" content="Empile les blocs pendant que météores, boule de démolition, pluie acide et gravité résiliée démontent ta pile. Chaque incident a sa propre musique." />
+  <meta property="og:description" content="Empile les blocs pendant que la grille subit incidents, mini-mondes et REALITY FAIL 3D." />
   <meta property="og:image" content="https://arcade.mjodheim.be/assets/og-stack-panic.png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
@@ -24,12 +24,13 @@
   <meta property="og:locale:alternate" content="en_US" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="STACK PANIC — Vibe Arcade" />
-  <meta name="twitter:description" content="Empile les blocs pendant que météores, boule de démolition, pluie acide et gravité résiliée démontent ta pile. Chaque incident a sa propre musique." />
+  <meta name="twitter:description" content="Empile les blocs pendant que la grille subit incidents, mini-mondes et REALITY FAIL 3D." />
   <meta name="twitter:image" content="https://arcade.mjodheim.be/assets/og-stack-panic.png" />
 
   <link rel="stylesheet" href="/stack-panic/style.css" />
   <link rel="stylesheet" href="/stack-panic/polish.css" />
   <link rel="stylesheet" href="/stack-panic/ui-cinematics.css" />
+  <link rel="stylesheet" href="/stack-panic/cataclysms.css" />
 </head>
 <body>
   <div class="noise" aria-hidden="true"></div>
@@ -112,6 +113,7 @@
           <small>SURVIVAL NOTES</small>
           <p>Les incidents sont parfois utiles. Souvent non.</p>
           <p>Plus le chaos monte, plus ils arrivent vite — et à partir d'un certain point, à deux en même temps.</p>
+          <p>À 100% : REALITY FAIL. La grille bascule dans un cataclysme 3D qui modifie réellement la pile.</p>
           <p>La brèche 3D utilise la vraie pile. Dans le tunnel : flèches/WASD pour piloter, ESPACE pour booster.</p>
         </div>
         <div class="legend">
@@ -129,8 +131,8 @@
     </section>
 
     <section class="notes">
-      <span>BUILD 0.3 // INCIDENT DIRECTOR</span>
-      <p>Les gros incidents ont désormais une entrée en scène, de vrais acteurs animés, des impacts visibles et une identité visuelle propre — le brouillard tout seul n'est plus considéré comme une catastrophe.</p>
+      <span>BUILD 0.4 // REALITY FAIL</span>
+      <p>À 100% de chaos, le cabinet déclenche désormais un cataclysme 3D procédural : trou noir, bombardement orbital ou dimension des moutons. Chacun transforme massivement la pile avant de rendre le contrôle.</p>
     </section>
   </main>
 
@@ -140,7 +142,9 @@
   <script src="/stack-panic/audio.js"></script>
   <script src="/stack-panic/runtime.js"></script>
   <script src="/stack-panic/ui-cinematics.js"></script>
+  <script src="/stack-panic/cataclysms.js"></script>
   <script src="/stack-panic/controls.js"></script>
   <script type="module" src="/stack-panic/breach.js"></script>
+  <script type="module" src="/stack-panic/cataclysm-3d.js"></script>
 </body>
 </html>
