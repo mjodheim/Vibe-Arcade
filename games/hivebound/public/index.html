@@ -3,125 +3,54 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <title>Hivebound — Relics of the Bloom</title>
-  <meta name="theme-color" content="#0b0910" />
-  <link rel="stylesheet" href="./styles.css" />
+  <meta name="theme-color" content="#17281d" />
+  <meta name="description" content="Hivebound — explore the Bloom, solve ancient shrine puzzles, fight Gloam creatures, learn talents and craft potions." />
+  <title>HIVEBOUND — Relics of the Bloom</title>
+  <link rel="stylesheet" href="/hivebound/world.css" />
 </head>
 <body>
-  <div id="app">
-    <header class="topbar">
-      <a class="brand" href="/">
-        <span class="brand-mark">⬡</span>
-        <span>HIVEBOUND</span>
-        <small>Relics of the Bloom</small>
-      </a>
-      <div class="top-actions">
-        <a class="ghost arcade-link" href="/" data-fr="← Arcade" data-en="← Arcade">← Arcade</a>
-        <button class="ghost lang-switch" id="langBtn">EN</button>
-        <button class="ghost" id="leaderboardBtn"><span>🏆</span> <span data-fr="Classement" data-en="Leaderboard">Classement</span></button>
-        <button class="ghost" id="settingsBtn"><span>⚙</span> <span data-fr="Commandes" data-en="Controls">Commandes</span></button>
-        <button class="ghost" id="accountBtn" data-fr="Invité" data-en="Guest">Invité</button>
-      </div>
-    </header>
+  <canvas id="world" aria-label="Hivebound 3D world"></canvas>
+  <div class="shade" aria-hidden="true"></div><div class="grain" aria-hidden="true"></div>
 
-    <main>
-      <section id="homeScreen" class="screen active hero-screen">
-        <div class="hero-copy">
-          <div class="game-index"><span>#001</span><i></i><b data-fr="ROGUELITE D’ACTION" data-en="ACTION ROGUELITE">ROGUELITE D’ACTION</b></div>
-          <p class="eyebrow" data-fr="LA BLOOM SE MEURT. LE GLOAM ARRIVE." data-en="THE BLOOM IS DYING. THE GLOAM IS COMING.">LA BLOOM SE MEURT. LE GLOAM ARRIVE.</p>
-          <h1>
-            <span data-fr="ENTRE DANS" data-en="ENTER THE">ENTRE DANS</span><br>
-            <em data-fr="L’ESSAIM." data-en="HIVE.">L’ESSAIM.</em>
-          </h1>
-          <p class="lede" data-fr="Choisis une classe, traverse des routes qui changent à chaque partie, combine les reliques et pousse ton build jusqu’à ce que le Gloam ait le dernier mot." data-en="Choose a class, cross routes that change every run, combine relics and push your build until the Gloam finally wins.">Choisis une classe, traverse des routes qui changent à chaque partie, combine les reliques et pousse ton build jusqu’à ce que le Gloam ait le dernier mot.</p>
+  <div class="hud">
+    <div class="topbar">
+      <a class="brand" href="/">⬡ HIVEBOUND<small>RELICS OF THE BLOOM · WORLD PROTOTYPE</small></a>
+      <div class="objective"><small>ACTIVE QUEST</small><strong id="objectiveText">Find the three Bloom Shrines and awaken them in the right order.</strong></div>
+    </div>
 
-          <div class="hero-actions">
-            <button class="primary big" id="newRunBtn"><span data-fr="Jouer" data-en="Play">Jouer</span><b>→</b></button>
-            <button class="secondary big" id="dailyRunBtn"><span data-fr="Défi du jour" data-en="Daily Hive">Défi du jour</span><small data-fr="même seed pour tous" data-en="same seed for everyone">même seed pour tous</small></button>
-          </div>
+    <div id="bossWrap" class="bossbar">
+      <label><b id="bossName">GLOAM WARDEN</b><span>GUARDIAN</span></label>
+      <div class="bar"><i id="bossFill"></i></div>
+    </div>
 
-          <div class="feature-strip">
-            <span><b>4</b> <i data-fr="classes" data-en="classes">classes</i></span>
-            <span><b>∞</b> <i data-fr="routes" data-en="routes">routes</i></span>
-            <span><b>5</b> <i data-fr="biomes" data-en="biomes">biomes</i></span>
-            <span><b>1</b> <i data-fr="objectif : aller plus loin" data-en="goal: go farther">objectif : aller plus loin</i></span>
-          </div>
-        </div>
+    <div class="status">
+      <div class="portrait-row"><div class="portrait">🐝</div><div class="nameplate"><strong>Bloomstrider</strong><small>WANDERER OF THE VERDANT REACH</small></div></div>
+      <div class="bar hp"><i id="hpFill"></i></div><div class="meta"><span id="hpText">120 / 120</span><span>LVL <b id="levelText">1</b></span></div>
+      <div class="bar xp"><i id="xpFill"></i></div>
+    </div>
 
-        <div class="hive-art" aria-hidden="true">
-          <div class="art-glow"></div>
-          <div class="moon"></div>
-          <div class="hex h1"></div><div class="hex h2"></div><div class="hex h3"></div><div class="hex h4"></div>
-          <div class="bee-silhouette">🐝</div>
-          <div class="art-card">
-            <span data-fr="RUN EN COURS" data-en="CURRENT RUN">RUN EN COURS</span>
-            <strong data-fr="Construis. Risque. Survis." data-en="Build. Risk. Survive.">Construis. Risque. Survis.</strong>
-          </div>
-        </div>
-      </section>
+    <div class="hotbar" aria-label="Ability bar">
+      <button class="slot"><small>1</small><b>🗡️</b><span>Predator Sting</span><i class="cd"></i></button>
+      <button class="slot"><small>2</small><b>✿</b><span>Pollen Nova</span><i class="cd"></i></button>
+      <button class="slot"><small>3</small><b>➳</b><span>Briarstep</span><i class="cd"></i></button>
+      <button class="slot"><small>4</small><b>⬡</b><span>Wax Ward</span><i class="cd"></i></button>
+      <button class="slot" onclick="document.dispatchEvent(new KeyboardEvent('keydown',{code:'KeyQ'}))"><small>Q</small><b>🧪</b><span>Healing Potion</span><i class="cd"></i></button>
+    </div>
 
-      <section id="classScreen" class="screen">
-        <div class="section-heading">
-          <p class="eyebrow" data-fr="CHOISIS TA VOIE" data-en="CHOOSE YOUR OATH">CHOISIS TA VOIE</p>
-          <h2 data-fr="Qui entre dans le Gloam ?" data-en="Who enters the Gloam?">Qui entre dans le Gloam ?</h2>
-          <p data-fr="Chaque classe change ton rythme de jeu, ta portée, ta compétence et tes talents." data-en="Every class changes your pace, range, ability and talent pool.">Chaque classe change ton rythme de jeu, ta portée, ta compétence et tes talents.</p>
-        </div>
-        <div id="classGrid" class="class-grid"></div>
-        <button class="ghost back-home" data-fr="← Retour" data-en="← Back">← Retour</button>
-      </section>
+    <div class="mini">
+      <div class="resource-strip"><span>🍯 <b id="nectar">1</b></span><span>⬡ <b id="wax">1</b></span><span>✿ <b id="pollen">0</b></span><span>🧪 <b id="potions">1</b></span></div>
+      <div class="hint"><strong>ZQSD / WASD</strong> move · <strong>E</strong> interact · <strong>1–4</strong> abilities · <strong>Q</strong> potion<br><strong>I</strong> inventory · <strong>N</strong> talents · <strong>B</strong> crafting</div>
+    </div>
 
-      <section id="gameScreen" class="screen game-screen">
-        <div class="game-layout">
-          <aside class="hud-panel left-panel">
-            <div class="portrait" id="classPortrait">🐝</div>
-            <div><strong id="className">Warden</strong><small id="classSubtitle" data-fr="Classe" data-en="Class">Classe</small></div>
-            <div class="meter"><label><span data-fr="Vitalité" data-en="Vitality">Vitalité</span> <span id="hpText"></span></label><div><i id="hpBar"></i></div></div>
-            <div class="meter xp"><label><span data-fr="Niveau" data-en="Level">Niveau</span> <span id="levelText">1</span></label><div><i id="xpBar"></i></div></div>
-            <div class="stats-grid">
-              <span>⚔ <b id="damageStat">0</b></span><span>⚡ <b id="speedStat">0</b></span><span>✦ <b id="critStat">0</b></span><span>⌛ <b id="cooldownStat">0</b></span>
-            </div>
-            <div class="ability-card"><span id="abilityKeyLabel">SPACE</span><strong id="abilityName" data-fr="Compétence" data-en="Ability">Compétence</strong><small id="abilityDesc"></small><div class="cooldown"><i id="abilityCd"></i></div></div>
-            <div class="materials"><span>🍯 <b id="nectarCount">0</b></span><span>⬡ <b id="waxCount">0</b></span><span>✿ <b id="pollenCount">0</b></span></div>
-          </aside>
+    <div id="interact" class="interact"></div><div id="toast" class="toast"></div>
 
-          <div class="arena-wrap">
-            <canvas id="gameCanvas" width="960" height="540"></canvas>
-            <div class="arena-top">
-              <div><small id="biomeLabel">VERDANT REACH</small><strong id="nodeLabel">Encounter</strong></div>
-              <div class="scorebox"><small>SCORE</small><b id="scoreText">0</b><span id="multiplierText">×1.00</span></div>
-            </div>
-            <div id="objective" class="objective" data-fr="Survivre" data-en="Survive">Survivre</div>
-            <div id="toast" class="toast"></div>
-          </div>
+    <section id="inventoryPanel" class="panel hidden"><button class="close" data-close>×</button><h2>Inventory</h2><p>Everything gathered while exploring the Bloom.</p><div class="panel-body"></div></section>
+    <section id="talentPanel" class="panel hidden"><button class="close" data-close>×</button><h2>Talents</h2><p>Spend points to shape your build. Ranks persist for this prototype session.</p><div class="panel-body"></div></section>
+    <section id="craftPanel" class="panel hidden"><button class="close" data-close>×</button><h2>Field Alchemy</h2><p>Turn what you harvest into tools that keep the journey alive.</p><div class="panel-body"></div></section>
 
-          <aside class="hud-panel right-panel">
-            <div class="side-title"><span data-fr="RÉSONANCE" data-en="RESONANCE">RÉSONANCE</span><small data-fr="Sigils portés" data-en="Sigils carried">Sigils portés</small></div>
-            <div id="resonances" class="resonances"></div>
-            <div class="side-title"><span data-fr="RELIQUES" data-en="RELICS">RELIQUES</span><small id="relicCount">0 / 8</small></div>
-            <div id="relics" class="relics"></div>
-            <div class="side-title"><span data-fr="PARTIE" data-en="RUN">PARTIE</span></div>
-            <div class="run-stats"><span><span data-fr="Région" data-en="Region">Région</span> <b id="regionStat">1</b></span><span>Gloam <b id="gloamStat">0%</b></span><span><span data-fr="Éliminations" data-en="Kills">Éliminations</span> <b id="killsStat">0</b></span></div>
-          </aside>
-        </div>
-      </section>
-
-      <section id="pathScreen" class="screen path-screen">
-        <div class="section-heading"><p class="eyebrow" id="pathEyebrow">THE VERDANT REACH</p><h2 data-fr="Choisis la prochaine route." data-en="Choose the next path.">Choisis la prochaine route.</h2><p id="pathHint" data-fr="Chaque étape nourrit le Gloam. Plus tu prends de risques, plus le score grimpe." data-en="Every step feeds the Gloam. Greed scores higher.">Chaque étape nourrit le Gloam. Plus tu prends de risques, plus le score grimpe.</p></div>
-        <div id="pathCards" class="path-cards"></div>
-        <div id="runSummaryBar" class="run-summary-bar"></div>
-      </section>
-
-      <section id="endScreen" class="screen end-screen">
-        <p class="eyebrow" data-fr="LA RUCHE SE SOUVIENT" data-en="THE HIVE REMEMBERS">LA RUCHE SE SOUVIENT</p><h2 id="endTitle" data-fr="Ta partie est terminée." data-en="Your run has ended.">Ta partie est terminée.</h2>
-        <div class="final-score"><small data-fr="SCORE FINAL" data-en="FINAL SCORE">SCORE FINAL</small><strong id="finalScore">0</strong></div>
-        <div id="finalStats" class="final-stats"></div>
-        <div class="hero-actions"><button class="primary big" id="againBtn" data-fr="Encore une partie" data-en="One More Run">Encore une partie</button><button class="secondary big" id="submitBtn" data-fr="Envoyer le score" data-en="Submit Score">Envoyer le score</button></div>
-        <p id="submitStatus" class="muted"></p>
-      </section>
-    </main>
+    <div id="death" class="death hidden"><div class="death-card"><h2>The Gloam takes you.</h2><p>The world remains. Your current expedition does not.</p><button id="restart">Return to the Hive</button></div></div>
   </div>
 
-  <div id="modal" class="modal hidden"><div class="modal-card"><button id="modalClose" class="modal-close">×</button><div id="modalContent"></div></div></div>
-  <script type="module" src="./js/bootstrap.js"></script>
+  <script type="module" src="/hivebound/js/world.js"></script>
 </body>
 </html>
