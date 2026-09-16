@@ -41,11 +41,19 @@
     cells.forEach(c=>{if(rng()<fraction){state.board[c.y][c.x]=0;removed++;}});
     if(removed){state.score+=removed*6;burst(180,420,Math.min(90,removed*2));}
   }
-  function strike(){
-    const cells=occupied();const target=cells.length?cells[rand(cells.length)]:{x:rand(COLS),y:ROWS-2-rand(5)};
-    const removed=crater(target.x,target.y,3);state.score+=removed*10;
-    burst(target.x*CELL+18,target.y*CELL+18,70);spawnSmoke(7);screenKick('shake',620);sfx('boom');
-    window.StackPanicCinematics?.shock?.(target.x*CELL+18,target.y*CELL+18,'#ff5f68');
+  function pickStrikeTargets(count){
+    const source=occupied();const result=[];
+    for(let i=0;i<count;i++){
+      if(source.length){const idx=rand(source.length);result.push(source.splice(idx,1)[0]);}
+      else result.push({x:rand(COLS),y:ROWS-2-rand(5)});
+    }
+    return result;
+  }
+  function strike(target){
+    const t=target||{x:rand(COLS),y:ROWS-2-rand(5)};
+    const removed=crater(t.x,t.y,3);state.score+=removed*10;
+    burst(t.x*CELL+18,t.y*CELL+18,70);spawnSmoke(7);screenKick('shake',620);sfx('boom');
+    window.StackPanicCinematics?.shock?.(t.x*CELL+18,t.y*CELL+18,'#ff5f68');
     clearLines();flash();
   }
   function stampede(){
@@ -74,7 +82,7 @@
   }
   function stageOrbital(c,elapsed){
     const times=[2200,3400,4600,5800,7000,8200,9400];
-    times.forEach((ms,i)=>{if(!c.steps[i]&&elapsed>ms){c.steps[i]=1;strike();}});
+    times.forEach((ms,i)=>{if(!c.steps[i]&&elapsed>ms){c.steps[i]=1;strike(c.targets?.[i]);}});
   }
   function stageSheep(c,elapsed){
     const times=[2500,4800,7100];
@@ -86,13 +94,14 @@
     if(state.cataclysm||state.mini||state.gameOver||!state.running)return;
     safeEndCurrent();
     const meta=forced?CATA.find(x=>x.id===forced)||CATA[0]:CATA[rand(CATA.length)];
-    state.cataclysm={...meta,started:t,steps:[]};state.realityFails++;
+    const targets=meta.id==='orbital'?pickStrikeTargets(7):[];
+    state.cataclysm={...meta,started:t,steps:[],targets};state.realityFails++;
     state.inputLocked=true;state.chaos=100;cabinet.classList.add('reality-fail');pauseBtn.disabled=true;
     ui.style.setProperty('--rf-accent',meta.accent);ui.style.setProperty('--rf-duration',`${meta.duration}ms`);
     ui.querySelector('strong').textContent=meta.name;ui.querySelector('span').textContent=meta.copy;ui.classList.add('live');
     eventTitle.textContent='REALITY FAIL';eventText.textContent=meta.name;
     rethemeMusic(meta.music);sfx('alert');flash();screenKick('shake',700);
-    if(window.Cataclysm3D){try{window.Cataclysm3D.start({canvas,board:state.board.map(r=>r.slice()),kind:meta.id,durationMs:meta.duration});}catch(err){console.warn('Cataclysm 3D unavailable',err);}}
+    if(window.Cataclysm3D){try{window.Cataclysm3D.start({canvas,board:state.board.map(r=>r.slice()),kind:meta.id,durationMs:meta.duration,targets});}catch(err){console.warn('Cataclysm 3D unavailable',err);}}
   }
 
   function finishRealityFail(t){
