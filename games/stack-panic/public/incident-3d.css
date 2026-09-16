@@ -1,0 +1,28 @@
+#incident3d{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  z-index:12;
+  pointer-events:none;
+  opacity:0;
+  transition:opacity 140ms ease-out;
+  filter:saturate(1.12) contrast(1.04);
+}
+#incident3d.live{opacity:1}
+.incident-3d-live .fx-sheep,
+.incident-3d-live .fx-tank{opacity:0!important}
+.incident-3d-live::after{
+  content:'';
+  position:absolute;
+  inset:0;
+  z-index:13;
+  pointer-events:none;
+  background:radial-gradient(circle at 50% 72%,rgba(255,255,255,.05),transparent 40%);
+  mix-blend-mode:screen;
+}
+@media (prefers-reduced-motion:reduce){
+  #incident3d{display:none}
+  .incident-3d-live .fx-sheep,
+  .incident-3d-live .fx-tank{opacity:1!important}
+}
