@@ -4,39 +4,63 @@ on:
   push:
     paths:
       - 'games/hivebound/**'
+      - 'index.html'
+      - 'arcade*.css'
+      - 'arcade.js'
       - '.github/workflows/hivebound-ci.yml'
   pull_request:
     paths:
       - 'games/hivebound/**'
+      - 'index.html'
+      - 'arcade*.css'
+      - 'arcade.js'
       - '.github/workflows/hivebound-ci.yml'
 
 jobs:
   verify:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: games/hivebound
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
-      - name: Check server syntax
+      - name: Check Hivebound server syntax
+        working-directory: games/hivebound
         run: node --check server.js
       - name: Check browser scripts
+        working-directory: games/hivebound
         run: |
           find public/js -name '*.js' -print0 | xargs -0 -n1 node --check
       - name: Check world runtime contract
+        working-directory: games/hivebound
         run: |
           node --input-type=module <<'NODE'
           import { readFileSync } from 'node:fs';
           const html=readFileSync('public/index.html','utf8');
           const world=readFileSync('public/js/world.js','utf8');
-          for(const asset of ['world.css','js/input-shim.js','js/world.js']) if(!html.includes('/hivebound/'+asset)) throw new Error('index missing '+asset);
+          const ambience=readFileSync('public/js/bee-ambience.js','utf8');
+          const polish=readFileSync('public/hive-polish.css','utf8');
+          for(const asset of ['world.css','hive-polish.css','js/input-shim.js','js/world.js','js/bee-ambience.js']) if(!html.includes('/hivebound/'+asset)) throw new Error('index missing '+asset);
           for(const system of ['function shrine','function resource','function spawnEnemy','function cast','function interact','function renderPanels']) if(!world.includes(system)) throw new Error('world system missing: '+system);
           for(const verb of ['talentPoints','potions','materials','gateOpen','bossDead']) if(!world.includes(verb)) throw new Error('progression contract missing: '+verb);
           if(!world.includes("import('/stack-panic/vendor/three.module.min.js')")) throw new Error('Three.js local runtime import missing');
-          console.log('Hivebound world contract intact: exploration, puzzle, combat, talents, craft and boss');
+          for(const visual of ['makeBee','pollenCount','requestAnimationFrame(frame)']) if(!ambience.includes(visual)) throw new Error('bee ambience missing: '+visual);
+          if(!polish.includes('#beeAmbience')||!polish.includes('.hive-atmosphere')) throw new Error('living hive presentation styles missing');
+          if(html.includes('<small>Q</small><b>🧪')) throw new Error('AZERTY potion label regressed to Q');
+          console.log('Hivebound contract intact: 3D world, RPG systems and living bee ambience');
           NODE
-      - name: Run tests
+      - name: Check arcade presentation contract
+        run: |
+          node --input-type=module <<'NODE'
+          import { readFileSync } from 'node:fs';
+          const html=readFileSync('index.html','utf8');
+          const css=readFileSync('arcade-v2.css','utf8');
+          if(!html.includes('/arcade-v2.css')) throw new Error('new arcade presentation stylesheet is not loaded');
+          if(html.includes('ACTION ROGUELITE')) throw new Error('Hivebound is still presented as a roguelite');
+          for(const copy of ['3D ACTION RPG','Verdant Reach','REALITY FAIL']) if(!html.includes(copy)) throw new Error('arcade presentation missing: '+copy);
+          for(const visual of ['.world-card.hive','.hive-city','.preview-swarm','.stack-meteor']) if(!css.includes(visual)) throw new Error('arcade world visual missing: '+visual);
+          console.log('Arcade presentation contract intact: two distinct playable worlds');
+          NODE
+      - name: Run Hivebound tests
+        working-directory: games/hivebound
         run: npm test
