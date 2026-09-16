@@ -75,7 +75,6 @@ const path=addMesh(new THREE.PlaneGeometry(9,72),mats.path,-2,.025,0);path.rotat
 const river=addMesh(new THREE.PlaneGeometry(92,6.8),mats.water,0,.055,11);river.rotation.x=-Math.PI/2;
 for(let i=0;i<7;i++){const b=addMesh(new THREE.BoxGeometry(2.35,.28,5.15),mats.darkWax,-7.5+i*2.5,.18,11,true);b.rotation.y=.025*Math.sin(i)}
 
-// Vegetation uses instancing: richer shapes, far fewer draw calls.
 const treeCount=46,dummy=new THREE.Object3D();
 const trunks=new THREE.InstancedMesh(new THREE.CylinderGeometry(.24,.38,2.6,10),mats.darkWax,treeCount);
 const crowns=new THREE.InstancedMesh(new THREE.SphereGeometry(1.28,14,9),mats.thorn,treeCount);
@@ -111,7 +110,6 @@ for(const x of [-2.15,2.15]){const p=new THREE.Mesh(new THREE.CylinderGeometry(.
 const lintel=new THREE.Mesh(new THREE.BoxGeometry(5.8,.95,1.3),mats.stone);lintel.position.set(0,5,-22);lintel.castShadow=true;gate.add(lintel);
 const barrier=new THREE.Mesh(new THREE.PlaneGeometry(4.1,4.5),new THREE.MeshBasicMaterial({color:0xc28cf4,transparent:true,opacity:.34,side:THREE.DoubleSide,blending:THREE.AdditiveBlending,depthWrite:false}));barrier.position.set(0,2.5,-21.94);gate.add(barrier);root.add(gate);
 
-// Player: smoother bee silhouette and animated wings.
 const player=new THREE.Group();
 const beeGold=new THREE.MeshStandardMaterial({color:0xf2b73c,roughness:.5});
 const beeDark=new THREE.MeshStandardMaterial({color:0x2b2419,roughness:.68});
@@ -125,7 +123,6 @@ const sting=new THREE.Mesh(new THREE.ConeGeometry(.11,.62,10),beeDark);sting.rot
 for(const x of [-.18,.18]){const ant=new THREE.Mesh(new THREE.CylinderGeometry(.018,.018,.46,6),beeDark);ant.position.set(x,.22,-.87);ant.rotation.x=-.75;ant.rotation.z=x<0?.28:-.28;player.add(ant)}
 player.position.set(-15,1.05,-14);player.traverse(o=>{if(o.isMesh){o.castShadow=true;o.receiveShadow=true}});scene.add(player);
 
-// Cheap ambient swarm: same renderer, billboard sprites, no second WebGL context.
 function beeSpriteTexture(){return canvasTexture((x,s)=>{
   x.clearRect(0,0,s,s);x.save();x.translate(s/2,s/2);x.fillStyle='rgba(232,255,248,.42)';x.beginPath();x.ellipse(-24,-12,25,11,-.4,0,Math.PI*2);x.ellipse(24,-12,25,11,.4,0,Math.PI*2);x.fill();
   x.fillStyle='#f2b73c';x.beginPath();x.ellipse(0,4,22,31,0,0,Math.PI*2);x.fill();x.fillStyle='#2a2113';for(const y of [-8,5,18])x.fillRect(-20,y,40,7);x.beginPath();x.arc(0,-23,15,0,Math.PI*2);x.fill();x.restore();
@@ -178,7 +175,7 @@ function resource(kind,x,z){const m=kind==='nectar'?mats.wax:kind==='pollen'?mat
 const enemies=[];
 function spawnEnemy(x,z,type='mite'){
   const boss=type==='boss',g=new THREE.Group(),body=new THREE.Mesh(new THREE.SphereGeometry(boss?1.08:.55,18,12),boss?mats.gloam:mats.gloam.clone());body.scale.set(1.15,.8,1.2);g.add(body);
-  const eyeMat=new THREE.MeshBasicMaterial({color:boss?0xff9ac0:0xffd1d9});for(const sx of [-.22,.22]){const eye=new THREE.Mesh(new THREE.SphereGeometry(boss?.09:.055,8,6),eyeMat);eye.position.set(sx,.16,-boss?.92:-.48);g.add(eye)}
+  const eyeMat=new THREE.MeshBasicMaterial({color:boss?0xff9ac0:0xffd1d9});for(const sx of [-.22,.22]){const eye=new THREE.Mesh(new THREE.SphereGeometry(boss?.09:.055,8,6),eyeMat);eye.position.set(sx,.16,-(boss?.92:.48));g.add(eye)}
   for(let i=0;i<6;i++){const leg=new THREE.Mesh(new THREE.CylinderGeometry(.035,.055,boss?.95:.55,7),mats.darkWax);leg.rotation.z=Math.PI/2.65;leg.rotation.y=i*Math.PI/3;leg.position.set(Math.cos(i*Math.PI/3)*(boss?.78:.44),-.12,Math.sin(i*Math.PI/3)*(boss?.78:.44));g.add(leg)}
   g.position.set(x,boss?1.25:.64,z);g.traverse(o=>{if(o.isMesh){o.castShadow=true;o.receiveShadow=true}});scene.add(g);const e={g,hp:boss?420:55,maxHp:boss?420:55,speed:boss?2.05:2.65,damage:boss?18:8,boss,type,dead:false,hit:0,attack:0,home:new THREE.Vector3(x,g.position.y,z)};enemies.push(e);return e
 }
