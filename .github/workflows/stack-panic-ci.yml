@@ -22,15 +22,11 @@ jobs:
         with:
           node-version: '20'
       - name: Check game scripts
-        # Everything the cabinet ships, minus the vendored three.js build.
         run: |
           find public -name '*.js' -not -path 'public/vendor/*' -print0 | xargs -0 -n1 node --check
       - name: Check the vendored renderer is present
         run: test -f public/vendor/three.module.min.js
       - name: Every incident has a soundtrack of its own
-        # A missing track is not an error at runtime: the incident just plays
-        # the default groove, which is exactly the kind of silent regression
-        # nobody notices until the game feels flat.
         run: |
           node --input-type=module -e "
           import { readFileSync } from 'node:fs';
@@ -75,3 +71,15 @@ jobs:
           for (const feature of ['acidRain','magnetStorm','wreckHits','scorch','lensPulse']) if (!fx.includes(feature)) throw new Error('FX director missing ' + feature);
           console.log('layered incident FX contract intact');
           "
+      - name: Check hostile sabotage contract
+        run: |
+          node --input-type=module <<'NODE'
+          import { readFileSync } from 'node:fs';
+          const html=readFileSync('public/index.html','utf8');
+          const sabotage=readFileSync('public/sabotage.js','utf8');
+          for(const asset of ['sabotage.css','sabotage.js']) if(!html.includes('/stack-panic/'+asset)) throw new Error('index missing '+asset);
+          for(const feature of ['RECONFIGURATION NON SOLLICITÉE','scrambleSettledRows','liftBadlyPlacedBlocks','sabotagePulse','12+rand(9)','state.chaos<55']) if(!sabotage.includes(feature)) throw new Error('hostile chaos feature missing: '+feature);
+          if(!sabotage.includes('Math.max(72, 590')) throw new Error('gravity difficulty regression');
+          if(!sabotage.includes("HEAVY_EVENTS.includes('sheep')")) throw new Error('sheepocalypse no longer classified as heavy sabotage');
+          console.log('hostile sabotage contract intact');
+          NODE
