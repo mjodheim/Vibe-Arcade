@@ -1,0 +1,13 @@
+/* Incidents are communicated by gameplay and animation, never by modal/message overlays. */
+.banner,
+.incident-cinematic,
+.event-card,
+.advert,
+.crash {
+  display: none !important;
+}
+
+/* Preserve the useful stats while letting the cabinet/event visuals do the talking. */
+.stats-panel {
+  align-content: start;
+}
