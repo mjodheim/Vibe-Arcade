@@ -47,12 +47,20 @@ document.getElementById('startBtn').addEventListener('click',()=>{ensureAudio();
 document.getElementById('dailyBtn').addEventListener('click',()=>{ensureAudio();resetGame(true);});
 document.getElementById('restartBtn').addEventListener('click',()=>{ensureAudio();resetGame(state.daily);});
 pauseBtn.addEventListener('click',togglePause);
+
+function currentMusicTheme(){
+  if(state.cataclysm?.music) return state.cataclysm.music;
+  if(state.mini) return 'miniworld';
+  if(state.activeEvent?.id==='shuffle') return 'glitch';
+  return state.activeEvent?.id || 'nominal';
+}
+
 soundBtn.addEventListener('click',()=>{
   state.sound=!state.sound;
   soundBtn.textContent=`SOUND: ${state.sound?'ON':'OFF'}`;
   soundBtn.setAttribute('aria-pressed',String(state.sound));
   ensureAudio();Music.setEnabled(state.sound&&!state.paused);
-  if(state.sound&&state.running&&!state.gameOver&&!state.paused)Music.start(state.activeEvent?state.activeEvent.id:'nominal');
+  if(state.sound&&state.running&&!state.gameOver&&!state.paused)Music.start(currentMusicTheme());
   if(!state.sound)Music.stop();
 });
 
