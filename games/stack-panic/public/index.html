@@ -32,6 +32,7 @@
   <link rel="stylesheet" href="/stack-panic/ui-cinematics.css" />
   <link rel="stylesheet" href="/stack-panic/cataclysms.css" />
   <link rel="stylesheet" href="/stack-panic/incident-3d.css" />
+  <link rel="stylesheet" href="/stack-panic/sabotage.css" />
 </head>
 <body>
   <div class="noise" aria-hidden="true"></div>
@@ -112,13 +113,14 @@
         <div class="next-box"><small>NEXT</small><canvas id="next" width="144" height="144"></canvas></div>
         <div class="rules">
           <small>SURVIVAL NOTES</small>
-          <p>Les incidents sont parfois utiles. Souvent non.</p>
-          <p>Plus le chaos monte, plus ils arrivent vite — et à partir d'un certain point, à deux en même temps.</p>
+          <p>Les incidents ne sont plus obligés d'être utiles. Ils peuvent maintenant saboter une pile propre.</p>
+          <p>Plus le chaos monte, plus la chute accélère et plus les gros incidents peuvent s'enchaîner.</p>
+          <p>🔀 La reconfiguration mélange des rangées et remonte des blocs sans en supprimer : à toi de réparer le carnage.</p>
           <p>À 100% : REALITY FAIL. La grille bascule dans un cataclysme 3D qui modifie réellement la pile.</p>
           <p>La brèche 3D utilise la vraie pile. Dans le tunnel : flèches/WASD pour piloter, ESPACE pour booster.</p>
         </div>
         <div class="legend">
-          <span>🐑 Faune</span><span>💧 Physique</span><span>💣 Sabotage</span><span>☄️ Impacts</span><span>🏗️ Démolition</span><span>🧪 Corrosion</span><span>🧲 Magnétisme</span><span>🙃 Gravité</span><span>💀 Panne système</span><span>🌀 Reality break</span>
+          <span>🐑 Piétinement</span><span>🔀 Reconfiguration</span><span>💧 Physique</span><span>💣 Sabotage</span><span>☄️ Impacts</span><span>🏗️ Démolition</span><span>🧪 Corrosion</span><span>🧲 Magnétisme</span><span>🙃 Gravité</span><span>💀 Panne système</span><span>🌀 Reality break</span>
         </div>
       </aside>
     </section>
@@ -132,8 +134,8 @@
     </section>
 
     <section class="notes">
-      <span>BUILD 0.6 // AFTERMATH ENGINE</span>
-      <p>Les incidents ont maintenant des couches persistantes : fumée, poussière, étincelles, traçantes, pluie acide, marques d'impact, lens-punch et grading critique. Les dégâts ne disparaissent plus visuellement dès que l'animation principale se termine.</p>
+      <span>BUILD 0.7 // MEANER CHAOS</span>
+      <p>Gravité plus nerveuse, récupération réduite, moutons réellement destructeurs et nouvelle reconfiguration hostile de la pile. À haut chaos, le jeu arrête de te protéger.</p>
     </section>
   </main>
 
@@ -142,6 +144,7 @@
   <script src="/stack-panic/events.js"></script>
   <script src="/stack-panic/audio.js"></script>
   <script src="/stack-panic/runtime.js"></script>
+  <script src="/stack-panic/sabotage.js"></script>
   <script src="/stack-panic/ui-cinematics.js"></script>
   <script src="/stack-panic/fx-director.js"></script>
   <script src="/stack-panic/cataclysms.js"></script>
