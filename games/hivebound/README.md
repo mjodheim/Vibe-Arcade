@@ -4,174 +4,113 @@
 
 <p align="center">
   <strong>🐝 Vibe Arcade — Cabinet #001</strong><br/>
-  <sub>Fantasy action roguelite · playable prototype v0.2</sub>
+  <sub>3D fantasy action-RPG · world prototype v0.3</sub>
 </p>
 
----
+# 🌼 HIVEBOUND — Relics of the Bloom
 
-# 🌼 The Bloom is fading
+Hivebound is no longer designed as a sequence of roguelite rooms. The target is a compact action-RPG world: **explore real maps, discover secrets, solve environmental puzzles, fight creatures where you find them, learn talents, gather materials, craft potions and improve your character.**
 
-Beyond the hive, the old gardens are changing.
+The fantasy remains the same: the Bloom is fading, the Gloam is spreading, and the old gardens around the Hive hide relics and corrupted creatures.
 
-Flowers glow where they should not. Ancient wax shrines hum in the dark. Strange relics surface beneath corrupted roots. The deeper a bee ventures into the Bloom, the stronger the **Gloam** becomes — and the greater the rewards.
-
-Choose a role. Build something ridiculous. Defeat what waits beyond the petals. Decide how long you're willing to risk the run.
-
-> **Survive. Adapt. Become gloriously overpowered. Score higher. Go again.**
-
----
-
-## 🐝 Choose your bee
-
-| Class | Role | Fantasy |
-|:--|:--|:--|
-| 🛡️ **Waxguard** | Warrior | Heavy wax armor, retaliation and staying power |
-| ✨ **Bloomweaver** | Mage | Arcane pollen, bursts and magical destruction |
-| 🏹 **Thornstrider** | Ranger | Speed, precision and critical-hit builds |
-| 🎶 **Hymnkeeper** | Support | Auras, swarm power and strange supportive magic |
-
-Each class is intended to feel different rather than simply carrying different stat bonuses.
-
----
-
-## ⚔️ The run
+## The new core loop
 
 ```text
-             🐝 HIVE
-                │
-                ▼
-          🗺️ CHOOSE A PATH
-          ╱      │       ╲
-       ⚔️       💎       🔨
-     COMBAT   TREASURE   SHRINE
-        │        │         │
-        └────────┼─────────┘
-                 ▼
-             🌿 GROW
-        talents · loot · craft
-                 │
-                 ▼
-              👑 BOSS
-                 │
-                 ▼
-           🌑 GLOAM PACT
-          safer?  greedier?
-                 │
-                 ▼
-             GO DEEPER ↺
+HIVE / SAFE PLACE
+      ↓
+EXPLORE A REAL MAP
+  ↙   ↓    ↘
+LORE  PUZZLES  COMBAT
+ ↓      ↓       ↓
+HARVEST · LOOT · XP
+      ↓
+TALENTS · CRAFT · POTIONS
+      ↓
+UNLOCK NEW PLACES / BOSSES
+      ↓
+RETURN, PREPARE, GO FARTHER
 ```
 
-The further you push, the more dangerous the run becomes — and the more valuable your score multiplier can become.
+There is no separate route-card screen between encounters. Exploration is the game.
 
----
+## Playable world slice — Verdant Reach
 
-## 💎 Buildcraft
+The current world prototype uses Three.js and already includes:
 
-Relics carry one of five **Sigils**. Stack matching Sigils and they awaken **Resonances** that reshape a build.
+- free 3D exploration with a following camera;
+- WASD, ZQSD and arrow-key movement;
+- enemies living directly in the map and engaging nearby players;
+- a four-slot action bar with cooldowns;
+- Predator Sting, Pollen Nova, Briarstep and Wax Ward;
+- healing potions;
+- harvestable nectar, wax and pollen;
+- field crafting for potions and permanent wax reinforcement;
+- a talent panel with rankable combat upgrades;
+- an ordered three-shrine environmental puzzle;
+- a sealed Bloom Gate unlocked by solving the puzzle;
+- a Gloam Warden boss encounter beyond the gate;
+- XP, levels, talent points and material rewards;
+- a deliberately light HUD so the world remains the main view.
 
-| Sigil | Identity |
-|:--:|---|
-| 🟡 **Wax** | durability, armor and retaliation |
-| 🌸 **Bloom** | raw damage and chain explosions |
-| 🌹 **Thorn** | speed, critical hits and aggression |
-| 🔊 **Echo** | ability tempo and repeated effects |
-| 🌑 **Gloam** | dangerous power and score multipliers |
+The renderer is presentation only. Progression, combat values, quest state and crafting remain ordinary serializable game state so the world can later grow without turning Three.js meshes into the source of truth.
 
-The goal is not perfect balance at all times. Part of the fun is discovering combinations that become **beautifully unfair**.
+## Long-term character direction
 
----
+The original class identities are still useful and should return as proper specializations rather than simple stat presets:
 
-## 🍯 What's playable now?
+| Path | Fantasy | Expected gameplay |
+|---|---|---|
+| **Waxguard** | warrior / protector | melee, armour, retaliation, control |
+| **Bloomweaver** | pollen mage | ranged spells, explosions, status effects |
+| **Thornstrider** | ranger | mobility, precision, poison, critical hits |
+| **Hymnkeeper** | support / summoner | auras, motes, healing, swarm companions |
 
-`⚔️ real-time combat` · `🗺️ procedural routes` · `💎 four loot rarities` · `🌿 randomized talents` · `🔨 crafting` · `👑 bosses` · `🌀 Sigil Resonances` · `🌑 Gloam Pacts` · `📈 endless scaling` · `🏆 all-time leaderboard` · `☀️ Daily Hive`
+The desired talent model is closer to an MMO/action-RPG tree: abilities should gain ranks, modifiers and meaningful branches instead of only offering random run bonuses.
 
-Also included:
+## Systems to grow next
 
-- 👤 account registration and login
-- 🎟️ run tokens with basic score validation
-- 💾 persistent prototype data
-- 🎲 deterministic Daily Hive seed shared by every player
-- ⌨️ fully configurable keyboard controls
-- 🇫🇷 friendly ZQSD/AZERTY preset
-- 🐳 Docker-ready deployment
-- 📦 zero runtime npm dependencies
+1. Proper GLB character and creature assets with animation states.
+2. More maps connected through gates, paths and interior spaces.
+3. Real collision/physics layer and nav-aware enemy AI.
+4. NPCs, dialogue, quests and a journal.
+5. Equipment slots, loot drops and visible item quality.
+6. Larger talent trees and class-specific action bars.
+7. Recipes, alchemy, weapon/armour crafting and gathering professions.
+8. Map/minimap, discovered locations and fast travel.
+9. Save-game boundary tied back into the existing server/account layer.
+10. Restore leaderboard/daily systems only where they make sense for the new RPG structure.
 
----
+## Controls — current slice
 
-## 🎮 Controls
+- `WASD` / `ZQSD` / arrows — move
+- `E` — interact / harvest / activate shrine
+- `1–4` — abilities
+- mouse click — basic Predator Sting
+- `R` — healing potion
+- `I` — inventory
+- `N` — talents
+- `B` — crafting
+- `Esc` — close panels
 
-Open **⚙ Controls** in-game to rebind movement and the class ability.
+## Architecture
 
-Quick presets:
+- `public/js/world.js` — current 3D world/simulation vertical slice
+- `public/js/input-shim.js` — keyboard compatibility layer, including AZERTY
+- `public/world.css` — lightweight RPG HUD and menus
+- existing server/auth/score code remains in the repository while the RPG client is rebuilt
+- Three.js is reused from the vendored Vibe Arcade build, with a CDN fallback for standalone development
 
-`WASD` · `ZQSD / AZERTY` · `Arrow Keys`
-
-The class ability defaults to `Space`, but every binding can be changed. Settings are stored locally in the browser and duplicate bindings are rejected.
-
-Normal attacks currently auto-target nearby enemies so the player's attention stays on **movement, positioning, abilities and build decisions**.
-
----
-
-## ☀️ Daily Hive
-
-Every day, everyone can enter the same deterministic challenge.
-
-Same seed. Same underlying route generation. Same opportunity.
-
-The idea is simple:
-
-> **Who makes the most out of today's hive?**
-
----
-
-## 🏆 Score chasing
-
-Hivebound is the first game in Vibe Arcade's shared leaderboard direction.
-
-A run rewards progression, kills, bosses, loot and risk. Gloam can push the multiplier higher — if the run survives long enough to cash it in.
-
-Long-term, Vibe Arcade is intended to expose a player profile with records across every cabinet.
-
----
-
-# 🚀 Play locally
-
-### Node.js 20+
+## Run locally
 
 ```bash
 export HIVEBOUND_SECRET='a-long-random-secret'
 node server.js
 ```
 
-Then visit:
+Then open `http://localhost:8080`.
 
-```text
-http://localhost:8080
-```
-
-### Docker / VPS
-
-```bash
-cp .env.example .env
-# Set HIVEBOUND_SECRET in .env
-
-docker compose up -d --build
-```
-
-The container exposes port `8080` and can sit behind an existing reverse proxy / TLS setup.
+The standalone server can use the Three.js CDN fallback; the Vibe Arcade deployment reuses the vendored renderer from Stack Panic.
 
 ---
 
-## ⚠️ Prototype cave
-
-This is a playable prototype, not a finished competitive game.
-
-The server performs basic run validation, but a determined player can still manipulate a browser client. A serious competitive leaderboard should eventually use replay/event validation or more server-authoritative simulation.
-
-Persistence is deliberately lightweight for now. The current JSON layer keeps the prototype dependency-free; the shared Vibe Arcade identity and leaderboard layer can later move to PostgreSQL when the arcade grows.
-
----
-
-<p align="center">
-  <strong>🌼 ENTER THE BLOOM · EMBRACE THE GLOAM 🌑</strong>
-</p>
+**Direction:** build a small world that is enjoyable to inhabit first. More maps, classes and systems come after movement, combat, discovery and interaction feel good.
