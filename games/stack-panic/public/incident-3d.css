@@ -1,15 +1,23 @@
-#incident3d{
+#incident3d,
+#fxDirector{
   position:absolute;
   inset:0;
   width:100%;
   height:100%;
-  z-index:12;
   pointer-events:none;
+}
+#incident3d{
+  z-index:12;
   opacity:0;
   transition:opacity 140ms ease-out;
-  filter:saturate(1.12) contrast(1.04);
+  filter:saturate(1.16) contrast(1.05) drop-shadow(0 0 18px rgba(67,239,255,.14));
 }
 #incident3d.live{opacity:1}
+#fxDirector{
+  z-index:14;
+  mix-blend-mode:screen;
+  filter:saturate(1.18) contrast(1.06) drop-shadow(0 0 8px rgba(255,209,102,.22));
+}
 .incident-3d-live .fx-sheep,
 .incident-3d-live .fx-tank{opacity:0!important}
 .incident-3d-live::after{
@@ -18,11 +26,48 @@
   inset:0;
   z-index:13;
   pointer-events:none;
-  background:radial-gradient(circle at 50% 72%,rgba(255,255,255,.05),transparent 40%);
+  background:
+    radial-gradient(circle at 50% 72%,rgba(255,255,255,.08),transparent 36%),
+    radial-gradient(ellipse at center,transparent 58%,rgba(0,0,0,.28) 100%);
   mix-blend-mode:screen;
 }
+
+/* Bloom-inspired grading: highlights get a soft multi-scale halo without a costly full-screen composer. */
+.cabinet.fx-hot #game,
+.cabinet.fx-hot #overlay{
+  filter:saturate(1.28) contrast(1.08) drop-shadow(0 0 8px rgba(255,209,102,.24)) drop-shadow(0 0 22px rgba(255,90,183,.12));
+}
+.cabinet.fx-hot .screen-fx:after{opacity:.58}
+.cabinet.fx-vignette .screen-fx:before{
+  content:'';position:absolute;inset:-1px;pointer-events:none;z-index:5;
+  background:radial-gradient(ellipse at center,transparent 48%,rgba(0,0,0,.48) 100%);
+  animation:fx-vignette-breathe 1.4s ease-in-out infinite alternate;
+}
+@keyframes fx-vignette-breathe{to{opacity:.72;transform:scale(1.012)}}
+
+/* Short lens punch: the playfield bends and snaps back instead of only shaking. */
+.cabinet.fx-lens #game,
+.cabinet.fx-lens #overlay{
+  animation:fx-lens .42s cubic-bezier(.08,.72,.18,1);
+  transform-origin:center;
+}
+@keyframes fx-lens{
+  0%{transform:perspective(700px) scale(1);filter:saturate(1.1)}
+  18%{transform:perspective(700px) scale(1.035) rotateX(.8deg);filter:saturate(1.45) contrast(1.15)}
+  45%{transform:perspective(700px) scale(.992) rotateX(-.35deg);filter:hue-rotate(8deg) saturate(1.25)}
+  100%{transform:perspective(700px) scale(1);filter:none}
+}
+
+/* Acid leaves the cabinet sickly for the duration instead of only showing falling lines. */
+.cabinet.acid #game{filter:saturate(1.42) contrast(1.08) hue-rotate(24deg)}
+.cabinet.acid .screen-fx:after{background:radial-gradient(ellipse at center,transparent 54%,rgba(116,255,60,.19) 100%),linear-gradient(90deg,rgba(185,255,102,.025),rgba(0,255,180,.025))}
+
 @media (prefers-reduced-motion:reduce){
   #incident3d{display:none}
+  #fxDirector{display:none}
   .incident-3d-live .fx-sheep,
   .incident-3d-live .fx-tank{opacity:1!important}
+  .cabinet.fx-vignette .screen-fx:before,
+  .cabinet.fx-lens #game,
+  .cabinet.fx-lens #overlay{animation:none!important}
 }
