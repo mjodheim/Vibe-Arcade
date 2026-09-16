@@ -8,23 +8,29 @@ layer.id='incident3d';layer.width=360;layer.height=720;layer.setAttribute('aria-
 const cabinet=document.getElementById('cabinet');
 if(cabinet)cabinet.appendChild(layer);
 
-let renderer=null,scene=null,camera=null,raf=0,active=null,started=0,duration=0,actors=[],effects=[];
+let renderer=null,scene=null,camera=null,raf=0,active=null,started=0,duration=0,actors=[],effects=[],pausedAt=0,lastW=0,lastH=0;
 
 function disposeObject(root){
   root?.traverse?.(o=>{o.geometry?.dispose?.();const m=o.material;if(Array.isArray(m))m.forEach(x=>x.dispose?.());else m?.dispose?.();});
 }
 function clear(){
-  cancelAnimationFrame(raf);raf=0;active=null;actors.forEach(disposeObject);effects.forEach(disposeObject);actors=[];effects=[];
+  cancelAnimationFrame(raf);raf=0;active=null;actors.forEach(disposeObject);effects.forEach(disposeObject);actors=[];effects=[];pausedAt=0;
   renderer?.dispose?.();renderer=null;scene=null;camera=null;layer.classList.remove('live');
+}
+function resizeRenderer(){
+  if(!renderer||!camera)return;
+  const w=Math.max(1,Math.round(layer.clientWidth||360)),h=Math.max(1,Math.round(layer.clientHeight||720));
+  if(w===lastW&&h===lastH)return;
+  lastW=w;lastH=h;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();
 }
 function setup(){
   clear();
   renderer=new THREE.WebGLRenderer({canvas:layer,alpha:true,antialias:true,powerPreference:'high-performance'});
-  renderer.setPixelRatio(Math.min(devicePixelRatio||1,2));renderer.setSize(layer.clientWidth||360,layer.clientHeight||720,false);renderer.setClearColor(0x000000,0);
+  renderer.setPixelRatio(Math.min(devicePixelRatio||1,2));renderer.setClearColor(0x000000,0);
   renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.25;
-  scene=new THREE.Scene();camera=new THREE.PerspectiveCamera(42,(layer.clientWidth||360)/(layer.clientHeight||720),.1,100);camera.position.set(0,0,18);camera.lookAt(0,0,0);
+  scene=new THREE.Scene();camera=new THREE.PerspectiveCamera(42,1,.1,100);camera.position.set(0,0,18);camera.lookAt(0,0,0);
   scene.add(new THREE.HemisphereLight(0xb8ebff,0x16091e,2));const key=new THREE.DirectionalLight(0xffffff,2.4);key.position.set(4,8,10);scene.add(key);
-  layer.classList.add('live');
+  lastW=lastH=0;resizeRenderer();layer.classList.add('live');
 }
 
 function sheepModel(){
@@ -82,19 +88,26 @@ function startTank(){
   }catch(err){console.warn('3D tank incident unavailable',err);clear();return false;}
 }
 function stop(kind){if(!kind||active===kind)clear();}
-function tankShot(tank,elapsed){
-  const marks=[1450,2850,4250,5650];let firing=false;
-  marks.forEach(mark=>{if(Math.abs(elapsed-mark)<110)firing=true;});
+function tankShot(tank){
+  const firing=!!state.tank&&state.tank.flashUntil>performance.now();
   tank.userData.muzzle.visible=firing;tank.userData.lamp.intensity=firing?34:0;
-  if(firing){tank.userData.turret.rotation.z=Math.sin(elapsed*.03)*.018;}
+  if(firing)tank.userData.turret.rotation.z=Math.sin(performance.now()*.03)*.018;
+  else tank.userData.turret.rotation.z=0;
 }
 function loop(now=performance.now()){
-  if(!active||!renderer||!scene)return;const elapsed=now-started,p=Math.min(1,elapsed/duration);
+  if(!active||!renderer||!scene)return;
+  resizeRenderer();
+  if(state.paused){
+    if(!pausedAt)pausedAt=now;
+    renderer.render(scene,camera);raf=requestAnimationFrame(loop);return;
+  }
+  if(pausedAt){started+=now-pausedAt;pausedAt=0;}
+  const elapsed=now-started,p=Math.min(1,elapsed/duration);
   if(active==='sheep'){
     actors.forEach((s,i)=>{const q=Math.max(0,(p-s.userData.delay)/(1-s.userData.delay));s.position.x=-10+q*22*s.userData.speed;s.position.y+=Math.sin(now*.008+s.userData.phase)*.008;s.rotation.z=Math.sin(now*.012+s.userData.phase)*.1;const legs=s.userData.legs||[];legs.forEach((leg,j)=>leg.rotation.z=Math.sin(now*.018+s.userData.phase+j*Math.PI)*.32);});
     camera.position.x=Math.sin(now*.004)*.22;
   }else if(active==='tank'){
-    const t=actors[0];if(t){t.position.x=-9+p*18;t.position.y=-5.2+Math.sin(p*Math.PI)*.2;t.userData.turret.rotation.y=Math.sin(now*.0016)*.25;tankShot(t,elapsed);camera.position.x=Math.sin(now*.02)*.05;}
+    const t=actors[0];if(t){t.position.x=-9+p*18;t.position.y=-5.2+Math.sin(p*Math.PI)*.2;t.userData.turret.rotation.y=Math.sin(now*.0016)*.25;tankShot(t);camera.position.x=Math.sin(now*.02)*.05;}
   }
   renderer.render(scene,camera);if(p<1)raf=requestAnimationFrame(loop);else clear();
 }
