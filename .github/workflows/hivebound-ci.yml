@@ -25,11 +25,18 @@ jobs:
         run: node --check server.js
       - name: Check browser scripts
         run: |
-          node --check public/js/api.js
-          node --check public/js/app.js
-          node --check public/js/game.js
-          node --check public/js/game-patches.js
-          node --check public/js/bootstrap.js
-          node --check public/js/i18n.js
+          find public/js -name '*.js' -print0 | xargs -0 -n1 node --check
+      - name: Check world runtime contract
+        run: |
+          node --input-type=module -e "
+          import { readFileSync } from 'node:fs';
+          const html=readFileSync('public/index.html','utf8');
+          const world=readFileSync('public/js/world.js','utf8');
+          for(const asset of ['world.css','js/input-shim.js','js/world.js']) if(!html.includes('/hivebound/'+asset)) throw new Error('index missing '+asset);
+          for(const system of ['function shrine','function resource','function spawnEnemy','function cast','function interact','function renderPanels']) if(!world.includes(system)) throw new Error('world system missing: '+system);
+          for(const verb of ['talentPoints','potions','materials','gateOpen','bossDead']) if(!world.includes(verb)) throw new Error('progression contract missing: '+verb);
+          if(!world.includes("import('/stack-panic/vendor/three.module.min.js')")) throw new Error('Three.js local runtime import missing');
+          console.log('Hivebound world contract intact: exploration, puzzle, combat, talents, craft and boss');
+          "
       - name: Run tests
         run: npm test
