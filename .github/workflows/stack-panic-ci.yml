@@ -62,3 +62,16 @@ jobs:
           if (!css.includes('.cabinet.reality-fail')) throw new Error('REALITY FAIL presentation class missing');
           console.log('REALITY FAIL contract intact: 3 cataclysms, 100% trigger, synchronized 3D impacts');
           "
+      - name: Check layered incident FX contract
+        run: |
+          node --input-type=module -e "
+          import { readFileSync, existsSync } from 'node:fs';
+          const html = readFileSync('public/index.html', 'utf8');
+          const css = readFileSync('public/incident-3d.css', 'utf8');
+          for (const file of ['public/incident-3d.js','public/incident-3d-hooks.js','public/fx-director.js']) if (!existsSync(file)) throw new Error('missing layered FX file: ' + file);
+          for (const asset of ['incident-3d.css','fx-director.js','incident-3d-hooks.js']) if (!html.includes('/stack-panic/' + asset)) throw new Error('index missing ' + asset);
+          if (!css.includes('#fxDirector') || !css.includes('.cabinet.fx-lens')) throw new Error('persistent FX / lens grading styles missing');
+          const fx = readFileSync('public/fx-director.js','utf8');
+          for (const feature of ['acidRain','magnetStorm','wreckHits','scorch','lensPulse']) if (!fx.includes(feature)) throw new Error('FX director missing ' + feature);
+          console.log('layered incident FX contract intact');
+          "
