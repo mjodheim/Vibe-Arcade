@@ -3,7 +3,8 @@
 .incident-cinematic,
 .event-card,
 .advert,
-.crash {
+.crash,
+.reality-fail-copy {
   display: none !important;
 }
 
