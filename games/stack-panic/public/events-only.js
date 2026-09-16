@@ -6,12 +6,21 @@
   for (let i = EVENT_POOL.length - 1; i >= 0; i--) {
     if (EVENT_POOL[i].id === 'ad' || EVENT_POOL[i].id === 'bsod') EVENT_POOL.splice(i, 1);
   }
+  if (Array.isArray(SIDE_EVENTS)) {
+    for (let i = SIDE_EVENTS.length - 1; i >= 0; i--) {
+      if (SIDE_EVENTS[i] === 'ad' || SIDE_EVENTS[i] === 'bsod') SIDE_EVENTS.splice(i, 1);
+    }
+  }
 
   // No textual incident banners. The animation, audio and board mutation are the announcement.
   showBanner = function(){
     clearTimeout(state.bannerTimer);
     banner.classList.remove('show');
   };
+
+  // Belt-and-suspenders: even a stale/manual call cannot resurrect fake UI.
+  showAd = function(){ hideAd(); };
+  showCrash = function(){ hideCrash(); };
 
   // Defensive cleanup in case a stale state survived hot reload/dev tooling.
   hideAd();
