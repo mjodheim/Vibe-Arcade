@@ -39,8 +39,26 @@ jobs:
           const pool = core.slice(core.indexOf('const EVENT_POOL'), core.indexOf('function emptyBoard'));
           const ids = [...pool.matchAll(/\{id:'([a-z]+)'/g)].map(m => m[1]);
           const tracks = music.slice(music.indexOf('const TRACKS'));
-          const missing = ids.filter(id => !new RegExp('\n    ' + id + ': \{').test(tracks));
+          const missing = ids.filter(id => !new RegExp('\n    ' + id + ': \\{').test(tracks));
           if (!ids.length) { console.error('no incidents found — the parser needs updating'); process.exit(1); }
           if (missing.length) { console.error('incidents without a track: ' + missing.join(', ')); process.exit(1); }
           console.log(ids.length + ' incidents, all scored');
+          "
+      - name: Check REALITY FAIL contract
+        run: |
+          node --input-type=module -e "
+          import { readFileSync } from 'node:fs';
+          const html = readFileSync('public/index.html', 'utf8');
+          const controller = readFileSync('public/cataclysms.js', 'utf8');
+          const renderer = readFileSync('public/cataclysm-3d.js', 'utf8');
+          const css = readFileSync('public/cataclysms.css', 'utf8');
+          const requiredTypes = ['blackhole','orbital','sheepstorm'];
+          const missingTypes = requiredTypes.filter(id => !controller.includes(\"id:'\" + id + \"'\"));
+          if (missingTypes.length) throw new Error('missing cataclysms: ' + missingTypes.join(', '));
+          if (!controller.includes('state.chaos>=100')) throw new Error('REALITY FAIL no longer triggers at full chaos');
+          if (!controller.includes('targets') || !renderer.includes('targets=[]')) throw new Error('3D/gameplay impact synchronization missing');
+          for (const asset of ['cataclysms.css','cataclysms.js','cataclysm-3d.js']) if (!html.includes('/stack-panic/' + asset)) throw new Error('index missing ' + asset);
+          if (!renderer.includes(\"import * as THREE from '/stack-panic/vendor/three.module.min.js'\")) throw new Error('cataclysm renderer is not using the vendored Three.js build');
+          if (!css.includes('.cabinet.reality-fail')) throw new Error('REALITY FAIL presentation class missing');
+          console.log('REALITY FAIL contract intact: 3 cataclysms, 100% trigger, synchronized 3D impacts');
           "
