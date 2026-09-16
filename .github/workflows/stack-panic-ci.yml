@@ -93,7 +93,9 @@ jobs:
           for(const asset of ['events-only.css','events-only.js']) if(!html.includes('/stack-panic/'+asset)) throw new Error('index missing '+asset);
           for(const removed of ["EVENT_POOL[i].id === 'ad'","EVENT_POOL[i].id === 'bsod'"]) if(!mode.includes(removed)) throw new Error('message-only incident can return: '+removed);
           if(!mode.includes('showBanner = function()')) throw new Error('text incident banners are no longer suppressed');
-          for(const selector of ['.banner','.incident-cinematic','.event-card','.advert','.crash']) if(!css.includes(selector)) throw new Error('message overlay not hidden: '+selector);
+          for(const selector of ['.banner','.incident-cinematic','.event-card','.advert','.crash','.reality-fail-copy']) if(!css.includes(selector)) throw new Error('message overlay not hidden: '+selector);
           if(html.includes('PAUSE SPONSORISÉE') || html.includes('BLOCS PREMIUM') || html.includes('ERREUR FATALE')) throw new Error('message-only copy leaked back into the cabinet');
           console.log('events-only mode intact: gameplay/animation incidents only');
           NODE
+      - name: Run gameplay runtime smoke suite
+        run: node tests/runtime-smoke.mjs
