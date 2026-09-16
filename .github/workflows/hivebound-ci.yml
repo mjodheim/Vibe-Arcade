@@ -31,23 +31,27 @@ jobs:
         working-directory: games/hivebound
         run: |
           find public/js -name '*.js' -print0 | xargs -0 -n1 node --check
-      - name: Check world runtime contract
+      - name: Check stable 3D world contract
         working-directory: games/hivebound
         run: |
           node --input-type=module <<'NODE'
-          import { readFileSync } from 'node:fs';
+          import { readFileSync, existsSync } from 'node:fs';
           const html=readFileSync('public/index.html','utf8');
-          const world=readFileSync('public/js/world.js','utf8');
-          const ambience=readFileSync('public/js/bee-ambience.js','utf8');
+          const world=readFileSync('public/js/world-engine.js','utf8');
           const polish=readFileSync('public/hive-polish.css','utf8');
-          for(const asset of ['world.css','hive-polish.css','js/input-shim.js','js/world.js','js/bee-ambience.js']) if(!html.includes('/hivebound/'+asset)) throw new Error('index missing '+asset);
+          for(const asset of ['world.css','hive-polish.css','js/world-engine.js']) if(!html.includes('/hivebound/'+asset)) throw new Error('index missing '+asset);
+          if(html.includes('bee-ambience.js') || html.includes('input-shim.js') || html.includes('/hivebound/js/world.js')) throw new Error('legacy multi-runtime scripts are still loaded');
+          if(existsSync('public/js/bee-ambience.js')) throw new Error('second-renderer ambience file still exists');
+          const rendererCount=(world.match(/new THREE\.WebGLRenderer/g)||[]).length;
+          if(rendererCount!==1) throw new Error('Hivebound must use exactly one WebGLRenderer, found '+rendererCount);
           for(const system of ['function shrine','function resource','function spawnEnemy','function cast','function interact','function renderPanels']) if(!world.includes(system)) throw new Error('world system missing: '+system);
           for(const verb of ['talentPoints','potions','materials','gateOpen','bossDead']) if(!world.includes(verb)) throw new Error('progression contract missing: '+verb);
-          if(!world.includes("import('/stack-panic/vendor/three.module.min.js')")) throw new Error('Three.js local runtime import missing');
-          for(const visual of ['makeBee','pollenCount','requestAnimationFrame(frame)']) if(!ambience.includes(visual)) throw new Error('bee ambience missing: '+visual);
-          if(!polish.includes('#beeAmbience')||!polish.includes('.hive-atmosphere')) throw new Error('living hive presentation styles missing');
+          for(const camera of ['cameraRig','pointermove','wheel','KeyC','targetDistance']) if(!world.includes(camera)) throw new Error('camera control missing: '+camera);
+          for(const perf of ['InstancedMesh','lowQuality','monitorPerformance','webglcontextlost','webglcontextrestored']) if(!world.includes(perf)) throw new Error('stability feature missing: '+perf);
+          for(const material of ['noiseTexture','honeyTexture','CanvasTexture','grassTex','waxTex','stoneTex']) if(!world.includes(material)) throw new Error('procedural material missing: '+material);
+          if(!polish.includes('.hive-atmosphere') || !polish.includes('gpu-recover')) throw new Error('stable hive presentation styles missing');
           if(html.includes('<small>Q</small><b>🧪')) throw new Error('AZERTY potion label regressed to Q');
-          console.log('Hivebound contract intact: 3D world, RPG systems and living bee ambience');
+          console.log('Hivebound stable engine contract intact: one renderer, orbit camera, instancing, adaptive quality and procedural materials');
           NODE
       - name: Check arcade presentation contract
         run: |
