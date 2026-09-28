@@ -1,0 +1,15 @@
+services:
+  arcade:
+    build: .
+    restart: unless-stopped
+    environment:
+      ARCADE_SECRET: ${ARCADE_SECRET:?set ARCADE_SECRET in .env (16+ random characters)}
+      # Behind Nginx/Caddy on the same host: keep 1 so rate limits see real IPs.
+      TRUST_PROXY: ${TRUST_PROXY:-1}
+    ports:
+      - "127.0.0.1:${ARCADE_PORT:-8080}:8080"
+    volumes:
+      - arcade_data:/app/data
+
+volumes:
+  arcade_data:

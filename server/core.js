@@ -4,7 +4,9 @@ import { store, StorageUnavailable } from './store.js';
 // Games that can submit scores, with a generous plausibility ceiling:
 // a run cannot have scored faster than `perSecond` on average, plus a burst.
 export const GAMES = {
-  'stack-panic': { perSecond: 900, burst: 4000, max: 50_000_000 }
+  'stack-panic': { perSecond: 900, burst: 4000, max: 50_000_000 },
+  'forbidden-fruit': { perSecond: 250, burst: 3000, max: 10_000_000 },
+  'pigeon-control': { perSecond: 400, burst: 2000, max: 10_000_000 }
 };
 
 const TOKEN_DAYS = 30;
@@ -13,7 +15,7 @@ const RUN_MAX_MS = 6 * 60 * 60 * 1000;
 function secret() {
   const s = process.env.ARCADE_SECRET;
   if (s && s.length >= 16) return s;
-  if (process.env.VERCEL) throw new StorageUnavailable('secret-not-configured');
+  if (process.env.NODE_ENV === 'production') throw new StorageUnavailable('secret-not-configured');
   return 'dev-only-arcade-secret-change-me';
 }
 
@@ -48,8 +50,11 @@ export async function readJson(request) {
   try { return text ? JSON.parse(text) : {}; } catch { throw new HttpError(400, 'JSON invalide.'); }
 }
 
+// The HTTP server resolves the client address (honouring X-Forwarded-For only
+// when TRUST_PROXY is set) and hands it over in this header, overwriting
+// anything the client sent.
 export function clientIp(request) {
-  return (request.headers.get('x-forwarded-for') || '').split(',')[0].trim() || 'local';
+  return request.headers.get('x-arcade-client-ip') || 'local';
 }
 
 export async function limit(bucket, max, windowSeconds) {

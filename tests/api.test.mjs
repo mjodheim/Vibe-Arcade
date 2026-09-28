@@ -1,15 +1,17 @@
 import { test, beforeEach } from 'node:test';
 import assert from 'node:assert/strict';
-import { memoryStore, useStore } from '../api/_lib/store.js';
-import * as register from '../api/register.js';
-import * as login from '../api/login.js';
-import * as me from '../api/me.js';
-import * as runs from '../api/runs.js';
-import * as scores from '../api/scores.js';
-import { sign } from '../api/_lib/core.js';
+import { memoryStore, useStore } from '../server/store.js';
+import { routes } from '../server/api.js';
+import { sign } from '../server/core.js';
+
+const register = { POST: routes['POST /api/register'] };
+const login = { POST: routes['POST /api/login'] };
+const me = { GET: routes['GET /api/me'] };
+const runs = { POST: routes['POST /api/runs'] };
+const scores = { POST: routes['POST /api/scores'], GET: routes['GET /api/scores'] };
 
 const call = async (handler, { method = 'POST', body, token, query = '' } = {}) => {
-  const headers = { 'content-type': 'application/json', 'x-forwarded-for': '203.0.113.7' };
+  const headers = { 'content-type': 'application/json', 'x-arcade-client-ip': '203.0.113.7' };
   if (token) headers.authorization = `Bearer ${token}`;
   const res = await handler(new Request(`http://arcade.test/api/x${query}`, { method, headers, body: body ? JSON.stringify(body) : undefined }));
   return { status: res.status, data: await res.json() };
