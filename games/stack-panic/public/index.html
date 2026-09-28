@@ -34,12 +34,15 @@
   <link rel="stylesheet" href="/stack-panic/incident-3d.css" />
   <link rel="stylesheet" href="/stack-panic/sabotage.css" />
   <link rel="stylesheet" href="/stack-panic/events-only.css" />
+  <link rel="stylesheet" href="/stack-panic/visuals.css" />
+  <link rel="stylesheet" href="/shared/account.css" />
 </head>
 <body>
   <div class="noise" aria-hidden="true"></div>
   <header class="topbar">
     <a class="brand" href="/">← VIBE ARCADE</a>
     <div class="top-actions">
+      <div id="accountChip"></div>
       <button id="soundBtn" class="chip" type="button" aria-pressed="true">SOUND: ON</button>
       <button id="pauseBtn" class="chip" type="button">PAUSE</button>
     </div>
@@ -80,6 +83,7 @@
         <div id="startPanel" class="start-panel">
           <div class="logo-mini">STACK <b>PANIC</b></div>
           <p>Empile. Nettoie. Survis aux incidents.</p>
+          <p id="playerLine" class="player-line guest">INSCRIS-TOI POUR JOUER ET ENREGISTRER TES SCORES</p>
           <button id="startBtn" class="start-btn" type="button">INSERT COIN</button>
           <button id="dailyBtn" class="start-btn ghost-btn" type="button">DÉFI DU JOUR</button>
           <div class="best-scores">
@@ -94,22 +98,32 @@
           <strong id="finalScore">000000</strong>
           <span id="newBest" class="new-best" hidden>NOUVEAU RECORD</span>
           <p id="deathLine">La grille avait d'autres projets.</p>
+          <p id="scoreStatus" class="score-status" aria-live="polite"></p>
           <button id="restartBtn" class="start-btn" type="button">REBOOT</button>
         </div>
       </section>
 
       <aside class="panel side-panel">
         <div class="next-box"><small>NEXT</small><canvas id="next" width="144" height="144"></canvas></div>
+        <div class="leaderboard-box">
+          <small>CLASSEMENT</small>
+          <div class="board-tabs" role="tablist">
+            <button type="button" role="tab" data-board="all" aria-selected="true">GÉNÉRAL</button>
+            <button type="button" role="tab" data-board="daily" aria-selected="false">DU JOUR</button>
+          </div>
+          <ol id="leaderboard" class="leaderboard"><li class="empty">Chargement…</li></ol>
+        </div>
         <div class="rules">
           <small>SURVIVAL NOTES</small>
-          <p>Les incidents agissent directement sur la partie : pas de pop-up, pas de pub, pas de faux message système.</p>
-          <p>Plus le chaos monte, plus la chute accélère et plus les gros incidents peuvent s'enchaîner.</p>
-          <p>🔀 La reconfiguration mélange des rangées et remonte des blocs sans en supprimer : à toi de réparer le carnage.</p>
-          <p>À 100% : REALITY FAIL. La grille bascule dans un cataclysme 3D qui modifie réellement la pile.</p>
+          <p>Aucun incident ne t'aide. Les blocs ne disparaissent plus : ils sont déplacés, enterrés ou renvoyés sur ta pile.</p>
+          <p>Le chaos monte tout seul avec le temps. Un niveau toutes les 30 s, et la chute accélère sans pitié.</p>
+          <p>▲ La marée : une rangée de gravats remonte du sol, de plus en plus souvent. La jauge en bas de la grille te prévient.</p>
+          <p>📼 Pendant le glitch, gauche et droite s'inversent et l'aperçu ment. 💧 Pendant l'inondation, les commandes glissent.</p>
+          <p>À 100% : REALITY FAIL. Ce que le cataclysme avale, il le recrache par le bas.</p>
           <p>La brèche 3D utilise la vraie pile. Dans le tunnel : flèches/WASD pour piloter, ESPACE pour booster.</p>
         </div>
         <div class="legend">
-          <span>🐑 Piétinement</span><span>🔀 Reconfiguration</span><span>💧 Physique</span><span>💣 Sabotage</span><span>☄️ Impacts</span><span>🏗️ Démolition</span><span>🧪 Corrosion</span><span>🧲 Magnétisme</span><span>🙃 Gravité</span><span>🌀 Reality break</span>
+          <span>🐑 Piétinement</span><span>🔀 Reconfiguration</span><span>💧 Glisse</span><span>💣 Gravats</span><span>☄️ Éclats</span><span>🏗️ Démolition</span><span>🧪 Corrosion</span><span>🧲 Magnétisme</span><span>🙃 Sol qui monte</span><span>🪖 Remblai</span><span>🦆 Contrôle qualité</span><span>🌀 Reality break</span>
         </div>
       </aside>
     </section>
@@ -123,8 +137,8 @@
     </section>
 
     <section class="notes">
-      <span>BUILD 0.9 // DEEP PLAYTEST</span>
-      <p>Pause, FX, grading chaos, audio des modes spéciaux et acteurs 3D ont été resynchronisés après un audit complet du runtime.</p>
+      <span>BUILD 1.0 // NO MERCY</span>
+      <p>Plus aucun incident ne joue pour toi. Rendu HD, marée de gravats, comptes joueurs et classements en ligne.</p>
     </section>
   </main>
 
@@ -134,12 +148,16 @@
   <script src="/stack-panic/audio.js"></script>
   <script src="/stack-panic/runtime.js"></script>
   <script src="/stack-panic/sabotage.js"></script>
+  <script src="/stack-panic/visuals.js"></script>
+  <script src="/stack-panic/punish.js"></script>
   <script src="/stack-panic/ui-cinematics.js"></script>
   <script src="/stack-panic/events-only.js"></script>
   <script src="/stack-panic/fx-director.js"></script>
   <script src="/stack-panic/cataclysms.js"></script>
   <script src="/stack-panic/qa-fixes.js"></script>
   <script src="/stack-panic/controls.js"></script>
+  <script src="/shared/account.js"></script>
+  <script src="/stack-panic/account.js"></script>
   <script type="module" src="/stack-panic/breach.js"></script>
   <script type="module" src="/stack-panic/cataclysm-3d.js"></script>
   <script type="module" src="/stack-panic/incident-3d-hooks.js"></script>

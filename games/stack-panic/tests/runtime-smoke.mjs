@@ -19,7 +19,7 @@ class ClassList {
 const ctx2d = () => ({
   save(){},restore(){},translate(){},rotate(){},scale(){},fillRect(){},strokeRect(){},clearRect(){},
   beginPath(){},closePath(){},arc(){},ellipse(){},fill(){},stroke(){},moveTo(){},lineTo(){},quadraticCurveTo(){},
-  setLineDash(){},fillText(){},
+  setLineDash(){},fillText(){},drawImage(){},setTransform(){},
   createLinearGradient(){return {addColorStop(){}};},
   createRadialGradient(){return {addColorStop(){}};}
 });
@@ -79,7 +79,7 @@ vm.createContext(sandbox);
 
 const classic=[
   'public/music.js','public/core.js','public/events.js','public/audio.js','public/runtime.js',
-  'public/sabotage.js','public/ui-cinematics.js','public/events-only.js','public/fx-director.js',
+  'public/sabotage.js','public/visuals.js','public/punish.js','public/ui-cinematics.js','public/events-only.js','public/fx-director.js',
   'public/cataclysms.js','public/qa-fixes.js','public/controls.js'
 ];
 for(const file of classic){
@@ -91,7 +91,7 @@ for(const file of classic){
 vm.runInContext(`globalThis.__test={
   state,EVENT_POOL,SIDE_EVENTS,seedRun,makePiece,emptyBoard,spawn,clearLines,weightedEvent,
   scrambleSettledRows,liftBadlyPlacedBlocks,sabotagePulse,spawnSheep,dropInterval,glitchBoard,
-  togglePause,hardDrop,showBanner
+  togglePause,hardDrop,showBanner,updateEvents,liftStack,updateTank,spawnTank,explodeBomb,finishMini,draw,COLORS
 }`,sandbox);
 const t=sandbox.__test;
 const countCells=board=>board.reduce((sum,row)=>sum+row.filter(Boolean).length,0);
@@ -135,7 +135,8 @@ assert(t.state.sheep.length>=12&&t.state.sheep.length<=20,'sheep count outside h
 t.state.level=1;t.state.chaos=0;const calm=t.dropInterval();
 t.state.level=8;t.state.chaos=90;const hostile=t.dropInterval();
 assert(hostile<calm,'drop interval does not accelerate under pressure');
-assert(hostile>=72,'drop interval broke its safety floor');
+assert(hostile>=50,'drop interval broke its safety floor');
+assert(t.dropInterval()<=110,'late-game gravity is not punishing enough');
 
 // Event selection can run repeatedly without returning removed message incidents.
 t.state.level=10;t.state.chaos=100;t.state.recentEvents=[];t.state.eventCooldown=null;
@@ -168,6 +169,51 @@ assert.equal(t.state.piece,pieceBefore,'OS key-repeat triggered a hard drop');
 
 document.__dispatch('keydown',{key:' ',repeat:false});
 assert.notEqual(t.state.piece,pieceBefore,'normal hard drop was blocked');
+
+// NO MERCY: incidents never lower the stack any more.
+const P=sandbox.StackPanicPunish;
+const heightOf=board=>{const y=board.findIndex(r=>r.some(Boolean));return y<0?0:20-y;};
+const freshBoard=()=>{t.state.board=t.emptyBoard();for(let y=14;y<20;y++)for(let x=0;x<10;x++)if(x!==(y%10))t.state.board[y][x]=1+(x%7);t.state.piece=null;t.state.pushedOut=false;};
+t.seedRun(0xbadc0de);t.state.running=true;t.state.gameOver=false;t.state.paused=false;t.state.chaos=40;
+
+freshBoard();let h=heightOf(t.state.board);let n=countCells(t.state.board);
+t.liftStack();
+assert(heightOf(t.state.board)>=h+2,'gravity incident no longer raises the floor');
+assert(countCells(t.state.board)>n,'gravity incident removed cells');
+
+freshBoard();n=countCells(t.state.board);
+t.spawnTank();t.state.tank.nextShot=0;t.updateTank(1,1/60);
+assert.equal(countCells(t.state.board),n+9,'tank shell did not push a 9-cell garbage row');
+assert(t.state.board[19].includes(P.RUBBLE),'garbage row is not rubble');
+
+freshBoard();h=heightOf(t.state.board);
+t.explodeBomb({x:4,y:14});
+assert(heightOf(t.state.board)>=h,'bomb lowered the stack');
+
+freshBoard();n=countCells(t.state.board);
+t.state.mini={done:false,success:true,three:false};t.finishMini();
+assert.equal(countCells(t.state.board),n-9,'a sealed breach must clear exactly one row');
+
+// Rubble pushed past the ceiling ends the run.
+t.state.board=t.emptyBoard();t.state.board[0][3]=1;t.state.board[19][0]=1;t.state.pushedOut=false;
+P.pushGarbageRows(1);
+assert.equal(t.state.pushedOut,true,'top-out through garbage not detected');
+t.state.pushedOut=false;
+
+// The run escalates by itself: chaos climbs, the tide pushes rows in.
+freshBoard();t.state.chaos=0;t.state.level=1;t.state.lines=0;t.state.survivedMs=0;t.state.tideEvery=0;
+t.seedRun(1);t.state.next=t.makePiece();t.spawn();t.state.running=true;t.state.gameOver=false;
+t.state.activeEvent=null;t.state.nextEventAt=Infinity;t.state.cataclysm=null;t.state.nextRealityFailAt=Infinity;t.state.mini=null;
+n=countCells(t.state.board);
+for(let i=0;i<50;i++)t.updateEvents(clock,.05);
+assert(t.state.chaos>2,'chaos does not rise over time');
+assert.equal(t.state.tideLeft>0,true,'tide countdown not running');
+t.state.tideLeft=0;t.updateEvents(clock,.05);
+assert(countCells(t.state.board)>=n+9,'tide did not push a garbage row');
+assert(!t.state.gameOver,'tide ended a run that had room');
+
+// The renderer runs against the mocked canvas without throwing.
+t.draw();
 
 // Static integration assertions for visual bugs that the logic harness cannot render.
 const fx=readFileSync('public/fx-director.js','utf8');

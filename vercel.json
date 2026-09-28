@@ -3,7 +3,12 @@
   "redirects": [
     {
       "source": "/hivebound",
-      "destination": "/hivebound/",
+      "destination": "/",
+      "permanent": false
+    },
+    {
+      "source": "/hivebound/:path*",
+      "destination": "/",
       "permanent": false
     },
     {
@@ -13,14 +18,6 @@
     }
   ],
   "rewrites": [
-    {
-      "source": "/hivebound/",
-      "destination": "/games/hivebound/public/index.html"
-    },
-    {
-      "source": "/hivebound/:path*",
-      "destination": "/games/hivebound/public/:path*"
-    },
     {
       "source": "/stack-panic/",
       "destination": "/games/stack-panic/public/index.html"

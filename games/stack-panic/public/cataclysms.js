@@ -20,7 +20,8 @@
     {id:'sheepstorm',name:'SHEEP DIMENSION',copy:'Le bétail a obtenu l’accès administrateur.',accent:'#b9ff66',duration:12000,music:'sheep'}
   ];
 
-  state.cataclysm=null;state.nextRealityFailAt=performance.now()+25000;state.realityFails=0;
+  // First REALITY FAIL can land 18 s into a run, then every ~30 s at full chaos.
+  state.cataclysm=null;state.nextRealityFailAt=performance.now()+18000;state.realityFails=0;
 
   function flash(){const f=ui.querySelector('.rf-whiteout');f.classList.remove('fire');void f.offsetWidth;f.classList.add('fire');}
   function safeEndCurrent(){
@@ -29,17 +30,16 @@
     state.sheep=[];state.bombs=[];state.meteors=[];state.wreck=null;state.magnet=null;state.acid=null;state.smoke=[];
   }
   function occupied(){const cells=[];for(let y=0;y<ROWS;y++)for(let x=0;x<COLS;x++)if(state.board[y][x])cells.push({x,y});return cells;}
-  function settleColumns(){
-    for(let x=0;x<COLS;x++){
-      const values=[];for(let y=ROWS-1;y>=0;y--)if(state.board[y][x])values.push(state.board[y][x]);
-      for(let y=0;y<ROWS;y++)state.board[y][x]=0;
-      values.forEach((v,i)=>state.board[ROWS-1-i][x]=v);
-    }
-  }
+  // What the black hole swallows, it spits back out as garbage from the floor:
+  // the stack gets riddled with holes and ends up no lower than before.
   function eatFraction(fraction){
     const cells=occupied();let removed=0;
     cells.forEach(c=>{if(rng()<fraction){state.board[c.y][c.x]=0;removed++;}});
-    if(removed){state.score+=removed*6;burst(180,420,Math.min(90,removed*2));}
+    if(removed){
+      burst(180,420,Math.min(90,removed*2));
+      const P=window.StackPanicPunish;
+      if(P)P.pushGarbageRows(Math.max(1,Math.round(removed/7)));
+    }
   }
   function pickStrikeTargets(count){
     const source=occupied();const result=[];
@@ -51,7 +51,8 @@
   }
   function strike(target){
     const t=target||{x:rand(COLS),y:ROWS-2-rand(5)};
-    const removed=crater(t.x,t.y,3);state.score+=removed*10;
+    const removed=crater(t.x,t.y,2);
+    window.StackPanicPunish?.scatterDebris?.(removed+2,t.x);
     burst(t.x*CELL+18,t.y*CELL+18,70);spawnSmoke(7);screenKick('shake',620);sfx('boom');
     window.StackPanicCinematics?.shock?.(t.x*CELL+18,t.y*CELL+18,'#ff5f68');
     clearLines();flash();
@@ -65,8 +66,8 @@
           if(dir<0)row.push(row.shift());else row.unshift(row.pop());
         }
       }
-      for(let x=0;x<COLS;x++)if(row[x]&&rng()<.11)row[x]=0;
     }
+    window.StackPanicPunish?.scatterDebris?.(4+rand(4));
     burst(180,520,56);screenKick('shake',420);sfx('bleat');clearLines();
   }
   function woolDeposit(){
@@ -77,8 +78,8 @@
 
   function stageBlackHole(c,elapsed){
     if(!c.steps[0]&&elapsed>2600){c.steps[0]=1;eatFraction(.18);flash();}
-    if(!c.steps[1]&&elapsed>5200){c.steps[1]=1;eatFraction(.24);settleColumns();screenKick('shake',500);}
-    if(!c.steps[2]&&elapsed>8200){c.steps[2]=1;eatFraction(.34);settleColumns();clearLines();flash();}
+    if(!c.steps[1]&&elapsed>5200){c.steps[1]=1;eatFraction(.24);screenKick('shake',500);}
+    if(!c.steps[2]&&elapsed>8200){c.steps[2]=1;eatFraction(.3);clearLines();flash();}
   }
   function stageOrbital(c,elapsed){
     const times=[2200,3400,4600,5800,7000,8200,9400];
@@ -87,7 +88,7 @@
   function stageSheep(c,elapsed){
     const times=[2500,4800,7100];
     times.forEach((ms,i)=>{if(!c.steps[i]&&elapsed>ms){c.steps[i]=1;stampede();}});
-    if(!c.steps[3]&&elapsed>9000){c.steps[3]=1;woolDeposit();}
+    if(!c.steps[3]&&elapsed>9000){c.steps[3]=1;woolDeposit();woolDeposit();}
   }
 
   function triggerRealityFail(t,forced){
@@ -106,16 +107,15 @@
 
   function finishRealityFail(t){
     const c=state.cataclysm;if(!c)return;
-    settleColumns();clearLines();
-    state.chaos=18+rand(20);state.inputLocked=false;state.cataclysm=null;state.nextRealityFailAt=t+48000+rand(18000);pauseBtn.disabled=false;
+    clearLines();
+    state.chaos=55+rand(20);state.inputLocked=false;state.cataclysm=null;state.nextRealityFailAt=t+24000+rand(10000);pauseBtn.disabled=false;
     cabinet.classList.remove('reality-fail');ui.classList.remove('live');window.Cataclysm3D?.stop?.(canvas);
-    rethemeMusic('base');scheduleNextEvent(performance.now(),6500);
+    rethemeMusic('base');scheduleNextEvent(performance.now());
     eventTitle.textContent='REALITY RESTORED';eventText.textContent='La physique a redémarré avec des paramètres approximatifs.';
     showBanner('REALITY RESTORED',c.id==='orbital'?'Le bombardement a cessé. Le propriétaire du plafond sera contacté.':c.id==='blackhole'?'Une partie de la pile existe désormais ailleurs.':'Les moutons ont rendu les privilèges administrateur.');
-    if(state.piece&&collides(state.piece,0,0)){
-      state.board[0]=Array(COLS).fill(0);state.board[1]=Array(COLS).fill(0);state.piece.y=-1;
-      if(collides(state.piece,0,0))spawn();
-    }
+    // No more ceiling clean-up: if reality came back with your piece inside
+    // the stack, the run is over.
+    if(state.pushedOut||(state.piece&&collides(state.piece,0,0))){state.pushedOut=false;endGame();}
   }
 
   function updateRealityFail(t){
@@ -140,7 +140,7 @@
   const baseReset=resetGame;
   resetGame=function(daily=false){
     if(state.cataclysm)window.Cataclysm3D?.stop?.(canvas);
-    state.cataclysm=null;state.nextRealityFailAt=performance.now()+25000;pauseBtn.disabled=false;cabinet.classList.remove('reality-fail');ui.classList.remove('live');
+    state.cataclysm=null;state.nextRealityFailAt=performance.now()+18000;pauseBtn.disabled=false;cabinet.classList.remove('reality-fail');ui.classList.remove('live');
     baseReset(daily);
   };
   const baseEndGame=endGame;

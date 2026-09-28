@@ -29,31 +29,6 @@ Le code source est public. Les conversations privées utilisées pour orienter l
 
 ---
 
-# 🐝 BORNE #001
-
-## **Hivebound: Relics of the Bloom**
-
-> *The Bloom is fading. The Hive remembers.*
-
-Un roguelite d'action fantasy dans lequel des abeilles héroïques quittent la sécurité de la ruche, poursuivent d'étranges reliques, construisent des combinaisons absurdes, affrontent des créatures corrompues et risquent toujours davantage pour battre leur meilleur score.
-
-| 🛡️ Waxguard | ✨ Bloomweaver | 🏹 Thornstrider | 🎶 Hymnkeeper |
-|:---:|:---:|:---:|:---:|
-| Guerrier | Mage | Rôdeur | Support |
-| Armure & riposte | Pollen arcanique & explosions | Vitesse & critiques | Auras & puissance de l'essaim |
-
-### 🍯 Qu'est-ce qui est déjà présent ?
-
-`⚔️ combats en temps réel` · `🗺️ routes procédurales` · `💎 loot aléatoire` · `🌿 talents` · `🔨 craft` · `👑 boss` · `🌀 résonances` · `🌑 pactes risque/récompense` · `🏆 classements` · `☀️ Daily Hive`
-
-Chaque run consiste à devenir de plus en plus déraisonnablement puissant avant que la corruption ne finisse par te rattraper.
-
-**Version actuelle :** `v0.2 — prototype jouable`
-
-➡️ **[Entrer dans Hivebound](games/hivebound)**
-
----
-
 # 🧱 BORNE #002
 
 ## **Stack Panic**
@@ -62,9 +37,9 @@ Chaque run consiste à devenir de plus en plus déraisonnablement puissant avant
 
 Un **jeu de blocs qui tombent** dans lequel la partie refuse de rester sage. Tu empiles, tu nettoies des lignes — et le directeur du chaos envoie des moutons qui poussent les cases, de l'eau qui coule dans les trous, une bombe, un tank, une panne de courant, un canard inspecteur, ou une **brèche structurelle** : le jeu s'ouvre alors en 3D et tu pilotes un vaisseau dans un tunnel construit à partir de ta propre pile.
 
-Chaque incident peut sauver ta partie… ou l'achever. Le chaos a quand même ses règles : il ne s'acharne jamais deux fois de suite et se retient quand ta pile touche le plafond.
+Depuis la **v1.0 — NO MERCY**, plus aucun incident ne joue pour toi : les blocs ne disparaissent plus, ils sont déplacés, enterrés ou renvoyés sur ta pile. Le chaos monte tout seul, un niveau tombe toutes les 30 secondes et une marée de gravats remonte du sol de plus en plus souvent. Chaque partie finit par casser — la question est quand.
 
-`🐑 moutons` · `💧 blocs liquides` · `💣 bombes` · `🪖 tank` · `🌑 panne de courant` · `📼 glitch` · `🦆 canard` · `🌀 brèche 3D` · `☀️ défi du jour` · `🏆 records locaux`
+`🐑 moutons` · `💧 commandes qui glissent` · `💣 gravats` · `🪖 tank à remblai` · `🌑 panne de courant` · `📼 commandes inversées` · `🦆 canard contrôleur` · `🌀 brèche 3D` · `☀️ défi du jour` · `👤 comptes joueurs` · `🏆 classements en ligne`
 
 ➡️ **[Jouer à Stack Panic](https://arcade.mjodheim.be/stack-panic/)** · [le code et les notes de jeu](games/stack-panic)
 
@@ -115,9 +90,8 @@ La dernière phrase est la plus importante. 😈
 
 | Borne | Jeu | Genre | Statut |
 |:--:|---|---|:--:|
-| `#001` | 🐝 **Hivebound: Relics of the Bloom** | Roguelite d'action fantasy | 🟢 JOUABLE |
 | `#002` | 🧱 **Stack Panic** | Puzzle de blocs chaotique | 🟢 JOUABLE |
-| `#003` | ❔ **???** | ??? | 🔒 VERROUILLÉ |
+| `#003` | ❔ **???** | Arcade WTF | 🛠️ EN CONSTRUCTION |
 | `#004` | ❔ **???** | ??? | 🔒 VERROUILLÉ |
 
 Les prochains jeux pourront partager la même identité d'arcade, les profils joueurs, les succès et un classement propre à chaque jeu, tout en proposant des expériences complètement différentes.
@@ -128,8 +102,8 @@ Les prochains jeux pourront partager la même identité d'arcade, les profils jo
 
 À mesure que la collection grandit, Vibe Arcade doit obtenir une couche commune autour des jeux :
 
-- 👤 une seule identité joueur dans toute l'arcade
-- 🏆 un classement pour chaque jeu
+- ✅ 👤 une seule identité joueur dans toute l'arcade
+- ✅ 🏆 un classement pour chaque jeu
 - 🥇 des défis quotidiens et permanents
 - 🎖️ des succès inter-jeux
 - 📊 des records personnels et statistiques d'arcade
@@ -141,32 +115,19 @@ La contrainte importante reste la même : **le joueur oriente le produit par ses
 
 ## 🚀 Lancer l'arcade actuelle
 
-### Docker
+Le site est statique, avec une petite API (`api/`) en **Vercel Functions** pour les comptes et les classements. Aucune dépendance npm.
 
 ```bash
-cp games/hivebound/.env.example games/hivebound/.env
-# Définir une valeur HIVEBOUND_SECRET robuste dans le fichier .env
-
-docker compose up -d --build
+npm run dev    # http://localhost:3000 — site + API avec stockage en mémoire
+npm test       # tests de l'API + smoke test de Stack Panic
 ```
 
-Puis ouvrir :
+### En production (Vercel)
 
-```text
-http://localhost:8080
-```
+1. Ajouter une base **Upstash Redis** au projet (Vercel → Storage / Marketplace). Elle injecte `KV_REST_API_URL` et `KV_REST_API_TOKEN` (les noms `UPSTASH_REDIS_REST_URL` / `UPSTASH_REDIS_REST_TOKEN` marchent aussi).
+2. Définir `ARCADE_SECRET` : une longue chaîne aléatoire (≥ 16 caractères) qui signe les sessions et les parties.
 
-### Sans Docker
-
-Hivebound nécessite actuellement **Node.js 20+** et n'a aucune dépendance npm nécessaire à l'exécution.
-
-```bash
-cd games/hivebound
-export HIVEBOUND_SECRET='un-secret-long-et-aleatoire'
-node server.js
-```
-
-Pour les contrôles, les mécaniques et les informations propres au jeu, voir **[games/hivebound](games/hivebound)**.
+Sans ces variables, l'API répond « serveur de scores indisponible » et les jeux restent jouables en mode non classé.
 
 ---
 
@@ -175,11 +136,12 @@ Pour les contrôles, les mécaniques et les informations propres au jeu, voir **
 ```text
 Vibe-Arcade/
 ├── 🎮 games/
-│   └── 🐝 hivebound/       # Jeu #001
+│   └── 🧱 stack-panic/     # Jeu #002
+├── 🔐 api/                  # Comptes & classements (Vercel Functions)
+├── 🤝 shared/               # Client compte partagé par toutes les bornes
 ├── 🎨 assets/               # Visuels de l'arcade
 ├── 📚 docs/
 │   └── PHILOSOPHY.md        # Ce que l'expérience cherche à explorer
-├── 🐳 docker-compose.yml
 ├── 📖 README.md             # Français
 └── 📖 README.en.md          # English
 ```
