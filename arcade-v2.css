@@ -12,8 +12,7 @@ body{background:#05070d}.bg{background:radial-gradient(circle at 18% 8%,rgba(239
 @media(prefers-reduced-motion:reduce){.stack-meteor{animation:none!important}.world-card{transition:none}}
 
 /* Cabinets #003 and #004 */
-.cabinet-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
-@media(max-width:1000px){.cabinet-grid{grid-template-columns:1fr 1fr}}
+.cabinet-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
 @media(max-width:680px){.cabinet-grid{grid-template-columns:1fr}}
 .world-card.mystery{background:radial-gradient(circle at 50% 42%,rgba(255,77,94,.25),transparent 34%),linear-gradient(150deg,#0f2413,#0b1a0e 62%,#060a07)!important}
 .world-card.mystery .world-label strong{background:linear-gradient(90deg,#b9ff66,#ff4d5e);-webkit-background-clip:text;background-clip:text;color:transparent}
@@ -40,3 +39,14 @@ body{background:#05070d}.bg{background:radial-gradient(circle at 18% 8%,rgba(239
 .topbar nav{display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:flex-end}
 @media(prefers-reduced-motion:reduce){.mystery-mark,.fruit-snake,.pigeon-ring{animation:none!important}}
 .cabinet-grid .game-title strong{font-size:clamp(1.7rem,3.1vw,2.6rem);line-height:.95;overflow-wrap:anywhere}
+.goose-preview{background:radial-gradient(circle at 50% 40%,rgba(255,209,102,.22),transparent 34%),linear-gradient(145deg,#2f6b3a,#24542d 60%,#173a1e)}
+.goose-road{position:absolute;left:0;right:0;top:56%;height:48px;background:#34363d;box-shadow:0 -10px 0 #b8b2a3,0 10px 0 #b8b2a3}
+.goose-road:after{content:"";position:absolute;left:0;right:0;top:22px;border-top:3px dashed #f2d15a}
+.goose-honk{position:absolute;left:50%;top:44%;width:40px;height:40px;margin:-20px;border:3px solid rgba(255,255,255,.8);border-radius:50%;animation:honk-ring 1.6s ease-out infinite}
+@keyframes honk-ring{0%{transform:scale(.4);opacity:1}100%{transform:scale(4);opacity:0}}
+.goose-mark{filter:drop-shadow(0 6px 10px rgba(0,0,0,.4));animation:goose-waddle .5s ease-in-out infinite}
+@keyframes goose-waddle{0%,100%{transform:translate(-50%,-50%) rotate(-6deg)}50%{transform:translate(-50%,-54%) rotate(6deg)}}
+.goose-parcel{position:absolute;right:18%;top:20%;font-size:2.2rem;animation:apple-panic 2s ease-in-out infinite}
+.goose-card .game-title strong{background:linear-gradient(90deg,#ffd166,#ff9d3d);-webkit-background-clip:text;background-clip:text;color:transparent}
+.goose-play{background:linear-gradient(135deg,#ffd166,#ff9d3d)!important}
+@media(prefers-reduced-motion:reduce){.goose-honk,.goose-mark,.goose-parcel{animation:none!important}}

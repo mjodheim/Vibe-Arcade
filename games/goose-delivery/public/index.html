@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no" />
+  <meta name="theme-color" content="#0d140c" />
+  <meta name="description" content="GOOSE DELIVERY — tu es une oie livreuse. Livre les colis avant la fin du chrono. Ton seul outil : HONK." />
+  <title>GOOSE DELIVERY — Vibe Arcade</title>
+  <link rel="canonical" href="https://arcade.mjodheim.be/goose-delivery/" />
+  <link rel="icon" href="/assets/icon.svg" type="image/svg+xml" />
+  <meta property="og:title" content="GOOSE DELIVERY — Vibe Arcade" />
+  <meta property="og:description" content="Livraison express. Service client : HONK." />
+  <link rel="stylesheet" href="/shared/cabinet.css" />
+  <link rel="stylesheet" href="/shared/account.css" />
+  <link rel="stylesheet" href="/goose-delivery/style.css" />
+</head>
+<body>
+  <header class="cab-topbar">
+    <a class="cab-brand" href="/">← VIBE ARCADE</a>
+    <div class="cab-actions">
+      <div id="accountChip"></div>
+      <button id="soundBtn" class="cab-chip" type="button" aria-pressed="true">SON : ON</button>
+      <button id="pauseBtn" class="cab-chip" type="button">PAUSE</button>
+    </div>
+  </header>
+
+  <main class="cab-shell wide">
+    <section class="cab-intro">
+      <p class="cab-kicker">CABINET #005 · LIVRAISON EXPRESS</p>
+      <h1>GOOSE <span>DELIVERY</span></h1>
+      <p>Livraison express. Service client : HONK.</p>
+    </section>
+
+    <section class="cab-screen" aria-label="Quartier de livraison">
+      <canvas id="game" width="960" height="600"></canvas>
+      <button id="honkBtn" class="honk-btn" type="button" aria-label="Honk">HONK!</button>
+
+      <div id="startPanel" class="cab-overlay">
+        <p class="cab-kicker">TU ES UNE OIE · TU AS UN CDD</p>
+        <h2>🪿 Livre les colis. <br>HONK sur le reste.</h2>
+        <p>Ramasse le colis, apporte-le à la bonne maison. Chaque livraison rallonge le chrono.</p>
+        <p id="playerLine" class="player-line guest">INSCRIS-TOI POUR JOUER ET ENREGISTRER TES SCORES</p>
+        <div>
+          <button id="startBtn" class="cab-btn" type="button">COMMENCER LA TOURNÉE</button>
+          <button id="dailyBtn" class="cab-btn ghost" type="button">DÉFI DU JOUR</button>
+        </div>
+        <small>Flèches / ZQSD / WASD · ESPACE = HONK · P pause · Mobile : glisse sur la carte pour marcher, bouton HONK</small>
+      </div>
+
+      <div id="overPanel" class="cab-overlay" hidden>
+        <p class="cab-kicker">FIN DE TOURNÉE</p>
+        <h2 id="deathLine">La tournée est terminée.</h2>
+        <div class="big" id="finalScore">000000</div>
+        <p id="finalStats">—</p>
+        <p id="scoreStatus" class="score-status" aria-live="polite"></p>
+        <div>
+          <button id="againBtn" class="cab-btn" type="button">NOUVELLE TOURNÉE</button>
+          <button id="againDailyBtn" class="cab-btn ghost" type="button">DÉFI DU JOUR</button>
+        </div>
+      </div>
+    </section>
+    <p class="rotate-hint">↻ TOURNE TON TÉLÉPHONE EN PAYSAGE POUR UN QUARTIER PLUS GRAND</p>
+
+    <section class="goose-panels">
+      <aside class="cab-panel cab-stats">
+        <div class="cab-stat"><small>SCORE</small><strong id="score">000000</strong></div>
+        <div class="cab-stat"><small>CHRONO</small><strong id="clock">60.0s</strong></div>
+        <div class="cab-stat"><small>LIVRÉS</small><strong id="deliveries">0</strong></div>
+        <div class="cab-stat"><small>MEILLEURE SÉRIE</small><strong id="combo">×0</strong></div>
+      </aside>
+
+      <aside class="cab-panel cab-rules">
+        <small>MANUEL DE L'OIE</small>
+        <p>📦 Ramasse le colis (jaune), livre-le devant la bonne porte (vert). Livraison = points + secondes.</p>
+        <p>⚡ Livre vite : bonus de rapidité. Enchaîne sans perdre de colis : série jusqu'à +125.</p>
+        <p>📣 <b>HONK</b> : les passants fuient et lâchent leur baguette (+50, +1,5 s).</p>
+        <p>🚨 Trop de HONK = <b>police</b>. Elle te coûte 8 s si elle t'attrape… sauf si tu lui HONK dessus : glissade.</p>
+        <p>🚗 Les voitures ne s'arrêtent pas pour les oies : −5 s. Bousculer un passant fait tomber le colis.</p>
+      </aside>
+
+      <aside class="cab-panel">
+        <small>CLASSEMENT</small>
+        <div class="board-tabs" role="tablist">
+          <button type="button" role="tab" data-board="all" aria-selected="true">GÉNÉRAL</button>
+          <button type="button" role="tab" data-board="daily" aria-selected="false">DU JOUR</button>
+        </div>
+        <ol id="leaderboard" class="leaderboard"><li class="empty">Chargement…</li></ol>
+      </aside>
+    </section>
+    <p class="cab-foot">BUILD 1.0 · une borne Vibe Arcade</p>
+  </main>
+
+  <script src="/shared/account.js"></script>
+  <script src="/shared/cabinet.js"></script>
+  <script src="/goose-delivery/logic.js"></script>
+  <script src="/goose-delivery/game.js"></script>
+</body>
+</html>

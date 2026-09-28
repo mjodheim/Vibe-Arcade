@@ -36,7 +36,7 @@ jobs:
           node-version: '22'
       - name: Check every script parses
         run: |
-          find server shared games/forbidden-fruit games/pigeon-control -name '*.js' -print0 | xargs -0 -n1 node --check
+          find server shared games/forbidden-fruit games/pigeon-control games/goose-delivery -name '*.js' -print0 | xargs -0 -n1 node --check
       - name: Server, API and game logic tests
         run: node --test tests/*.test.mjs
       - name: Docker image builds

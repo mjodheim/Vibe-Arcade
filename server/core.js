@@ -6,7 +6,8 @@ import { store, StorageUnavailable } from './store.js';
 export const GAMES = {
   'stack-panic': { perSecond: 900, burst: 4000, max: 50_000_000 },
   'forbidden-fruit': { perSecond: 250, burst: 3000, max: 10_000_000 },
-  'pigeon-control': { perSecond: 400, burst: 2000, max: 10_000_000 }
+  'pigeon-control': { perSecond: 400, burst: 2000, max: 10_000_000 },
+  'goose-delivery': { perSecond: 250, burst: 2000, max: 10_000_000 }
 };
 
 const TOKEN_DAYS = 30;

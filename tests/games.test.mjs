@@ -108,3 +108,65 @@ test('pigeon: an unattended square ends in a crash', () => {
   while(!s.over && s.time < 180000) P.update(s, 16);
   assert.equal(s.over, true);
 });
+
+// ------------------------------------------------------------------ Goose Delivery
+const G = load('games/goose-delivery/public/logic.js', 'GooseLogic');
+
+test('goose: every door is reachable on foot from the start', () => {
+  const step = 8, seen = new Set(), queue = [[330, 215]];
+  const k = (x, y) => `${x},${y}`;
+  seen.add(k(330, 215));
+  while(queue.length){
+    const [x, y] = queue.shift();
+    for(const [dx, dy] of [[step,0],[-step,0],[0,step],[0,-step]]){
+      const nx = x + dx, ny = y + dy;
+      if(seen.has(k(nx, ny)) || !G.walkable(nx, ny, G.GOOSE_R)) continue;
+      seen.add(k(nx, ny)); queue.push([nx, ny]);
+    }
+  }
+  const reachable = (px, py) => [...seen].some(c => { const [x, y] = c.split(',').map(Number); return Math.hypot(x - px, y - py) < G.GOOSE_R + 18; });
+  for(const h of G.HOUSES) assert.ok(reachable(h.doorX, h.doorY), `door ${h.id} unreachable`);
+});
+
+test('goose: pick up, deliver, score and gain time', () => {
+  const s = G.newGame(4);
+  s.cars = []; s.nextCarAt = Infinity; s.peds = []; s.nextPedAt = Infinity;
+  s.goose.x = s.parcel.x; s.goose.y = s.parcel.y;
+  G.update(s, 16, {});
+  assert.equal(s.goose.carrying, true);
+  const before = s.timeLeft;
+  s.goose.x = s.target.doorX; s.goose.y = s.target.doorY;
+  G.update(s, 16, {});
+  assert.equal(s.deliveries, 1);
+  assert.ok(s.score >= 100);
+  assert.ok(s.timeLeft > before, 'delivery did not add time');
+  assert.equal(s.goose.carrying, false);
+  assert.ok(s.parcel, 'no new parcel');
+});
+
+test('goose: honk scares people, drops baguettes and summons the police when overdone', () => {
+  const s = G.newGame(8);
+  s.cars = []; s.nextCarAt = Infinity;
+  s.peds = [{x:s.goose.x + 40, y:s.goose.y, tx:0, ty:0, speed:40, flee:0, baguette:true, shirt:'#fff', wait:0}];
+  assert.equal(G.honk(s), true);
+  assert.ok(s.peds[0].flee > 0);
+  assert.equal(s.items.length, 1);
+  assert.equal(G.honk(s), false, 'honk ignored its cooldown');
+  for(let i = 0; i < 8; i++){ s.time += G.HONK_COOLDOWN + 1; G.honk(s); }
+  G.update(s, 16, {});
+  assert.ok(s.cop, 'no police after a honking spree');
+});
+
+test('goose: a car costs time and the parcel; the clock always ends the round', () => {
+  const s = G.newGame(2);
+  s.goose.carrying = true; s.parcel = null;
+  s.cars = [{x:s.goose.x, y:s.goose.y, vx:0, vy:0, horizontal:true, color:'#fff'}]; s.nextCarAt = Infinity;
+  const before = s.timeLeft;
+  G.update(s, 16, {});
+  assert.equal(s.goose.carrying, false);
+  assert.ok(s.parcel);
+  assert.ok(before - s.timeLeft >= 5000);
+  const idle = G.newGame(3);
+  while(!idle.over) G.update(idle, 50, {});
+  assert.ok(idle.time <= G.START_TIME + 100);
+});

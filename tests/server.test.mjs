@@ -23,7 +23,7 @@ after(() => { proc?.kill('SIGTERM'); rmSync(dataDir, { recursive: true, force: t
 const get = path => fetch(base + path, { redirect: 'manual' });
 
 test('serves the landing page, shared files and every cabinet', async () => {
-  for (const path of ['/', '/arcade.css', '/shared/account.js', '/stack-panic/', '/stack-panic/core.js', '/forbidden-fruit/', '/pigeon-control/']) {
+  for (const path of ['/', '/arcade.css', '/shared/account.js', '/stack-panic/', '/stack-panic/core.js', '/forbidden-fruit/', '/pigeon-control/', '/goose-delivery/']) {
     const res = await get(path);
     assert.equal(res.status, 200, path);
   }
