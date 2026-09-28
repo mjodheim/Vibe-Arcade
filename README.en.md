@@ -69,6 +69,18 @@ Draw each pigeon's route, with the mouse or a finger, to the monument of its col
 
 ---
 
+# 🪿 CABINET #005
+
+## **Goose Delivery**
+
+> *Express delivery. Customer service: HONK.*
+
+You are a goose on a temp contract at a courier. Grab the parcel and waddle it to the right door before the clock runs out: every delivery buys time. Your only tool is **HONK**: people flee and drop their baguettes, and a honked-at policeman slips. Honk too much and the police come for you, and cars don't brake for geese.
+
+➡️ **[Play Goose Delivery](https://arcade.mjodheim.be/goose-delivery/)**
+
+---
+
 ## 🧪 The Vibe Loop
 
 ```text
@@ -117,6 +129,7 @@ That last one is the important one. 😈
 | `#002` | 🧱 **Stack Panic** | Chaotic falling-block puzzle | 🟢 PLAYABLE |
 | `#003` | 🍎 **Forbidden Fruit** | Reverse Snake | 🟢 PLAYABLE |
 | `#004` | 🐦 **Pigeon Control** | Pigeon air traffic control | 🟢 PLAYABLE |
+| `#005` | 🪿 **Goose Delivery** | Goose courier, against the clock | 🟢 PLAYABLE |
 | `#004` | ❔ **???** | ??? | 🔒 LOCKED |
 
 Future games can share the same arcade identity, player profiles, achievements, and per-game leaderboards while remaining completely different experiences.
@@ -156,7 +169,11 @@ docker compose up -d --build  # listens on 127.0.0.1:8080
 
 - Accounts and scores live in the `arcade_data` volume (`/app/data/arcade.json`).
 - Put the existing reverse proxy (Nginx, Caddy…) in front of `127.0.0.1:8080` for HTTPS. Keep `TRUST_PROXY=1` so login rate limiting sees real client IPs.
-- Update: `git pull && docker compose up -d --build`.
+- Manual update: `git pull && docker compose up -d --build`.
+
+### Automatic deployment
+
+Every push to `main` redeploys the VPS through `.github/workflows/deploy-vps.yml` (SSH → `git reset --hard origin/main` → `docker compose up -d --build` → health check). GitHub secrets to create: `VPS_HOST`, `VPS_USER`, `VPS_SSH_KEY`, `VPS_PATH` (optionally `VPS_PORT`, `VPS_KNOWN_HOSTS`).
 
 ---
 
@@ -167,7 +184,8 @@ Vibe-Arcade/
 ├── 🎮 games/
 │   ├── 🧱 stack-panic/     # Game #002
 │   ├── 🍎 forbidden-fruit/ # Game #003
-│   └── 🐦 pigeon-control/  # Game #004
+│   ├── 🐦 pigeon-control/  # Game #004
+│   └── 🪿 goose-delivery/  # Game #005
 ├── 🖥️ server/               # Node server: site, games, accounts & leaderboards
 ├── 🐳 Dockerfile · docker-compose.yml
 ├── 🤝 shared/               # Account client shared by every cabinet

@@ -1,0 +1,54 @@
+name: Deploy to VPS
+
+# Every push to main redeploys arcade.mjodheim.be on the VPS.
+# Repository secrets to create (Settings → Secrets and variables → Actions):
+#   VPS_HOST      e.g. arcade.mjodheim.be or the server IP
+#   VPS_USER      SSH user allowed to run docker compose
+#   VPS_SSH_KEY   private key (the public half in ~/.ssh/authorized_keys on the VPS)
+#   VPS_PATH      absolute path of the repository checkout on the VPS
+# Optional: VPS_PORT (default 22), VPS_KNOWN_HOSTS (output of `ssh-keyscan <host>`).
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-vps
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Configure SSH
+        env:
+          KEY: ${{ secrets.VPS_SSH_KEY }}
+          HOST: ${{ secrets.VPS_HOST }}
+          PORT: ${{ secrets.VPS_PORT || '22' }}
+          KNOWN: ${{ secrets.VPS_KNOWN_HOSTS }}
+        run: |
+          mkdir -p ~/.ssh && chmod 700 ~/.ssh
+          printf '%s\n' "$KEY" > ~/.ssh/id_deploy && chmod 600 ~/.ssh/id_deploy
+          if [ -n "$KNOWN" ]; then printf '%s\n' "$KNOWN" > ~/.ssh/known_hosts; else ssh-keyscan -p "$PORT" "$HOST" > ~/.ssh/known_hosts; fi
+      - name: Pull and rebuild
+        env:
+          HOST: ${{ secrets.VPS_HOST }}
+          USER: ${{ secrets.VPS_USER }}
+          PORT: ${{ secrets.VPS_PORT || '22' }}
+          APP: ${{ secrets.VPS_PATH }}
+        run: |
+          ssh -i ~/.ssh/id_deploy -p "$PORT" "$USER@$HOST" "set -e
+            cd '$APP'
+            git fetch --prune origin main
+            git reset --hard origin/main
+            docker compose up -d --build --remove-orphans
+            docker image prune -f >/dev/null"
+      - name: Health check
+        env:
+          HOST: ${{ secrets.VPS_HOST }}
+          USER: ${{ secrets.VPS_USER }}
+          PORT: ${{ secrets.VPS_PORT || '22' }}
+        run: |
+          ssh -i ~/.ssh/id_deploy -p "$PORT" "$USER@$HOST" \
+            'for i in $(seq 1 20); do curl -fsS "http://127.0.0.1:${ARCADE_PORT:-8080}/api/scores?game=stack-panic" >/dev/null && exit 0; sleep 2; done; exit 1'

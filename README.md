@@ -69,6 +69,18 @@ Trace à la souris ou au doigt la route de chaque pigeon jusqu'au monument de sa
 
 ---
 
+# 🪿 BORNE #005
+
+## **Goose Delivery**
+
+> *Livraison express. Service client : HONK.*
+
+Tu es une oie en CDD chez un transporteur. Ramasse le colis, apporte-le devant la bonne porte avant la fin du chrono : chaque livraison rallonge le temps. Ton seul outil, c'est **HONK** : les passants fuient et lâchent leur baguette, et un policier qui se fait klaxonner glisse. Mais trop de HONK fait débarquer la police, et les voitures ne freinent pas pour les oies.
+
+➡️ **[Jouer à Goose Delivery](https://arcade.mjodheim.be/goose-delivery/)**
+
+---
+
 ## 🧪 La boucle Vibe
 
 ```text
@@ -117,6 +129,7 @@ La dernière phrase est la plus importante. 😈
 | `#002` | 🧱 **Stack Panic** | Puzzle de blocs chaotique | 🟢 JOUABLE |
 | `#003` | 🍎 **Forbidden Fruit** | Snake inversé | 🟢 JOUABLE |
 | `#004` | 🐦 **Pigeon Control** | Contrôle aérien de pigeons | 🟢 JOUABLE |
+| `#005` | 🪿 **Goose Delivery** | Livraison en oie, contre la montre | 🟢 JOUABLE |
 | `#004` | ❔ **???** | ??? | 🔒 VERROUILLÉ |
 
 Les prochains jeux pourront partager la même identité d'arcade, les profils joueurs, les succès et un classement propre à chaque jeu, tout en proposant des expériences complètement différentes.
@@ -156,7 +169,11 @@ docker compose up -d --build  # écoute sur 127.0.0.1:8080
 
 - Les comptes et scores vivent dans le volume `arcade_data` (`/app/data/arcade.json`).
 - Mettre le reverse proxy existant (Nginx, Caddy…) devant `127.0.0.1:8080` pour le HTTPS. Garder `TRUST_PROXY=1` pour que la limitation des tentatives de connexion voie les vraies IP.
-- Mise à jour : `git pull && docker compose up -d --build`.
+- Mise à jour manuelle : `git pull && docker compose up -d --build`.
+
+### Déploiement automatique
+
+Chaque push sur `main` redéploie le VPS via `.github/workflows/deploy-vps.yml` (SSH → `git reset --hard origin/main` → `docker compose up -d --build` → health check). Secrets GitHub à créer : `VPS_HOST`, `VPS_USER`, `VPS_SSH_KEY`, `VPS_PATH` (et optionnellement `VPS_PORT`, `VPS_KNOWN_HOSTS`).
 
 ---
 
@@ -167,7 +184,8 @@ Vibe-Arcade/
 ├── 🎮 games/
 │   ├── 🧱 stack-panic/     # Jeu #002
 │   ├── 🍎 forbidden-fruit/ # Jeu #003
-│   └── 🐦 pigeon-control/  # Jeu #004
+│   ├── 🐦 pigeon-control/  # Jeu #004
+│   └── 🪿 goose-delivery/  # Jeu #005
 ├── 🖥️ server/               # Serveur Node : site, jeux, comptes & classements
 ├── 🐳 Dockerfile · docker-compose.yml
 ├── 🤝 shared/               # Client compte partagé par toutes les bornes
