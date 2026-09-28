@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no" />
+  <meta name="theme-color" content="#0b0d14" />
+  <meta name="description" content="PIGEON CONTROL — tour de contrôle d'une place publique. Trace la route de chaque pigeon jusqu'à son monument, sans collision." />
+  <title>PIGEON CONTROL — Vibe Arcade</title>
+  <link rel="canonical" href="https://arcade.mjodheim.be/pigeon-control/" />
+  <link rel="icon" href="/assets/icon.svg" type="image/svg+xml" />
+  <meta property="og:title" content="PIGEON CONTROL — Vibe Arcade" />
+  <meta property="og:description" content="Tour de contrôle, ici le pigeon." />
+  <link rel="stylesheet" href="/shared/cabinet.css" />
+  <link rel="stylesheet" href="/shared/account.css" />
+  <link rel="stylesheet" href="/pigeon-control/style.css" />
+</head>
+<body>
+  <header class="cab-topbar">
+    <a class="cab-brand" href="/">← VIBE ARCADE</a>
+    <div class="cab-actions">
+      <div id="accountChip"></div>
+      <button id="soundBtn" class="cab-chip" type="button" aria-pressed="true">SON : ON</button>
+      <button id="pauseBtn" class="cab-chip" type="button">PAUSE</button>
+    </div>
+  </header>
+
+  <main class="cab-shell wide">
+    <section class="cab-intro">
+      <p class="cab-kicker">CABINET #004 · CONTRÔLE AÉRIEN</p>
+      <h1>PIGEON <span>CONTROL</span></h1>
+      <p>Tour de contrôle, ici le pigeon.</p>
+    </section>
+
+    <section class="cab-screen" aria-label="Place publique">
+      <canvas id="game" width="960" height="600"></canvas>
+
+      <div id="startPanel" class="cab-overlay">
+        <p class="cab-kicker">PLACE PUBLIQUE · TRAFIC DENSE</p>
+        <h2>🐦 Trace la route. <br>Évite le carnage.</h2>
+        <p>Dessine le chemin de chaque pigeon jusqu'au monument de sa couleur.</p>
+        <p id="playerLine" class="player-line guest">INSCRIS-TOI POUR JOUER ET ENREGISTRER TES SCORES</p>
+        <div>
+          <button id="startBtn" class="cab-btn" type="button">PRENDRE MON SERVICE</button>
+          <button id="dailyBtn" class="cab-btn ghost" type="button">DÉFI DU JOUR</button>
+        </div>
+        <small>Clique (ou touche) un pigeon et glisse jusqu'à son monument · P pause · plusieurs doigts OK sur mobile</small>
+      </div>
+
+      <div id="overPanel" class="cab-overlay" hidden>
+        <p class="cab-kicker">INCIDENT AÉRIEN</p>
+        <h2 id="deathLine">Collision en plein vol.</h2>
+        <div class="big" id="finalScore">000000</div>
+        <p id="finalStats">—</p>
+        <p id="scoreStatus" class="score-status" aria-live="polite"></p>
+        <div>
+          <button id="againBtn" class="cab-btn" type="button">REPRENDRE LE SERVICE</button>
+          <button id="againDailyBtn" class="cab-btn ghost" type="button">DÉFI DU JOUR</button>
+        </div>
+      </div>
+    </section>
+    <p class="rotate-hint">↻ TOURNE TON TÉLÉPHONE EN PAYSAGE POUR UNE PLACE PLUS GRANDE</p>
+
+    <section class="pigeon-panels">
+      <aside class="cab-panel cab-stats">
+        <div class="cab-stat"><small>SCORE</small><strong id="score">000000</strong></div>
+        <div class="cab-stat"><small>POSÉS</small><strong id="landed">0</strong></div>
+        <div class="cab-stat"><small>MEILLEURE SÉRIE</small><strong id="streak">×0</strong></div>
+        <div class="cab-stat"><small>SERVICE</small><strong id="time">0s</strong></div>
+      </aside>
+
+      <aside class="cab-panel cab-rules">
+        <small>PLAN DE VOL</small>
+        <p><b class="k-city">● Pigeon des villes</b> → Statue du Général</p>
+        <p><b class="k-dove">● Colombe</b> → Fontaine</p>
+        <p><b class="k-fat">● Pigeon obèse</b> → Kiosque à pain. Lent, énorme, +50.</p>
+        <p><b class="k-ninja">● Pigeon ninja</b> → n'importe quel monument. Très rapide, +100.</p>
+        <p>🦅 <b>Mouette</b> : ne répond à personne. Écarte tes pigeons de sa trajectoire.</p>
+        <p>🍞 <b>Du pain !</b> Tous les pigeons sans route foncent vers les miettes.</p>
+        <p>Pose-les à moins de 3,5 s d'intervalle pour enchaîner une série (+50 par palier).</p>
+      </aside>
+
+      <aside class="cab-panel">
+        <small>CLASSEMENT</small>
+        <div class="board-tabs" role="tablist">
+          <button type="button" role="tab" data-board="all" aria-selected="true">GÉNÉRAL</button>
+          <button type="button" role="tab" data-board="daily" aria-selected="false">DU JOUR</button>
+        </div>
+        <ol id="leaderboard" class="leaderboard"><li class="empty">Chargement…</li></ol>
+      </aside>
+    </section>
+    <p class="cab-foot">BUILD 1.0 · une borne Vibe Arcade</p>
+  </main>
+
+  <script src="/shared/account.js"></script>
+  <script src="/shared/cabinet.js"></script>
+  <script src="/pigeon-control/logic.js"></script>
+  <script src="/pigeon-control/game.js"></script>
+</body>
+</html>

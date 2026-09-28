@@ -45,6 +45,30 @@ Since **v1.0 — NO MERCY**, no incident is on your side any more: blocks never 
 
 ---
 
+# 🍎 CABINET #003
+
+## **Forbidden Fruit**
+
+> *Snake, but you're the apple.*
+
+You run. Three snakes hunt you: **the Chaser** goes straight for you, **the Ambusher** aims where you're going, **the Drunk** zigzags at random. They keep growing and speeding up, and a new one arrives every 22 seconds. A snake that hits a wall, itself or another snake explodes into seeds (+500, ×2, ×3 combos…): the real game is making them take each other out.
+
+➡️ **[Play Forbidden Fruit](https://arcade.mjodheim.be/forbidden-fruit/)**
+
+---
+
+# 🐦 CABINET #004
+
+## **Pigeon Control**
+
+> *Control tower, this is pigeon.*
+
+Draw each pigeon's route, with the mouse or a finger, to the monument of its colour. Two pigeons touching ends your shift. Featuring fat pigeons, ninja pigeons, seagulls that answer to nobody, and a kid throwing bread at the worst possible moment.
+
+➡️ **[Play Pigeon Control](https://arcade.mjodheim.be/pigeon-control/)**
+
+---
+
 ## 🧪 The Vibe Loop
 
 ```text
@@ -91,7 +115,8 @@ That last one is the important one. 😈
 | Cabinet | Game | Genre | Status |
 |:--:|---|---|:--:|
 | `#002` | 🧱 **Stack Panic** | Chaotic falling-block puzzle | 🟢 PLAYABLE |
-| `#003` | ❔ **???** | WTF arcade | 🛠️ UNDER CONSTRUCTION |
+| `#003` | 🍎 **Forbidden Fruit** | Reverse Snake | 🟢 PLAYABLE |
+| `#004` | 🐦 **Pigeon Control** | Pigeon air traffic control | 🟢 PLAYABLE |
 | `#004` | ❔ **???** | ??? | 🔒 LOCKED |
 
 Future games can share the same arcade identity, player profiles, achievements, and per-game leaderboards while remaining completely different experiences.
@@ -113,21 +138,25 @@ The important constraint remains the same: **the player steers the product throu
 
 ---
 
-## 🚀 Run the current arcade
+## 🚀 Run the arcade
 
-The site is static, plus a small API (`api/`) running as **Vercel Functions** for accounts and leaderboards. No npm dependencies.
+Everything runs in **a single Node process** (`server/`): the landing page, every cabinet under `/<game>/`, and the account/leaderboard API. No npm dependencies, Node 20+.
 
 ```bash
-npm run dev    # http://localhost:3000 — site + API with an in-memory store
-npm test       # API tests + Stack Panic smoke test
+npm run dev    # http://localhost:8080 — auto-reload, data in ./data
+npm test       # server, API, game logic + Stack Panic smoke test
 ```
 
-### In production (Vercel)
+### On the VPS (Docker)
 
-1. Add an **Upstash Redis** database to the project (Vercel → Storage / Marketplace). It injects `KV_REST_API_URL` and `KV_REST_API_TOKEN` (`UPSTASH_REDIS_REST_URL` / `UPSTASH_REDIS_REST_TOKEN` work too).
-2. Set `ARCADE_SECRET`: a long random string (≥ 16 characters) that signs sessions and runs.
+```bash
+cp .env.example .env          # set a long random ARCADE_SECRET
+docker compose up -d --build  # listens on 127.0.0.1:8080
+```
 
-Without them the API answers "score server unavailable" and the games stay playable, unranked.
+- Accounts and scores live in the `arcade_data` volume (`/app/data/arcade.json`).
+- Put the existing reverse proxy (Nginx, Caddy…) in front of `127.0.0.1:8080` for HTTPS. Keep `TRUST_PROXY=1` so login rate limiting sees real client IPs.
+- Update: `git pull && docker compose up -d --build`.
 
 ---
 
@@ -136,8 +165,11 @@ Without them the API answers "score server unavailable" and the games stay playa
 ```text
 Vibe-Arcade/
 ├── 🎮 games/
-│   └── 🧱 stack-panic/     # Game #002
-├── 🔐 api/                  # Accounts & leaderboards (Vercel Functions)
+│   ├── 🧱 stack-panic/     # Game #002
+│   ├── 🍎 forbidden-fruit/ # Game #003
+│   └── 🐦 pigeon-control/  # Game #004
+├── 🖥️ server/               # Node server: site, games, accounts & leaderboards
+├── 🐳 Dockerfile · docker-compose.yml
 ├── 🤝 shared/               # Account client shared by every cabinet
 ├── 🎨 assets/               # Arcade visuals
 ├── 📚 docs/

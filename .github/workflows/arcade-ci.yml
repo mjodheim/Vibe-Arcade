@@ -1,0 +1,43 @@
+name: Arcade CI
+
+on:
+  push:
+    paths:
+      - 'server/**'
+      - 'shared/**'
+      - 'games/**'
+      - 'tests/**'
+      - 'index.html'
+      - 'arcade*.css'
+      - 'arcade.js'
+      - 'package.json'
+      - 'Dockerfile'
+      - '.github/workflows/arcade-ci.yml'
+  pull_request:
+    paths:
+      - 'server/**'
+      - 'shared/**'
+      - 'games/**'
+      - 'tests/**'
+      - 'index.html'
+      - 'arcade*.css'
+      - 'arcade.js'
+      - 'package.json'
+      - 'Dockerfile'
+      - '.github/workflows/arcade-ci.yml'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check every script parses
+        run: |
+          find server shared games/forbidden-fruit games/pigeon-control -name '*.js' -print0 | xargs -0 -n1 node --check
+      - name: Server, API and game logic tests
+        run: node --test tests/*.test.mjs
+      - name: Docker image builds
+        run: docker build -t vibe-arcade:ci .

@@ -15,7 +15,7 @@ STACK PANIC is Vibe Arcade cabinet #002: a browser falling-block game where shor
 - procedural Web Audio soundtrack with per-event themes and SFX
 - screen shake, blackout, glitch lines, smoke, particles and event banners
 - weighted incident director with cooldowns and level gates
-- Vercel route at `/stack-panic/`
+- served by the arcade server at `/stack-panic/`
 
 ## v1.0 — NO MERCY
 
@@ -37,7 +37,7 @@ turns them hostile — blocks are displaced, buried or thrown back on the stack:
 Rubble pushed past the ceiling ends the run. `public/visuals.js` is the HiDPI
 renderer (glass blocks, line-clear sweeps, lock flash, drop trails, tide gauge).
 Playing requires an arcade account (`/shared/account.js`); scores go to the
-leaderboard API in `/api`.
+leaderboard API served by `/server`.
 
 ## Incidents implemented
 

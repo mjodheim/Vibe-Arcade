@@ -45,6 +45,30 @@ Depuis la **v1.0 — NO MERCY**, plus aucun incident ne joue pour toi : les bloc
 
 ---
 
+# 🍎 BORNE #003
+
+## **Forbidden Fruit**
+
+> *Snake, mais c'est toi la pomme.*
+
+Tu fuis. Trois serpents te chassent : **le Chasseur** fonce droit sur toi, **l'Embusqué** vise là où tu vas, **le Bourré** zigzague au hasard. Ils grandissent et accélèrent sans arrêt, et un nouveau débarque toutes les 22 secondes. Un serpent qui percute un mur, lui-même ou un autre serpent explose en graines (+500, combos ×2, ×3…) : le vrai jeu, c'est de les faire s'entretuer.
+
+➡️ **[Jouer à Forbidden Fruit](https://arcade.mjodheim.be/forbidden-fruit/)**
+
+---
+
+# 🐦 BORNE #004
+
+## **Pigeon Control**
+
+> *Tour de contrôle, ici le pigeon.*
+
+Trace à la souris ou au doigt la route de chaque pigeon jusqu'au monument de sa couleur. Deux pigeons qui se touchent, c'est fini. Au programme : pigeons obèses, pigeons ninja, mouettes qui n'obéissent à personne et un gamin qui jette du pain au pire moment.
+
+➡️ **[Jouer à Pigeon Control](https://arcade.mjodheim.be/pigeon-control/)**
+
+---
+
 ## 🧪 La boucle Vibe
 
 ```text
@@ -91,7 +115,8 @@ La dernière phrase est la plus importante. 😈
 | Borne | Jeu | Genre | Statut |
 |:--:|---|---|:--:|
 | `#002` | 🧱 **Stack Panic** | Puzzle de blocs chaotique | 🟢 JOUABLE |
-| `#003` | ❔ **???** | Arcade WTF | 🛠️ EN CONSTRUCTION |
+| `#003` | 🍎 **Forbidden Fruit** | Snake inversé | 🟢 JOUABLE |
+| `#004` | 🐦 **Pigeon Control** | Contrôle aérien de pigeons | 🟢 JOUABLE |
 | `#004` | ❔ **???** | ??? | 🔒 VERROUILLÉ |
 
 Les prochains jeux pourront partager la même identité d'arcade, les profils joueurs, les succès et un classement propre à chaque jeu, tout en proposant des expériences complètement différentes.
@@ -113,21 +138,25 @@ La contrainte importante reste la même : **le joueur oriente le produit par ses
 
 ---
 
-## 🚀 Lancer l'arcade actuelle
+## 🚀 Lancer l'arcade
 
-Le site est statique, avec une petite API (`api/`) en **Vercel Functions** pour les comptes et les classements. Aucune dépendance npm.
+Tout tourne dans **un seul process Node** (`server/`) : page d'accueil, bornes sous `/<jeu>/` et API comptes/classements. Aucune dépendance npm, Node 20+.
 
 ```bash
-npm run dev    # http://localhost:3000 — site + API avec stockage en mémoire
-npm test       # tests de l'API + smoke test de Stack Panic
+npm run dev    # http://localhost:8080 — rechargement auto, données dans ./data
+npm test       # serveur, API, logique des jeux + smoke test Stack Panic
 ```
 
-### En production (Vercel)
+### Sur le VPS (Docker)
 
-1. Ajouter une base **Upstash Redis** au projet (Vercel → Storage / Marketplace). Elle injecte `KV_REST_API_URL` et `KV_REST_API_TOKEN` (les noms `UPSTASH_REDIS_REST_URL` / `UPSTASH_REDIS_REST_TOKEN` marchent aussi).
-2. Définir `ARCADE_SECRET` : une longue chaîne aléatoire (≥ 16 caractères) qui signe les sessions et les parties.
+```bash
+cp .env.example .env          # mettre un ARCADE_SECRET long et aléatoire
+docker compose up -d --build  # écoute sur 127.0.0.1:8080
+```
 
-Sans ces variables, l'API répond « serveur de scores indisponible » et les jeux restent jouables en mode non classé.
+- Les comptes et scores vivent dans le volume `arcade_data` (`/app/data/arcade.json`).
+- Mettre le reverse proxy existant (Nginx, Caddy…) devant `127.0.0.1:8080` pour le HTTPS. Garder `TRUST_PROXY=1` pour que la limitation des tentatives de connexion voie les vraies IP.
+- Mise à jour : `git pull && docker compose up -d --build`.
 
 ---
 
@@ -136,8 +165,11 @@ Sans ces variables, l'API répond « serveur de scores indisponible » et les je
 ```text
 Vibe-Arcade/
 ├── 🎮 games/
-│   └── 🧱 stack-panic/     # Jeu #002
-├── 🔐 api/                  # Comptes & classements (Vercel Functions)
+│   ├── 🧱 stack-panic/     # Jeu #002
+│   ├── 🍎 forbidden-fruit/ # Jeu #003
+│   └── 🐦 pigeon-control/  # Jeu #004
+├── 🖥️ server/               # Serveur Node : site, jeux, comptes & classements
+├── 🐳 Dockerfile · docker-compose.yml
 ├── 🤝 shared/               # Client compte partagé par toutes les bornes
 ├── 🎨 assets/               # Visuels de l'arcade
 ├── 📚 docs/

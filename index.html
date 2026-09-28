@@ -29,20 +29,20 @@
       <div class="hero-copy">
         <div class="hero-kicker" data-fr="VIBE ARCADE · ARCADE WTF · ZÉRO INSTALLATION" data-en="VIBE ARCADE · WTF ARCADE · ZERO INSTALLS">VIBE ARCADE · ARCADE WTF · ZÉRO INSTALLATION</div>
         <h1><span data-fr="INSÈRE UNE PIÈCE." data-en="INSERT COIN.">INSÈRE UNE PIÈCE.</span><br><em data-fr="PERDS TA DIGNITÉ." data-en="LOSE YOUR DIGNITY.">PERDS TA DIGNITÉ.</em></h1>
-        <p class="hero-text" data-fr="Une petite arcade web de jeux courts, absurdes et injustes. Empile des blocs pendant que la réalité sabote ta partie, enregistre ton score, et reviens te venger." data-en="A small web arcade of short, absurd and unfair games. Stack blocks while reality sabotages your run, save your score, and come back for revenge.">Une petite arcade web de jeux courts, absurdes et injustes. Empile des blocs pendant que la réalité sabote ta partie, enregistre ton score, et reviens te venger.</p>
+        <p class="hero-text" data-fr="Une petite arcade web de jeux courts, absurdes et injustes. Empile des blocs pendant que la réalité sabote ta partie, joue la pomme traquée par des serpents, ou tiens la tour de contrôle d’une place envahie de pigeons." data-en="A small web arcade of short, absurd and unfair games. Stack blocks while reality sabotages your run, play the apple hunted by snakes, or run air traffic control for a square full of pigeons.">Une petite arcade web de jeux courts, absurdes et injustes. Empile des blocs pendant que la réalité sabote ta partie, joue la pomme traquée par des serpents, ou tiens la tour de contrôle d’une place envahie de pigeons.</p>
         <div class="hero-actions">
           <a class="cta primary" href="/stack-panic/" data-fr="Entrer dans Stack Panic" data-en="Enter Stack Panic">Entrer dans Stack Panic</a>
           <a class="cta" href="#games" data-fr="Voir les bornes" data-en="See the cabinets">Voir les bornes</a>
         </div>
-        <div class="pulse-line"><span></span><small data-fr="1 jeu jouable · borne #003 en construction · compte gratuit" data-en="1 game playable · cabinet #003 under construction · free account">1 jeu jouable · borne #003 en construction · compte gratuit</small></div>
+        <div class="pulse-line"><span></span><small data-fr="3 jeux jouables · un compte · trois classements" data-en="3 playable games · one account · three leaderboards">3 jeux jouables · un compte · trois classements</small></div>
       </div>
 
       <div class="hero-worlds" aria-hidden="true">
         <div class="world-orbit">
           <div class="world-card mystery">
-            <div class="mystery-static"></div>
-            <div class="mystery-mark">?</div>
-            <div class="world-label"><small>CABINET #003 · SOON</small><strong>???</strong></div>
+            <div class="fruit-grid"></div>
+            <div class="mystery-mark">🍎</div>
+            <div class="world-label"><small>SNAKE, MAIS T'ES LA POMME</small><strong>FORBIDDEN FRUIT</strong></div>
           </div>
           <div class="world-card stack">
             <div class="stack-mini-grid"></div><div class="stack-meteor"></div>
@@ -57,7 +57,7 @@
       <div class="world-strip-inner">
         <div class="world-stat"><small data-fr="COMPTE JOUEUR" data-en="PLAYER ACCOUNT">COMPTE JOUEUR</small><strong data-fr="Un pseudo pour toute l’arcade" data-en="One name across the arcade">Un pseudo pour toute l’arcade</strong></div>
         <div class="world-stat"><small data-fr="CLASSEMENTS" data-en="LEADERBOARDS">CLASSEMENTS</small><strong data-fr="Général · défi du jour" data-en="All-time · daily challenge">Général · défi du jour</strong></div>
-        <div class="world-stat"><small data-fr="STACK PANIC" data-en="STACK PANIC">STACK PANIC</small><strong data-fr="Incidents qui touchent vraiment la grille" data-en="Incidents that really hit the board">Incidents qui touchent vraiment la grille</strong></div>
+        <div class="world-stat"><small data-fr="3 BORNES" data-en="3 CABINETS">3 BORNES</small><strong data-fr="Blocs · pomme · pigeons" data-en="Blocks · apple · pigeons">Blocs · pomme · pigeons</strong></div>
         <div class="world-stat"><small data-fr="REALITY FAIL" data-en="REALITY FAIL">REALITY FAIL</small><strong data-fr="Cataclysmes 3D à 100% chaos" data-en="3D cataclysms at 100% chaos">Cataclysmes 3D à 100% chaos</strong></div>
       </div>
     </section>
@@ -83,17 +83,31 @@
           </div>
         </article>
 
-        <article class="cabinet soon-card">
-          <div class="cabinet-screen mystery-preview">
-            <div class="screen-noise"></div><div class="mystery-static"></div><span class="cabinet-number">#003</span><span class="status soon"><i></i> <span data-fr="EN CONSTRUCTION" data-en="UNDER CONSTRUCTION">EN CONSTRUCTION</span></span>
-            <div class="mystery-mark">?</div>
-            <div class="game-title"><small>INSERT IDEA</small><strong>???</strong></div>
+        <article class="cabinet live fruit-card">
+          <div class="cabinet-screen fruit-preview">
+            <div class="screen-noise"></div><div class="fruit-grid"></div><span class="cabinet-number">#003</span><span class="status"><i></i> <span data-fr="EN FUITE" data-en="ON THE RUN">EN FUITE</span></span>
+            <div class="fruit-snake"><i></i><i></i><i></i><i></i><i></i></div><div class="mystery-mark">🍎</div>
+            <div class="game-title"><small>SNAKE, BUT YOU'RE THE APPLE</small><strong>FORBIDDEN FRUIT</strong></div>
           </div>
           <div class="cabinet-body">
-            <div><span class="genre">ARCADE · WTF</span><h3 data-fr="Borne #003" data-en="Cabinet #003">Borne #003</h3></div>
-            <p data-fr="Un nouveau jeu d’arcade absurde et addictif arrive ici. Même compte, nouveau classement, nouvelles raisons de rager." data-en="A new absurd, addictive arcade game is landing here. Same account, new leaderboard, new reasons to rage.">Un nouveau jeu d’arcade absurde et addictif arrive ici. Même compte, nouveau classement, nouvelles raisons de rager.</p>
-            <div class="feature-tags"><span>ARCADE</span><span>WTF</span><span>LEADERBOARD</span></div>
-            <span class="play disabled" aria-disabled="true"><span data-fr="BIENTÔT" data-en="SOON">BIENTÔT</span><b>…</b></span>
+            <div><span class="genre">SNAKE INVERSÉ · SURVIE</span><h3>Forbidden Fruit</h3></div>
+            <p data-fr="Tu es la pomme. Trois serpents aux personnalités douteuses te chassent, grandissent et accélèrent. Fais-les s’écraser les uns contre les autres : ils explosent en graines." data-en="You are the apple. Three snakes with questionable personalities hunt you, grow and speed up. Make them crash into each other: they explode into seeds.">Tu es la pomme. Trois serpents aux personnalités douteuses te chassent, grandissent et accélèrent. Fais-les s’écraser les uns contre les autres : ils explosent en graines.</p>
+            <div class="feature-tags"><span>SNAKE INVERSÉ</span><span>COMBOS</span><span>DAILY SEED</span></div>
+            <a class="play fruit-play" href="/forbidden-fruit/"><span data-fr="FUIR LES SERPENTS" data-en="RUN FROM THE SNAKES">FUIR LES SERPENTS</span><b>→</b></a>
+          </div>
+        </article>
+
+        <article class="cabinet live pigeon-card">
+          <div class="cabinet-screen pigeon-preview">
+            <div class="screen-noise"></div><span class="cabinet-number">#004</span><span class="status"><i></i> <span data-fr="TRAFIC DENSE" data-en="HEAVY TRAFFIC">TRAFIC DENSE</span></span>
+            <div class="pigeon-ring r1"></div><div class="pigeon-ring r2"></div><div class="pigeon-route"></div><div class="mystery-mark pigeon-mark">🐦</div>
+            <div class="game-title"><small>AIR TRAFFIC, BUT PIGEONS</small><strong>PIGEON CONTROL</strong></div>
+          </div>
+          <div class="cabinet-body">
+            <div><span class="genre">CONTRÔLE AÉRIEN · PANIQUE</span><h3>Pigeon Control</h3></div>
+            <p data-fr="Trace la route de chaque pigeon jusqu’au monument de sa couleur. Pigeons obèses, pigeons ninja, mouettes hors-la-loi et un gamin avec du pain. Une collision et c’est fini." data-en="Draw each pigeon’s route to the monument of its colour. Fat pigeons, ninja pigeons, outlaw seagulls and a kid with bread. One collision and it’s over.">Trace la route de chaque pigeon jusqu’au monument de sa couleur. Pigeons obèses, pigeons ninja, mouettes hors-la-loi et un gamin avec du pain. Une collision et c’est fini.</p>
+            <div class="feature-tags"><span>DESSINE LES ROUTES</span><span>TACTILE</span><span>DAILY SEED</span></div>
+            <a class="play pigeon-play" href="/pigeon-control/"><span data-fr="PRENDRE MON SERVICE" data-en="START MY SHIFT">PRENDRE MON SERVICE</span><b>→</b></a>
           </div>
         </article>
       </div>

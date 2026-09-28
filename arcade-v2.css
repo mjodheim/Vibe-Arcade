@@ -9,17 +9,34 @@ body{background:#05070d}.bg{background:radial-gradient(circle at 18% 8%,rgba(239
 .games-section{padding-top:52px}.section-head{margin-bottom:38px}.cabinet-grid{gap:24px}.cabinet{position:relative;border-radius:30px;transition:transform .3s,border-color .3s,box-shadow .3s}.cabinet:hover{transform:translateY(-7px);border-color:rgba(255,255,255,.16);box-shadow:0 36px 100px rgba(0,0,0,.38)}.cabinet-screen{min-height:390px}.feature-tags span{font-size:.62rem;font-weight:850;letter-spacing:.1em;padding:7px 9px;border:1px solid rgba(255,255,255,.08);border-radius:999px;color:#bac4d6;background:rgba(255,255,255,.025)}.world-strip-inner{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;border:1px solid var(--line);border-radius:22px;overflow:hidden;background:var(--line)}.world-stat{padding:22px;background:rgba(8,11,20,.94)}.world-stat small{display:block;color:#6f7b92;font-size:.62rem;letter-spacing:.16em}.world-stat strong{display:block;margin-top:7px;font-size:1rem;color:#dce5f7}.world-stat:nth-child(1) strong{color:#ffe199}.world-stat:nth-child(2) strong{color:#73e4a3}.world-stat:nth-child(3) strong{color:#6deeff}.world-stat:nth-child(4) strong{color:#ff7bc8}
 @media(max-width:900px){.hero{grid-template-columns:1fr;padding-top:54px}.hero-worlds{min-height:460px;max-width:680px;width:100%;margin:auto}.world-strip-inner{grid-template-columns:1fr 1fr}.cabinet-screen{min-height:340px}}
 @media(max-width:600px){.hero{display:block;min-height:auto}.hero-worlds{min-height:380px;margin-top:44px}.world-card{width:78%}.world-card.stack{right:-8%}.world-strip{padding:0 18px}.world-strip-inner{grid-template-columns:1fr}.cabinet-screen{min-height:300px}}
-@media(prefers-reduced-motion:reduce){.mystery-static,.stack-meteor{animation:none!important}.world-card{transition:none}}
+@media(prefers-reduced-motion:reduce){.stack-meteor{animation:none!important}.world-card{transition:none}}
 
-/* Cabinet #003 teaser */
-.world-card.mystery{background:radial-gradient(circle at 50% 40%,rgba(185,255,102,.18),transparent 34%),linear-gradient(150deg,#141a12,#0d1320 62%,#07090f)!important}
-.world-card.mystery .world-label strong{color:#b9ff66}
-.mystery-preview{background:radial-gradient(circle at 50% 40%,rgba(185,255,102,.16),transparent 32%),linear-gradient(145deg,#10160f,#0b1020 60%,#06080e)}
-.mystery-static{position:absolute;inset:0;opacity:.14;background-image:repeating-linear-gradient(0deg,rgba(255,255,255,.5) 0 1px,transparent 1px 3px);animation:static-roll 1.6s steps(8) infinite}
-@keyframes static-roll{to{background-position:0 24px}}
-.mystery-mark{position:absolute;left:50%;top:46%;transform:translate(-50%,-50%);font:900 clamp(6rem,14vw,9rem)/1 ui-monospace,Menlo,monospace;color:#b9ff66;text-shadow:0 0 40px rgba(185,255,102,.45),4px 0 rgba(255,90,183,.5),-4px 0 rgba(67,239,255,.5);animation:mark-glitch 3.2s steps(1) infinite}
-@keyframes mark-glitch{0%,86%,100%{transform:translate(-50%,-50%)}88%{transform:translate(-46%,-52%) skewX(8deg)}92%{transform:translate(-54%,-49%) skewX(-6deg)}}
-.status.soon{color:#ffd166}.status.soon i{background:#ffd166;box-shadow:0 0 16px #ffd166}
-.play.disabled{background:rgba(255,255,255,.06);color:#8d97ad;cursor:default}.play.disabled:hover{transform:none;box-shadow:none}
+/* Cabinets #003 and #004 */
+.cabinet-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+@media(max-width:1000px){.cabinet-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:680px){.cabinet-grid{grid-template-columns:1fr}}
+.world-card.mystery{background:radial-gradient(circle at 50% 42%,rgba(255,77,94,.25),transparent 34%),linear-gradient(150deg,#0f2413,#0b1a0e 62%,#060a07)!important}
+.world-card.mystery .world-label strong{background:linear-gradient(90deg,#b9ff66,#ff4d5e);-webkit-background-clip:text;background-clip:text;color:transparent}
+.fruit-grid{position:absolute;inset:0;opacity:.5;background-image:linear-gradient(45deg,#0c1d10 25%,transparent 25%,transparent 75%,#0c1d10 75%),linear-gradient(45deg,#0c1d10 25%,#0f2413 25%,#0f2413 75%,#0c1d10 75%);background-size:36px 36px;background-position:0 0,18px 18px}
+.mystery-mark{position:absolute;left:50%;top:44%;transform:translate(-50%,-50%);font-size:clamp(4.5rem,10vw,6.5rem);line-height:1;filter:drop-shadow(0 0 28px rgba(255,77,94,.55));animation:apple-panic 1.8s ease-in-out infinite}
+@keyframes apple-panic{0%,100%{transform:translate(-50%,-50%) rotate(-4deg)}50%{transform:translate(-46%,-52%) rotate(5deg)}}
+.fruit-preview{background:radial-gradient(circle at 50% 40%,rgba(255,77,94,.2),transparent 32%),linear-gradient(145deg,#0f2413,#0a160c 60%,#050906)}
+.fruit-snake{position:absolute;left:12%;top:24%;display:flex;gap:2px;animation:snake-creep 3.5s ease-in-out infinite}
+.fruit-snake i{width:22px;height:22px;border-radius:50%;background:#b9ff66;box-shadow:0 0 14px rgba(185,255,102,.6)}
+.fruit-snake i:first-child{order:5;background:#d6ff9a}
+@keyframes snake-creep{50%{transform:translate(38px,18px)}}
+.fruit-card .game-title strong{background:linear-gradient(90deg,#b9ff66,#ff4d5e);-webkit-background-clip:text;background-clip:text;color:transparent}
+.fruit-play{background:linear-gradient(135deg,#b9ff66,#ff4d5e)!important}
+.pigeon-preview{background:radial-gradient(circle at 50% 40%,rgba(127,227,255,.18),transparent 34%),repeating-linear-gradient(0deg,#262a33 0 12px,#2d313b 12px 14px),#262a33}
+.pigeon-ring{position:absolute;border:3px dashed;border-radius:50%;animation:ring-spin 8s linear infinite}
+.pigeon-ring.r1{width:70px;height:70px;left:14%;top:52%;border-color:#9aa6b8}
+.pigeon-ring.r2{width:80px;height:80px;right:14%;top:14%;border-color:#7fe3ff}
+@keyframes ring-spin{to{transform:rotate(360deg)}}
+.pigeon-route{position:absolute;left:26%;top:30%;width:48%;height:32%;border-top:3px dashed rgba(244,247,255,.6);border-right:3px dashed rgba(244,247,255,.6);border-radius:0 60px 0 0}
+.pigeon-mark{filter:drop-shadow(0 0 24px rgba(127,227,255,.5));animation:pigeon-fly 4s ease-in-out infinite}
+@keyframes pigeon-fly{0%,100%{transform:translate(-80%,-40%) rotate(-8deg)}50%{transform:translate(-20%,-60%) rotate(8deg)}}
+.pigeon-card .game-title strong{background:linear-gradient(90deg,#7fe3ff,#ffd166);-webkit-background-clip:text;background-clip:text;color:transparent}
+.pigeon-play{background:linear-gradient(135deg,#7fe3ff,#ffd166)!important}
 .topbar nav{display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:flex-end}
-@media(prefers-reduced-motion:reduce){.mystery-mark{animation:none!important}}
+@media(prefers-reduced-motion:reduce){.mystery-mark,.fruit-snake,.pigeon-ring{animation:none!important}}
+.cabinet-grid .game-title strong{font-size:clamp(1.7rem,3.1vw,2.6rem);line-height:.95;overflow-wrap:anywhere}

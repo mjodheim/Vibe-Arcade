@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no" />
+  <meta name="theme-color" content="#050b07" />
+  <meta name="description" content="FORBIDDEN FRUIT — le Snake inversé : tu es la pomme. Fais s'écraser les serpents les uns contre les autres pour survivre." />
+  <title>FORBIDDEN FRUIT — Vibe Arcade</title>
+  <link rel="canonical" href="https://arcade.mjodheim.be/forbidden-fruit/" />
+  <link rel="icon" href="/assets/icon.svg" type="image/svg+xml" />
+  <meta property="og:title" content="FORBIDDEN FRUIT — Vibe Arcade" />
+  <meta property="og:description" content="Snake, mais c'est toi la pomme." />
+  <link rel="stylesheet" href="/shared/cabinet.css" />
+  <link rel="stylesheet" href="/shared/account.css" />
+  <link rel="stylesheet" href="/forbidden-fruit/style.css" />
+</head>
+<body>
+  <header class="cab-topbar">
+    <a class="cab-brand" href="/">← VIBE ARCADE</a>
+    <div class="cab-actions">
+      <div id="accountChip"></div>
+      <button id="soundBtn" class="cab-chip" type="button" aria-pressed="true">SON : ON</button>
+      <button id="pauseBtn" class="cab-chip" type="button">PAUSE</button>
+    </div>
+  </header>
+
+  <main class="cab-shell">
+    <section class="cab-intro">
+      <p class="cab-kicker">CABINET #003 · SNAKE INVERSÉ</p>
+      <h1>FORBIDDEN <span>FRUIT</span></h1>
+      <p>Snake, mais c'est toi la pomme.</p>
+    </section>
+
+    <section class="cab-layout">
+      <aside class="cab-panel cab-stats">
+        <div class="cab-stat"><small>SCORE</small><strong id="score">000000</strong></div>
+        <div class="cab-stat"><small>SURVIE</small><strong id="time">0.0s</strong></div>
+        <div class="cab-stat"><small>SERPENTS K.O.</small><strong id="kills">0</strong></div>
+        <div class="cab-stat"><small>MEILLEUR COMBO</small><strong id="combo">×0</strong></div>
+      </aside>
+
+      <section class="cab-screen" aria-label="Plateau de jeu">
+        <canvas id="game" width="630" height="630"></canvas>
+
+        <div id="startPanel" class="cab-overlay">
+          <p class="cab-kicker">TU ES LA POMME</p>
+          <h2>🍎 Fuis. Survis. <br>Fais-les s'écraser.</h2>
+          <p id="playerLine" class="player-line guest">INSCRIS-TOI POUR JOUER ET ENREGISTRER TES SCORES</p>
+          <div>
+            <button id="startBtn" class="cab-btn" type="button">JOUER</button>
+            <button id="dailyBtn" class="cab-btn ghost" type="button">DÉFI DU JOUR</button>
+          </div>
+          <small>Flèches / ZQSD / WASD (maintenir) · P pause · Mobile : glisse sur le plateau ou croix directionnelle</small>
+        </div>
+
+        <div id="overPanel" class="cab-overlay" hidden>
+          <p class="cab-kicker">CROQUÉE</p>
+          <h2 id="deathLine">Le chasseur t'a eue.</h2>
+          <div class="big" id="finalScore">000000</div>
+          <p id="finalStats">—</p>
+          <p id="scoreStatus" class="score-status" aria-live="polite"></p>
+          <div>
+            <button id="againBtn" class="cab-btn" type="button">REJOUER</button>
+            <button id="againDailyBtn" class="cab-btn ghost" type="button">DÉFI DU JOUR</button>
+          </div>
+        </div>
+      </section>
+
+      <aside class="cab-panel">
+        <small>CLASSEMENT</small>
+        <div class="board-tabs" role="tablist">
+          <button type="button" role="tab" data-board="all" aria-selected="true">GÉNÉRAL</button>
+          <button type="button" role="tab" data-board="daily" aria-selected="false">DU JOUR</button>
+        </div>
+        <ol id="leaderboard" class="leaderboard"><li class="empty">Chargement…</li></ol>
+
+        <div class="cab-rules">
+          <small style="margin-top:18px">BESTIAIRE</small>
+          <p><b class="sn-chaser">● Le Chasseur</b> fonce droit sur toi.</p>
+          <p><b class="sn-ambusher">● L'Embusqué</b> vise là où tu vas, pas là où tu es.</p>
+          <p><b class="sn-drunk">● Le Bourré</b> zigzague. Imprévisible, donc dangereux.</p>
+          <small style="margin-top:18px">SURVIE</small>
+          <p>Un serpent qui percute un mur, lui-même ou un autre serpent explose (+500, combo ×2, ×3…) et se transforme en graines.</p>
+          <p>Graine +25 · <span class="gold">Pépin doré</span> +100 et embrouille tous les serpents 3 s.</p>
+          <p>Ils grandissent sans arrêt, accélèrent, et un nouveau débarque toutes les 22 s.</p>
+        </div>
+      </aside>
+    </section>
+
+    <div class="cab-dpad" aria-label="Croix directionnelle">
+      <button type="button" data-dir="up" aria-label="Haut">▲</button>
+      <button type="button" data-dir="left" aria-label="Gauche">◀</button>
+      <button type="button" data-dir="right" aria-label="Droite">▶</button>
+      <button type="button" data-dir="down" aria-label="Bas">▼</button>
+    </div>
+    <p class="cab-foot">BUILD 1.0 · une borne Vibe Arcade</p>
+  </main>
+
+  <script src="/shared/account.js"></script>
+  <script src="/shared/cabinet.js"></script>
+  <script src="/forbidden-fruit/logic.js"></script>
+  <script src="/forbidden-fruit/game.js"></script>
+</body>
+</html>
