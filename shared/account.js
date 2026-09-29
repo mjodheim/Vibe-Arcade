@@ -53,7 +53,7 @@
     async refresh() { if (!token) return null; const d = await request('me'); setSession(token, d.user); return d; },
     async startRun(game, daily = false) { return (await request('runs', { method: 'POST', body: { game, daily } })).runToken; },
     async submitScore(runToken, score) { return request('scores', { method: 'POST', body: { runToken, score } }); },
-    async leaderboard(game, daily = false, limit = 10) { return (await request(`scores?game=${encodeURIComponent(game)}&daily=${daily ? 1 : 0}&limit=${limit}`)).scores; },
+    async leaderboard(game, daily = false, limit = 10, day = '') { return (await request(`scores?game=${encodeURIComponent(game)}&daily=${daily ? 1 : 0}&limit=${limit}${day ? `&day=${encodeURIComponent(day)}` : ''}`)).scores; },
     openModal,
     renderChip
   };

@@ -94,7 +94,8 @@ export function verify(token) {
   const [body, sig] = String(token || '').split('.');
   if (!body || !sig) return null;
   const expected = createHmac('sha256', secret()).update(body).digest('base64url');
-  if (sig.length !== expected.length || !timingSafeEqual(Buffer.from(sig), Buffer.from(expected))) return null;
+  const given = Buffer.from(sig), wanted = Buffer.from(expected);
+  if (given.length !== wanted.length || !timingSafeEqual(given, wanted)) return null;
   try {
     const data = JSON.parse(Buffer.from(body, 'base64url').toString('utf8'));
     return data.exp && data.exp < Date.now() ? null : data;

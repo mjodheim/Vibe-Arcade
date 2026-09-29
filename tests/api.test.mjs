@@ -93,3 +93,22 @@ test('login is rate limited per IP', async () => {
   for (let i = 0; i < 21; i++) last = await call(login.POST, { body: { username: 'Mouton', password: 'wrong-password' } });
   assert.equal(last.status, 429);
 });
+
+test('malformed multi-byte token signatures are rejected with 401, not a crash', async () => {
+  const { token } = await signup('Glyphe');
+  const [body] = token.split('.');
+  const forged = `${body}.${'é'.repeat(43)}`;
+  assert.equal((await call(me.GET, { method: 'GET', token: forged })).status, 401);
+});
+
+test('a daily leaderboard can be read for the day the run was filed under', async () => {
+  const { token } = await signup('Minuit');
+  const run = (await call(runs.POST, { token, body: { game: 'stack-panic', daily: true } })).data.runToken;
+  const payload = JSON.parse(Buffer.from(run.split('.')[0], 'base64url'));
+  const lateRun = sign({ ...payload, day: '2026-09-28', t: Date.now() - 60_000 });
+  const res = await call(scores.POST, { token, body: { runToken: lateRun, score: 500 } });
+  assert.equal(res.data.day, '2026-09-28');
+  const board = await call(scores.GET, { method: 'GET', query: '?game=stack-panic&daily=1&day=2026-09-28' });
+  assert.deepEqual(board.data.scores.map(s => s.username), ['Minuit']);
+  assert.equal((await call(scores.GET, { method: 'GET', query: '?game=stack-panic&daily=1&day=../../x' })).status, 200, 'bad day param should fall back to today');
+});

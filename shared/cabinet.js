@@ -17,6 +17,7 @@
   function create({ game, start, playerLine, status, board, tabs = [], chip }) {
     let offline = false;
     let daily = false;
+    let lastDailyDay = ''; // UTC day of the last daily run submitted from this page
     let run = null;
 
     if (chip) Account?.renderChip(chip);
@@ -38,7 +39,7 @@
     async function refreshBoard() {
       if (!board || !Account) return paintPlayer();
       try {
-        const scores = await Account.leaderboard(game, daily, 8);
+        const scores = await Account.leaderboard(game, daily, 8, daily ? lastDailyDay : '');
         offline = false;
         board.replaceChildren();
         if (!scores.length) {
@@ -98,6 +99,7 @@
       if (r.failed || !r.token) { setStatus('Serveur de scores injoignable : score non enregistré.', 'warn'); return null; }
       try {
         const res = await Account.submitScore(r.token, Math.floor(score));
+        if (res.day) lastDailyDay = res.day;
         const where = res.dailyRank ? `#${res.dailyRank} du jour · #${res.rank} au général` : `#${res.rank} au général`;
         setStatus(`${res.newBest ? 'NOUVEAU RECORD PERSO · ' : ''}Score enregistré · ${where}`, 'ok');
         refreshBoard();

@@ -216,13 +216,15 @@
     }
     s.pigeons = s.pigeons.filter(p => p.state !== 'landed');
 
-    // Collisions.
-    const air = s.pigeons.filter(p => p.state === 'flying');
+    // Collisions, only between birds that are actually over the square: two
+    // incoming pigeons crossing off-screen must not end the shift unseen.
+    const air = s.pigeons.filter(p => p.state === 'flying' && p.inside);
+    const onScreen = g => g.x > -g.r && g.x < W + g.r && g.y > -g.r && g.y < H + g.r;
     for(let i = 0; i < air.length && !s.over; i++){
       for(let j = i + 1; j < air.length; j++){
         if(dist(air[i], air[j]) < air[i].r + air[j].r){ crash(s, air[i], air[j]); break; }
       }
-      for(const g of s.gulls) if(!s.over && dist(air[i], g) < air[i].r + g.r) crash(s, air[i], g);
+      for(const g of s.gulls) if(!s.over && onScreen(g) && dist(air[i], g) < air[i].r + g.r) crash(s, air[i], g);
     }
     return s;
   }

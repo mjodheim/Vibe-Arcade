@@ -14,6 +14,8 @@
   const ui = {score:$('score'), time:$('time'), kills:$('kills'), combo:$('combo'), start:$('startPanel'), over:$('overPanel'),
     death:$('deathLine'), final:$('finalScore'), finalStats:$('finalStats'), pause:$('pauseBtn'), sound:$('soundBtn')};
 
+  const STEP = 16;
+  let stepAcc = 0;
   let game = null, running = false, paused = false, daily = false, last = 0, bestCombo = 0;
   let sound = true, audio = null;
   const fx = {particles:[], texts:[], flash:0, flashColor:'#fff', confusedTint:0};
@@ -93,7 +95,7 @@
     running = true; paused = false; bestCombo = 0; held.length = 0;
     fx.particles = []; fx.texts = []; fx.flash = 0;
     ui.start.hidden = true; ui.over.hidden = true; ui.pause.textContent = 'PAUSE';
-    last = performance.now();
+    last = performance.now(); stepAcc = 0;
     sfx.spawn();
   }
 
@@ -373,8 +375,9 @@
     const dt = Math.min(50, t - last || 16);
     last = t;
     if(running && !paused){
-      let left = dt;
-      while(left > 0 && !game.over){ const step = Math.min(16, left); L.update(game, step, currentInput()); left -= step; }
+      // Fixed 16 ms steps: the seeded daily run must not depend on the display's frame rate.
+      stepAcc += dt;
+      while(stepAcc >= STEP && !game.over){ L.update(game, STEP, currentInput()); stepAcc -= STEP; }
       consumeEvents();
       if(game.over) gameOver();
     }

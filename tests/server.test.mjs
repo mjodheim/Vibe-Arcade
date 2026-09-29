@@ -65,3 +65,11 @@ test('file store reloads what it saved', async () => {
   assert.equal(await b.get('rl:login:1'), null, 'rate-limit counters should not be persisted');
   rmSync(dir, { recursive: true, force: true });
 });
+
+test('file store reports a failed snapshot instead of pretending it worked', async () => {
+  const dir = mkdtempSync(join(tmpdir(), 'arcade-store-'));
+  const s = fileStore(join(dir, 'missing-dir', 'nested', 'db.json'));
+  await s.setNX('user:x', '1');
+  rmSync(dir, { recursive: true, force: true }); // the target directory disappears under the store
+  await assert.rejects(s.flush());
+});

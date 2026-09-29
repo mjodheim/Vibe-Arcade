@@ -117,17 +117,20 @@ export function fileStore(file) {
 
   let timer = null;
   let writing = Promise.resolve();
+  // Writes are serialised; a failed write is logged and reported to whoever
+  // awaits flush() (the shutdown handler), never silently turned into success.
   const flush = () => {
     timer = null;
     const data = JSON.stringify(store.snapshot());
-    writing = writing.then(async () => {
+    const attempt = writing.then(async () => {
       const tmp = `${file}.tmp`;
       await writeFile(tmp, data);
       await rename(tmp, file);
-    }).catch(err => console.error('store: write failed', err));
-    return writing;
+    });
+    writing = attempt.catch(err => console.error('store: write failed', err));
+    return attempt;
   };
-  const store = memoryStore({ snapshot, onChange: () => { if (!timer) timer = setTimeout(flush, 250); } });
+  const store = memoryStore({ snapshot, onChange: () => { if (!timer) timer = setTimeout(() => flush().catch(() => {}), 250); } });
   store.flush = () => { clearTimeout(timer); return flush(); };
   return store;
 }

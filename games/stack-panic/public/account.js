@@ -14,6 +14,7 @@
   const boardTabs = document.querySelectorAll('[data-board]');
   let offline = false;
   let boardDaily = false;
+  let lastDailyDay = ''; // UTC day of the last daily run submitted from this page
 
   Account.renderChip(document.getElementById('accountChip'));
 
@@ -28,7 +29,7 @@
   async function refreshBoard() {
     if (!boardList) return;
     try {
-      const scores = await Account.leaderboard(GAME, boardDaily, 8);
+      const scores = await Account.leaderboard(GAME, boardDaily, 8, boardDaily ? lastDailyDay : '');
       offline = false;
       boardList.innerHTML = '';
       if (!scores.length) {
@@ -104,6 +105,7 @@
       if (run.failed || !run.token) { setStatus('Serveur de scores injoignable : score non enregistré.', 'warn'); return; }
       try {
         const r = await Account.submitScore(run.token, score);
+        if (r.day) lastDailyDay = r.day;
         const where = r.dailyRank ? `#${r.dailyRank} du jour · #${r.rank} au général` : `#${r.rank} au général`;
         setStatus(`${r.newBest ? 'NOUVEAU RECORD PERSO · ' : ''}Score enregistré · ${where}`, 'ok');
         refreshBoard();

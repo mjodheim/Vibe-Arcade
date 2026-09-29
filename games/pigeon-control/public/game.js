@@ -14,6 +14,8 @@
   const ui = {score:$('score'), landed:$('landed'), streak:$('streak'), time:$('time'), start:$('startPanel'), over:$('overPanel'),
     death:$('deathLine'), final:$('finalScore'), finalStats:$('finalStats'), pause:$('pauseBtn'), sound:$('soundBtn')};
 
+  const STEP = 16;
+  let stepAcc = 0;
   let game = null, running = false, paused = false, daily = false, last = 0, bestStreak = 0, demo = true;
   let sound = true, audio = null;
   const fx = {feathers:[], texts:[], ripples:[], flash:0, flashColor:'#fff', crashAt:0};
@@ -95,7 +97,7 @@
     running = true; paused = false; bestStreak = 0; drawing.clear();
     fx.feathers = []; fx.texts = []; fx.ripples = []; fx.flash = 0;
     ui.start.hidden = true; ui.over.hidden = true; ui.pause.textContent = 'PAUSE';
-    last = performance.now();
+    last = performance.now(); stepAcc = 0;
   }
   const DEATH = {
     collision: ['Collision en plein vol. Des plumes partout.', 'Deux pigeons, un seul couloir aérien.', 'La tour de contrôle a regardé ailleurs.'],
@@ -399,8 +401,9 @@
     last = t;
     if(demo){ demoPilot(); P.update(game, dt); consumeEvents(); }
     else if(running && !paused){
-      let left = dt;
-      while(left > 0 && !game.over){ const step = Math.min(16, left); P.update(game, step); left -= step; }
+      // Fixed 16 ms steps: the seeded daily run must not depend on the display's frame rate.
+      stepAcc += dt;
+      while(stepAcc >= STEP && !game.over){ P.update(game, STEP); stepAcc -= STEP; }
       consumeEvents();
       if(game.over) gameOver();
     }

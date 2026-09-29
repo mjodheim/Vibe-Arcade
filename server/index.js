@@ -128,8 +128,14 @@ server.listen(PORT, () => console.log(`Vibe Arcade listening on http://localhost
 
 for (const signal of ['SIGINT', 'SIGTERM']) {
   process.on(signal, async () => {
-    server.close();
-    await db.flush();
-    process.exit(0);
+    // Let in-flight requests finish (5 s at most) so their writes make it
+    // into the final snapshot, then fail loudly if that snapshot cannot be saved.
+    await new Promise(resolve => {
+      server.close(resolve);
+      server.closeIdleConnections?.();
+      setTimeout(resolve, 5000).unref();
+    });
+    try { await db.flush(); process.exit(0); }
+    catch (err) { console.error('store: final snapshot failed', err); process.exit(1); }
   });
 }

@@ -14,6 +14,8 @@
   const ui = {score:$('score'), clock:$('clock'), deliveries:$('deliveries'), combo:$('combo'), start:$('startPanel'), over:$('overPanel'),
     death:$('deathLine'), final:$('finalScore'), finalStats:$('finalStats'), pause:$('pauseBtn'), sound:$('soundBtn'), honk:$('honkBtn')};
 
+  const STEP = 16;
+  let stepAcc = 0;
   let game = null, running = false, paused = false, daily = false, last = 0, demo = true;
   let sound = true, audio = null;
   const fx = {rings:[], texts:[], dust:[], flash:0, flashColor:'#fff', shakeUntil:0};
@@ -96,7 +98,7 @@
     running = true; paused = false; keys.clear(); honkQueued = false;
     fx.rings = []; fx.texts = []; fx.dust = []; fx.flash = 0;
     ui.start.hidden = true; ui.over.hidden = true; ui.pause.textContent = 'PAUSE';
-    last = performance.now();
+    last = performance.now(); stepAcc = 0;
   }
   const LINES = [
     'La tournée est terminée. Le client aussi.', 'Colis livré en retard. L’oie n’a aucun regret.',
@@ -394,9 +396,12 @@
       G.update(game, dt, demoInput()); consumeEvents();
       if(game.over || game.time > 40000) game = G.newGame(Math.floor(Math.random() * 1e9));
     }else if(running && !paused){
+      // Fixed 16 ms steps: the seeded daily run must not depend on the display's frame rate.
       const input = readInput();
-      let left = dt, first = true;
-      while(left > 0 && !game.over){ const step = Math.min(16, left); G.update(game, step, first ? input : {...input, honk:false}); first = false; left -= step; }
+      stepAcc += dt;
+      let first = true;
+      while(stepAcc >= STEP && !game.over){ G.update(game, STEP, first ? input : {...input, honk:false}); first = false; stepAcc -= STEP; }
+      if(first && input.honk) honkQueued = true; // no step ran this frame: keep the honk for the next one
       consumeEvents();
       if(game.over) gameOver();
     }

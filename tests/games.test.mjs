@@ -170,3 +170,25 @@ test('goose: a car costs time and the parcel; the clock always ends the round', 
   while(!idle.over) G.update(idle, 50, {});
   assert.ok(idle.time <= G.START_TIME + 100);
 });
+
+test('fruit: the daily run is identical whatever the frame rate, with fixed 16 ms steps', () => {
+  const play = frameMs => {
+    const s = F.newGame(777);
+    let acc = 0;
+    for(let t = 0; t < 30000 && !s.over; t += frameMs){ acc += frameMs; while(acc >= 16 && !s.over){ F.update(s, 16, null); acc -= 16; } }
+    return JSON.stringify([s.seeds, s.snakes.map(sn => sn.body), s.time]);
+  };
+  assert.equal(play(1000 / 60), play(1000 / 120));
+});
+
+test('pigeon: birds that have not entered the square cannot crash into each other', () => {
+  const s = P.newGame(1);
+  s.nextSpawnAt = Infinity; s.nextGullAt = Infinity; s.nextBreadAt = Infinity;
+  const a = P.spawn(s, {x:-30, y:300, angle:Math.PI / 2, kind:'city'});
+  const b = P.spawn(s, {x:-30, y:305, angle:Math.PI / 2, kind:'city'});
+  P.update(s, 16);
+  assert.equal(s.over, false, 'off-screen pigeons crashed');
+  a.inside = b.inside = true; a.x = b.x = 300;
+  P.update(s, 16);
+  assert.equal(s.over, true);
+});

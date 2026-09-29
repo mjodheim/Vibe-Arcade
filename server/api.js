@@ -3,7 +3,7 @@ import { store } from './store.js';
 import {
   route, json, readJson, limit, clientIp, normalizeUsername, usernameKey, validateCredentials,
   hashPassword, verifyPassword, sessionToken, publicUser, loadUser, requireUser, runToken, verify,
-  boardKey, GAMES, HttpError
+  boardKey, dayKey, GAMES, HttpError
 } from './core.js';
 
 const register = route(async request => {
@@ -63,6 +63,7 @@ const submitScore = route(async request => {
     const daily = boardKey(run.game, true, run.day);
     await db.zaddGT(daily, user.username, score, 3 * 86400);
     result.dailyRank = (await db.zrevrank(daily, user.username)) + 1;
+    result.day = run.day;
   }
   return json(201, result);
 });
@@ -73,8 +74,12 @@ const leaderboard = route(async request => {
   if (!GAMES[game]) throw new HttpError(400, 'Jeu inconnu.');
   const daily = url.searchParams.get('daily') === '1';
   const count = Math.min(50, Math.max(1, Number(url.searchParams.get('limit')) || 10));
-  const top = await store().ztop(boardKey(game, daily), count);
-  return json(200, { game, daily, scores: top.map((s, i) => ({ rank: i + 1, username: s.member, score: s.score })) });
+  // A daily run started before UTC midnight is filed under its own day; the
+  // client asks for that day so the score it just submitted stays visible.
+  const requested = url.searchParams.get('day');
+  const day = requested && /^\d{4}-\d{2}-\d{2}$/.test(requested) ? requested : dayKey();
+  const top = await store().ztop(boardKey(game, daily, day), count);
+  return json(200, { game, daily, day: daily ? day : undefined, scores: top.map((s, i) => ({ rank: i + 1, username: s.member, score: s.score })) });
 });
 
 export const routes = {
