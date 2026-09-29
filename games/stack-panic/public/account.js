@@ -74,6 +74,8 @@
     event.preventDefault();
     event.stopImmediatePropagation();
     const user = await Account.openModal('register');
+    // The modal closes by itself when the server turns out to be down.
+    if (!user && Account.offline) { offline = true; paintPlayer(); }
     if (user || offline) btn.click();
   }, true);
 

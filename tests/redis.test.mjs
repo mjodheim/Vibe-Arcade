@@ -15,6 +15,9 @@ function exec([cmd, ...a]){
     case 'SET': { const nx = a.includes('NX'); if(nx && kv.has(a[0])) return null; kv.set(a[0], a[1]); if(a.includes('EX')) ttl.add(a[0]); return 'OK'; }
     case 'INCR': { const n = Number(kv.get(a[0]) || 0) + 1; kv.set(a[0], String(n)); return n; }
     case 'EXPIRE': return 1;
+    case 'EVAL': { // only the atomic INCR-with-TTL script is expected
+      assert.match(a[0], /INCR[\s\S]*TTL[\s\S]*EXPIRE/); assert.equal(a[1], '1');
+      const n = exec(['INCR', a[2]]); ttl.add(a[2]); return n; }
     case 'ZADD': { assert.equal(a[1], 'GT'); const s = Number(a[2]), m = a[3], k = z(a[0]); if(!k.has(m) || s > k.get(m)) k.set(m, s); return 1; }
     case 'ZSCORE': { const k = z(a[0]); return k.has(a[1]) ? String(k.get(a[1])) : null; }
     case 'ZREVRANK': { const i = rev(a[0]).findIndex(([m]) => m === a[1]); return i < 0 ? null : i; }
@@ -69,10 +72,12 @@ test('accounts, runs and leaderboards work over the Upstash REST API', async () 
   assert.deepEqual(board.data.scores, [{rank:1, username:'Redis Oie', score:1234}]);
   const me = await call('GET /api/me', {token});
   assert.equal(me.data.best['goose-delivery'], 1234);
-  for(const c of ['SET','GET','INCR','ZADD','ZSCORE','ZREVRANK','ZRANGE']) assert.ok(seen.includes(c), `${c} never sent`);
+  for(const c of ['SET','GET','EVAL','ZADD','ZSCORE','ZREVRANK','ZRANGE']) assert.ok(seen.includes(c), `${c} never sent`);
 });
 
 test('rate-limit counters always carry an expiry', async () => {
+  // A counter left without a TTL (e.g. by an older client) is repaired.
+  kv.set('rl:login:192.0.2.1', '1'); ttl.delete('rl:login:192.0.2.1');
   for(let i = 0; i < 3; i++) await call('POST /api/login', {body:{username:'nobody', password:'wrong-password'}});
   const counters = [...kv.keys()].filter(k => k.startsWith('rl:'));
   assert.ok(counters.length, 'no counter created');

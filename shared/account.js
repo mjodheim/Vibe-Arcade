@@ -29,6 +29,9 @@
   }
 
   const REQUEST_TIMEOUT_MS = 8000;
+  // Whether the last request found the score server unreachable; cabinets let
+  // players through unranked while it is.
+  let serverOffline = false;
   const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
 
   async function request(path, { method = 'GET', body } = {}) {
@@ -39,10 +42,11 @@
     // nothing in the UI may wait on it forever.
     const timeout = typeof AbortSignal !== 'undefined' && AbortSignal.timeout ? AbortSignal.timeout(REQUEST_TIMEOUT_MS) : undefined;
     try { res = await fetch(`/api/${path}`, { method, headers, body: body ? JSON.stringify(body) : undefined, signal: timeout }); }
-    catch { throw new ApiError('Serveur injoignable.', 0, true); }
+    catch { serverOffline = true; throw new ApiError('Serveur injoignable.', 0, true); }
     const data = await res.json().catch(() => null);
     // No API at all (plain static preview) or storage not configured yet.
-    if (!data || res.status === 404 || res.status === 503) throw new ApiError(data?.error || 'Serveur de scores indisponible.', res.status, true);
+    serverOffline = !data || res.status === 404 || res.status === 503;
+    if (serverOffline) throw new ApiError(data?.error || 'Serveur de scores indisponible.', res.status, true);
     if (res.status === 401 && token && path !== 'login') setSession('', null);
     if (!res.ok) throw new ApiError(data.error || `Erreur ${res.status}`, res.status);
     return data;
@@ -52,6 +56,7 @@
     ApiError,
     get user() { return user; },
     get loggedIn() { return !!(token && user); },
+    get offline() { return serverOffline; },
     onChange(fn) { listeners.add(fn); return () => listeners.delete(fn); },
     async register(username, password) { const d = await request('register', { method: 'POST', body: { username, password } }); setSession(d.token, d.user); return d.user; },
     async login(username, password) { const d = await request('login', { method: 'POST', body: { username, password } }); setSession(d.token, d.user); return d.user; },
@@ -132,6 +137,9 @@
         form.reset();
         close(u);
       } catch (err) {
+        // The score server is down: the sign-up gate lets the player through
+        // unranked instead of trapping them in this form.
+        if (err.offline) { close(null); return; }
         error.textContent = err.message;
       } finally {
         submit.disabled = false;

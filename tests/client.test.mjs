@@ -68,3 +68,32 @@ test('only the refresh right after a daily submission pins the board to that run
   const daily = boards.filter(b => b.daily).map(b => b.day);
   assert.deepEqual(daily, ['', '2026-09-28', ''], 'a later daily refresh kept showing the old day');
 });
+
+test('the account client reports an unreachable score server as offline', async () => {
+  const { api } = client(['network', { status:200, body:{ scores:[] } }]);
+  await assert.rejects(api.login('ana', 'password1'), e => e.offline);
+  assert.equal(api.offline, true);
+  await api.leaderboard('stack-panic');
+  assert.equal(api.offline, false);
+});
+
+test('a sign-up attempt during an outage lets the player through unranked', async () => {
+  const started = [];
+  const Account = {
+    loggedIn:false, offline:false, user:null,
+    onChange(){}, refresh:async () => {}, renderChip(){},
+    leaderboard:async () => [],
+    // The player submits the form while the server is down: the modal closes empty.
+    openModal:async () => { Account.offline = true; return null; }
+  };
+  const sandbox = { ArcadeAccount:Account, setTimeout, document:{ createElement:() => ({}) } };
+  sandbox.window = sandbox;
+  vm.createContext(sandbox);
+  vm.runInContext(readFileSync('shared/cabinet.js', 'utf8'), sandbox);
+  const cab = sandbox.ArcadeCabinet.create({ game:'forbidden-fruit', start:daily => started.push(daily) });
+  await cab.play(false);
+  assert.deepEqual(started, [false], 'the outage left the player stuck at the gate');
+  Account.openModal = async () => { throw new Error('the gate reopened during the outage'); };
+  await cab.play(false);
+  assert.deepEqual(started, [false, false]);
+});

@@ -15,6 +15,9 @@ export class StorageUnavailable extends Error {}
 const REDIS_URL = process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL || '';
 const REDIS_TOKEN = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN || '';
 
+const INCR_WITH_TTL = "local n = redis.call('INCR', KEYS[1]) " +
+  "if redis.call('TTL', KEYS[1]) < 0 then redis.call('EXPIRE', KEYS[1], ARGV[1]) end return n";
+
 function redisStore() {
   async function cmd(...args) {
     let res;
@@ -39,11 +42,11 @@ function redisStore() {
       if (ttlSeconds) args.push('EX', ttlSeconds);
       return (await cmd(...args)) === 'OK';
     },
-    // The counter is created with its TTL before being incremented, so a key
-    // can never exist without an expiry (INCR keeps the TTL).
+    // Increment and expiry run as one atomic script, and any counter found
+    // without a TTL gets one, so a rate limit can never become permanent.
     async incr(key, ttlSeconds) {
-      if (ttlSeconds) await cmd('SET', key, 0, 'EX', ttlSeconds, 'NX');
-      return cmd('INCR', key);
+      if (!ttlSeconds) return cmd('INCR', key);
+      return cmd('EVAL', INCR_WITH_TTL, 1, key, ttlSeconds);
     },
     async zaddGT(key, member, score, ttlSeconds = 0) {
       await cmd('ZADD', key, 'GT', score, member);

@@ -107,6 +107,8 @@
     async function play(isDaily = false) {
       if (!Account || Account.loggedIn || offline) return begin(isDaily);
       const user = await Account.openModal('register');
+      // The modal closes by itself when the server turns out to be down.
+      if (!user && Account.offline) { offline = true; paintPlayer(); }
       if (user || offline) begin(isDaily);
     }
 
