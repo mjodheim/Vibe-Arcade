@@ -175,7 +175,9 @@ docker compose up -d --build  # listens on 127.0.0.1:8080
 
 ### Automatic deployment
 
-Every push to `main` redeploys the VPS through `.github/workflows/deploy-vps.yml` (SSH → `git reset --hard origin/main` → `docker compose up -d --build` → health check). GitHub secrets to create: `VPS_HOST`, `VPS_USER`, `VPS_SSH_KEY`, `VPS_PATH` (optionally `VPS_PORT`, `VPS_KNOWN_HOSTS`).
+Every push to `main` redeploys the VPS through `.github/workflows/deploy-vps.yml` (SSH → `git reset --hard origin/main` → `docker compose up -d --build` → health check). The first deploy bootstraps itself: it clones the repository into `VPS_PATH` and writes `.env` from the `ARCADE_SECRET` secret.
+
+GitHub secrets to create: `VPS_HOST`, `VPS_USER`, `VPS_SSH_KEY`, `VPS_PATH`, `ARCADE_SECRET` (optionally `VPS_PORT`, `VPS_KNOWN_HOSTS`). The VPS only needs git, Docker (with compose) and a reverse proxy sending `arcade.mjodheim.be` to `127.0.0.1:8080`.
 
 ---
 

@@ -1,12 +1,19 @@
 name: Deploy to VPS
 
-# Every push to main redeploys arcade.mjodheim.be on the VPS.
-# Repository secrets to create (Settings → Secrets and variables → Actions):
-#   VPS_HOST      e.g. arcade.mjodheim.be or the server IP
-#   VPS_USER      SSH user allowed to run docker compose
-#   VPS_SSH_KEY   private key (the public half in ~/.ssh/authorized_keys on the VPS)
-#   VPS_PATH      absolute path of the repository checkout on the VPS
+# Every push to main redeploys arcade.mjodheim.be on the VPS. The first run
+# bootstraps the server by itself: it clones the repository into VPS_PATH and
+# writes .env from the ARCADE_SECRET secret if they do not exist yet.
+#
+# Repository secrets (Settings → Secrets and variables → Actions):
+#   VPS_HOST       e.g. the server IP
+#   VPS_USER       SSH user allowed to run docker compose
+#   VPS_SSH_KEY    private key (the public half in ~/.ssh/authorized_keys on the VPS)
+#   VPS_PATH       absolute path of the checkout on the VPS, e.g. /opt/vibe-arcade
+#   ARCADE_SECRET  16+ random characters, signs sessions and runs (first run only)
 # Optional: VPS_PORT (default 22), VPS_KNOWN_HOSTS (output of `ssh-keyscan <host>`).
+#
+# The VPS needs git and Docker with the compose plugin; the reverse proxy
+# (Nginx, Caddy…) sends arcade.mjodheim.be to 127.0.0.1:8080.
 
 on:
   push:
@@ -21,6 +28,19 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
+      - name: Check configuration
+        env:
+          HOST: ${{ secrets.VPS_HOST }}
+          USER: ${{ secrets.VPS_USER }}
+          KEY: ${{ secrets.VPS_SSH_KEY }}
+          APP: ${{ secrets.VPS_PATH }}
+        run: |
+          missing=""
+          [ -n "$HOST" ] || missing="$missing VPS_HOST"
+          [ -n "$USER" ] || missing="$missing VPS_USER"
+          [ -n "$KEY" ]  || missing="$missing VPS_SSH_KEY"
+          [ -n "$APP" ]  || missing="$missing VPS_PATH"
+          if [ -n "$missing" ]; then echo "::error::Missing repository secrets:$missing"; exit 1; fi
       - name: Configure SSH
         env:
           KEY: ${{ secrets.VPS_SSH_KEY }}
@@ -31,6 +51,26 @@ jobs:
           mkdir -p ~/.ssh && chmod 700 ~/.ssh
           printf '%s\n' "$KEY" > ~/.ssh/id_deploy && chmod 600 ~/.ssh/id_deploy
           if [ -n "$KNOWN" ]; then printf '%s\n' "$KNOWN" > ~/.ssh/known_hosts; else ssh-keyscan -p "$PORT" "$HOST" > ~/.ssh/known_hosts; fi
+      - name: Bootstrap checkout and .env (first deploy only)
+        env:
+          HOST: ${{ secrets.VPS_HOST }}
+          USER: ${{ secrets.VPS_USER }}
+          PORT: ${{ secrets.VPS_PORT || '22' }}
+          APP: ${{ secrets.VPS_PATH }}
+          SECRET: ${{ secrets.ARCADE_SECRET }}
+          REPO: ${{ github.server_url }}/${{ github.repository }}.git
+        run: |
+          # The secret travels over stdin so it never shows up in a command line.
+          printf '%s' "$SECRET" | ssh -i ~/.ssh/id_deploy -p "$PORT" "$USER@$HOST" "set -e
+            if [ ! -d '$APP/.git' ]; then git clone '$REPO' '$APP'; fi
+            cd '$APP'
+            if [ ! -f .env ]; then
+              secret=\$(cat)
+              if [ \${#secret} -lt 16 ]; then echo 'No .env on the VPS and ARCADE_SECRET secret missing or shorter than 16 characters.' >&2; exit 1; fi
+              umask 077
+              printf 'ARCADE_SECRET=%s\nARCADE_PORT=8080\nTRUST_PROXY=1\n' \"\$secret\" > .env
+              echo 'Created .env'
+            fi"
       - name: Pull and rebuild
         env:
           HOST: ${{ secrets.VPS_HOST }}
@@ -49,6 +89,9 @@ jobs:
           HOST: ${{ secrets.VPS_HOST }}
           USER: ${{ secrets.VPS_USER }}
           PORT: ${{ secrets.VPS_PORT || '22' }}
+          APP: ${{ secrets.VPS_PATH }}
         run: |
-          ssh -i ~/.ssh/id_deploy -p "$PORT" "$USER@$HOST" \
-            'for i in $(seq 1 20); do curl -fsS "http://127.0.0.1:${ARCADE_PORT:-8080}/api/scores?game=stack-panic" >/dev/null && exit 0; sleep 2; done; exit 1'
+          ssh -i ~/.ssh/id_deploy -p "$PORT" "$USER@$HOST" "cd '$APP'
+            port=\$(sed -n 's/^ARCADE_PORT=//p' .env); port=\${port:-8080}
+            for i in \$(seq 1 30); do curl -fsS \"http://127.0.0.1:\$port/api/scores?game=stack-panic\" >/dev/null && echo 'Arcade is up' && exit 0; sleep 2; done
+            docker compose logs --tail 50; exit 1"
