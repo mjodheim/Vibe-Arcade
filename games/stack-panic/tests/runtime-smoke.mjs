@@ -248,6 +248,9 @@ assert(eventsCss.includes('.reality-fail-copy'),'REALITY FAIL text message is st
 const controls=readFileSync('public/controls.js','utf8');
 for(const mode of ['state.cataclysm?.music','state.mini','shuffle'])assert(controls.includes(mode),`sound toggle loses ${mode} soundtrack`);
 const html=readFileSync('public/index.html','utf8');
+const cata=readFileSync('public/cataclysms.js','utf8');
+const wool=cata.slice(cata.indexOf('function woolDeposit'),cata.indexOf('function stageBlackHole'));
+assert(wool.includes('state.pushedOut=true'),'sheepstorm wool deposit can silently delete the top row');
 assert(html.indexOf('/stack-panic/qa-fixes.js')<html.indexOf('/stack-panic/controls.js'),'QA input hardening must load before controls');
 
 console.log('STACK PANIC runtime smoke: all gameplay invariants passed');

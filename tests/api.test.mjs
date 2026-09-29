@@ -123,3 +123,34 @@ test('a score submission can be retried safely, but a run cannot change its scor
   assert.equal((await call(scores.POST, { token, body: { runToken: aged, score: 4200 } })).status, 201, 'identical retry refused');
   assert.equal((await call(scores.POST, { token, body: { runToken: aged, score: 9000 } })).status, 409, 'run score was changed');
 });
+
+test('a failed registration (missing secret) does not consume the username', async () => {
+  const saved = { env: process.env.NODE_ENV, secret: process.env.ARCADE_SECRET };
+  process.env.NODE_ENV = 'production'; delete process.env.ARCADE_SECRET;
+  try {
+    assert.equal((await call(register.POST, { body: { username: 'Secretless', password: 'whatever123' } })).status, 503);
+  } finally {
+    process.env.NODE_ENV = saved.env; if (saved.secret) process.env.ARCADE_SECRET = saved.secret;
+  }
+  assert.equal((await call(register.POST, { body: { username: 'Secretless', password: 'whatever123' } })).status, 201, 'name was consumed by the failed attempt');
+});
+
+test('best and newBest reflect the committed leaderboard value', async () => {
+  const { token } = await signup('Concurrent');
+  const open = async () => {
+    const p = JSON.parse(Buffer.from((await call(runs.POST, { token, body: { game: 'stack-panic' } })).data.runToken.split('.')[0], 'base64url'));
+    return sign({ ...p, t: Date.now() - 120_000 });
+  };
+  const [a, b] = [await open(), await open()];
+  await call(scores.POST, { token, body: { runToken: a, score: 9000 } });
+  const low = await call(scores.POST, { token, body: { runToken: b, score: 4000 } });
+  assert.equal(low.data.best, 9000);
+  assert.equal(low.data.newBest, false);
+});
+
+test('opening runs is rate limited per account', async () => {
+  const { token } = await signup('Spammeur');
+  let last;
+  for (let i = 0; i < 61; i++) last = await call(runs.POST, { token, body: { game: 'stack-panic' } });
+  assert.equal(last.status, 429);
+});

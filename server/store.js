@@ -17,11 +17,17 @@ const REDIS_TOKEN = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_R
 
 function redisStore() {
   async function cmd(...args) {
-    const res = await fetch(REDIS_URL, {
-      method: 'POST',
-      headers: { authorization: `Bearer ${REDIS_TOKEN}`, 'content-type': 'application/json' },
-      body: JSON.stringify(args.map(String))
-    });
+    let res;
+    try {
+      res = await fetch(REDIS_URL, {
+        method: 'POST',
+        headers: { authorization: `Bearer ${REDIS_TOKEN}`, 'content-type': 'application/json' },
+        body: JSON.stringify(args.map(String))
+      });
+    } catch (err) {
+      // DNS, TLS or network failure: an outage, not a bug (503, clients go unranked).
+      throw new StorageUnavailable(`redis unreachable: ${err.message}`);
+    }
     const data = await res.json().catch(() => ({}));
     if (!res.ok || data.error) throw new StorageUnavailable(data.error || `redis ${res.status}`);
     return data.result;
@@ -33,10 +39,11 @@ function redisStore() {
       if (ttlSeconds) args.push('EX', ttlSeconds);
       return (await cmd(...args)) === 'OK';
     },
+    // The counter is created with its TTL before being incremented, so a key
+    // can never exist without an expiry (INCR keeps the TTL).
     async incr(key, ttlSeconds) {
-      const n = await cmd('INCR', key);
-      if (n === 1 && ttlSeconds) await cmd('EXPIRE', key, ttlSeconds);
-      return n;
+      if (ttlSeconds) await cmd('SET', key, 0, 'EX', ttlSeconds, 'NX');
+      return cmd('INCR', key);
     },
     async zaddGT(key, member, score, ttlSeconds = 0) {
       await cmd('ZADD', key, 'GT', score, member);

@@ -71,6 +71,8 @@
     burst(180,520,56);screenKick('shake',420);sfx('bleat');clearLines();
   }
   function woolDeposit(){
+    // Whatever is shoved past the ceiling is a top-out, like any garbage row.
+    if(state.board[0].some(Boolean)) state.pushedOut=true;
     state.board.shift();
     state.board.push(Array.from({length:COLS},(_,x)=>rng()<.58&&(x===0||x===COLS-1||rng()<.82)?5:0));
     screenKick('shake',360);sfx('impact');

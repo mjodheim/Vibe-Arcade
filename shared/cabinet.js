@@ -85,7 +85,7 @@
       setStatus('');
       run = null;
       if (!Account?.loggedIn) return start(isDaily, localDay());
-      const r = { token: null, failed: false };
+      const r = { token: null, failed: false, daily: isDaily };
       r.ready = Account.startRun(game, isDaily)
         .then(res => { r.token = res.token; r.day = res.day; })
         .catch(err => { r.failed = true; if (err.offline) offline = true; });
@@ -97,7 +97,10 @@
         await Promise.race([r.ready, new Promise(resolve => setTimeout(resolve, 4000))]);
         if (run !== r) return;
       }
-      start(isDaily, r.day || localDay());
+      // If the server was too slow, the board comes from the device's day and
+      // the run stays unranked unless that turns out to be the server's day.
+      r.seedDay = r.day || localDay();
+      start(isDaily, r.seedDay);
     }
 
     async function play(isDaily = false) {
@@ -113,6 +116,7 @@
       setStatus('Envoi du score…');
       await r.ready;
       if (r.failed || !r.token) { setStatus('Serveur de scores injoignable : score non enregistré.', 'warn'); return null; }
+      if (r.daily && r.day !== r.seedDay) { setStatus('Défi joué sur une autre grille que celle du jour : score non classé.', 'warn'); return null; }
       try {
         const res = await Account.submitScore(r.token, Math.floor(score));
         if (res.day) lastDailyDay = res.day;

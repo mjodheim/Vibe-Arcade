@@ -82,7 +82,7 @@
   state.accountRun = null;
   let prefetched = null;
   function openRun(daily) {
-    const run = { token: null, failed: false, day: '' };
+    const run = { token: null, failed: false, day: '', daily };
     run.ready = Account.startRun(GAME, daily)
       .then(res => { run.token = res.token; run.day = res.day; })
       .catch(err => { run.failed = true; if (err.offline) offline = true; });
@@ -124,6 +124,8 @@
     prefetched = null;
     if (!Account.loggedIn) { state.accountRun = null; return; }
     state.accountRun = run || openRun(daily);
+    // The day the board was actually seeded from (device day if the server was too slow).
+    state.accountRun.seedDay = serverDay || new Date().toISOString().slice(0, 10);
   };
 
   function setStatus(text, kind) {
@@ -142,6 +144,7 @@
     setStatus('Envoi du score…', '');
     run.ready.then(async () => {
       if (run.failed || !run.token) { setStatus('Serveur de scores injoignable : score non enregistré.', 'warn'); return; }
+      if (run.daily && run.day !== run.seedDay) { setStatus('Défi joué sur une autre grille que celle du jour : score non classé.', 'warn'); return; }
       try {
         const r = await Account.submitScore(run.token, score);
         if (r.day) lastDailyDay = r.day;

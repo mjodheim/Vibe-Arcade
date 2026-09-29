@@ -47,11 +47,14 @@
     return s;
   }
 
-  function occupied(s, ignoreTails = true){
+  // Cells covered by snake bodies. Only the tail of `mover` is left free — it
+  // is vacated during that snake's own step (unless it is growing); every
+  // other snake's tail stays solid, since it may not move this tick.
+  function occupied(s, mover = null){
     const blocked = new Set();
     for(const sn of s.snakes){
       if(!sn.alive) continue;
-      const n = sn.body.length - (ignoreTails && !sn.grow ? 1 : 0);
+      const n = sn.body.length - (sn === mover && !sn.grow ? 1 : 0);
       for(let i = 0; i < n; i++) blocked.add(key(sn.body[i].x, sn.body[i].y));
     }
     return blocked;
@@ -148,7 +151,7 @@
   }
 
   function chooseDir(s, sn){
-    const blocked = occupied(s);
+    const blocked = occupied(s, sn);
     const moves = safeMoves(s, sn, blocked);
     if(!moves.length) return sn.dir; // cornered: it will crash
     const confused = s.time < s.confusedUntil;
@@ -200,7 +203,7 @@
       return;
     }
     if(!inBounds(nx, ny)) return killSnake(s, sn, 'wall');
-    const blocked = occupied(s);
+    const blocked = occupied(s, sn);
     if(blocked.has(key(nx, ny))) return killSnake(s, sn, 'crash');
     sn.body.unshift({x:nx, y:ny});
     if(sn.grow > 0) sn.grow--; else sn.body.pop();

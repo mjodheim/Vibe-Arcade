@@ -225,3 +225,16 @@ test('fruit: the kill combo multiplier is capped', () => {
   }
   assert.equal(s.combo, F.POINTS.MAX_COMBO);
 });
+
+test('fruit: a snake cannot slide into another snake tail that is not moving', () => {
+  const s = F.newGame(4);
+  s.snakes = [];
+  F.spawnSnake(s, {x:5, y:5}, F.DIRS.right, 0);
+  F.spawnSnake(s, {x:0, y:0}, F.DIRS.down, 2);
+  const [a, b] = s.snakes;
+  a.body = [{x:5,y:5},{x:4,y:5},{x:3,y:5}]; a.grow = 0;
+  b.body = [{x:6,y:7},{x:6,y:6},{x:6,y:5}]; b.grow = 0;  // b's tail sits right in front of a
+  const blockedForA = F.occupied(s, a);
+  assert.ok(blockedForA.has(5 * 21 + 6), "another snake's tail was treated as free");
+  assert.ok(!blockedForA.has(5 * 21 + 3), "the mover's own tail should be free");
+});

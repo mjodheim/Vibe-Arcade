@@ -13,9 +13,11 @@ const register = route(async request => {
   validateCredentials(username, data.password);
   const { salt, hash } = hashPassword(data.password);
   const user = { id: randomBytes(12).toString('hex'), username, salt, hash, createdAt: new Date().toISOString() };
+  // Sign first: a missing ARCADE_SECRET must fail before the name is taken.
+  const token = sessionToken(user);
   const created = await store().setNX(`user:${usernameKey(username)}`, JSON.stringify(user));
   if (!created) throw new HttpError(409, 'Ce pseudo est déjà pris.');
-  return json(201, { token: sessionToken(user), user: publicUser(user) });
+  return json(201, { token, user: publicUser(user) });
 });
 
 const login = route(async request => {
@@ -37,6 +39,8 @@ const me = route(async request => {
 // token is signed, time-stamped and single use.
 const startRun = route(async request => {
   const user = await requireUser(request);
+  // Every scored run leaves a 7-day marker: bound how fast one account can mint them.
+  await limit(`runs:${user.id}`, 60, 600);
   const data = await readJson(request);
   if (!GAMES[data.game]) throw new HttpError(400, 'Jeu inconnu.');
   const token = runToken(user, data.game, data.daily);
@@ -66,7 +70,9 @@ const submitScore = route(async request => {
   const all = boardKey(run.game, false);
   const previous = (await db.zscore(all, user.username)) || 0;
   await db.zaddGT(all, user.username, score);
-  const result = { score, best: Math.max(previous, score), newBest: score > previous, rank: (await db.zrevrank(all, user.username)) + 1 };
+  // Read back what is actually stored: a concurrent submission may have won.
+  const best = (await db.zscore(all, user.username)) || score;
+  const result = { score, best, newBest: score > previous && score === best, rank: (await db.zrevrank(all, user.username)) + 1 };
   if (run.daily) {
     const daily = boardKey(run.game, true, run.day);
     await db.zaddGT(daily, user.username, score, 3 * 86400);
