@@ -43,9 +43,10 @@ const startRun = route(async request => {
   await limit(`runs:${user.id}`, 60, 600);
   const data = await readJson(request);
   if (!GAMES[data.game]) throw new HttpError(400, 'Jeu inconnu.');
-  const token = runToken(user, data.game, data.daily);
-  // The daily seed comes from the server's UTC day, never the device clock.
-  return json(201, { runToken: token, day: dayKey() });
+  // The daily seed comes from the server's UTC day, never the device clock;
+  // read the clock once so the signed token and the response agree at midnight.
+  const day = dayKey();
+  return json(201, { runToken: runToken(user, data.game, data.daily, day), day });
 });
 
 const submitScore = route(async request => {

@@ -154,3 +154,10 @@ test('opening runs is rate limited per account', async () => {
   for (let i = 0; i < 61; i++) last = await call(runs.POST, { token, body: { game: 'stack-panic' } });
   assert.equal(last.status, 429);
 });
+
+test('the day returned with a run is the day signed into it', async () => {
+  const { token } = await signup('Horloge');
+  const res = await call(runs.POST, { token, body: { game: 'stack-panic', daily: true } });
+  const payload = JSON.parse(Buffer.from(res.data.runToken.split('.')[0], 'base64url'));
+  assert.equal(payload.day, res.data.day);
+});

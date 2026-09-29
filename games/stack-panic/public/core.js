@@ -106,6 +106,7 @@ function recordBest(score,daily){
   try{ localStorage.setItem(BEST_KEY,JSON.stringify(best)); }catch{ /* private window */ }
   return true;
 }
+const SCORE_LEVEL_CAP=10;
 function clamp(v,a,b){ return Math.max(a,Math.min(b,v)); }
 function formatScore(v){ return String(v).padStart(6,'0'); }
 
@@ -146,7 +147,9 @@ function clearLines(){
     // a wrecking ball, the stack coming back down. Reading past the end of the
     // table used to turn the score into NaN for the rest of the run.
     const table=[0,100,300,500,800];
-    state.score += (table[Math.min(cleared,4)] + Math.max(0,cleared-4)*400)*state.level;
+    // Levels keep rising every 30 s, but the score multiplier stops at 10 so
+    // the scoring rate stays bounded (the leaderboard rejects impossible rates).
+    state.score += (table[Math.min(cleared,4)] + Math.max(0,cleared-4)*400)*Math.min(state.level,SCORE_LEVEL_CAP);
     state.lines += cleared;
     state.level = 1 + Math.floor(state.lines/8);
     state.chaos = clamp(state.chaos + cleared*8,0,100);

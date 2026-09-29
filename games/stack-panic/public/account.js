@@ -101,7 +101,10 @@
   let startingDaily = false;
   document.addEventListener('click', async event => {
     const btn = event.target.closest?.('button');
-    if (!btn || !Account.loggedIn || startingDaily) return;
+    if (!btn || !Account.loggedIn || !startButtons.includes(btn.id)) return;
+    // While a daily start waits for the server, swallow any other start click
+    // (double-click, or the free button) so only one game begins.
+    if (startingDaily) { event.preventDefault(); event.stopImmediatePropagation(); return; }
     const daily = btn.id === 'dailyBtn' || (btn.id === 'restartBtn' && state.daily);
     if (!daily) return;
     event.preventDefault();

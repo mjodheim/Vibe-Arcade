@@ -114,6 +114,10 @@ t.state.score=0;t.state.lines=0;t.state.level=1;t.state.chaos=0;t.state.particle
 t.clearLines();
 assert.equal(t.state.lines,5,'five-line incident clear not accounted for');
 assert(Number.isFinite(t.state.score),'score became non-finite after clearing >4 lines');
+// The score multiplier stops at level 10 so the scoring rate stays bounded.
+t.state.board=t.emptyBoard();for(let y=16;y<20;y++)t.state.board[y]=Array(10).fill(1);
+t.state.score=0;t.state.level=40;t.clearLines();
+assert.equal(t.state.score,800*10,'level multiplier is not capped for scoring');
 
 // Shuffle/lift sabotage preserves settled-cell count and board dimensions.
 t.seedRun(0xdecafbad);t.state.board=t.emptyBoard();

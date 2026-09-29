@@ -28,11 +28,17 @@
     constructor(message, status, offline = false) { super(message); this.status = status; this.offline = offline; }
   }
 
+  const REQUEST_TIMEOUT_MS = 8000;
+  const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
+
   async function request(path, { method = 'GET', body } = {}) {
     const headers = { 'content-type': 'application/json' };
     if (token) headers.authorization = `Bearer ${token}`;
     let res;
-    try { res = await fetch(`/api/${path}`, { method, headers, body: body ? JSON.stringify(body) : undefined }); }
+    // A request that never answers counts as the server being unreachable:
+    // nothing in the UI may wait on it forever.
+    const timeout = typeof AbortSignal !== 'undefined' && AbortSignal.timeout ? AbortSignal.timeout(REQUEST_TIMEOUT_MS) : undefined;
+    try { res = await fetch(`/api/${path}`, { method, headers, body: body ? JSON.stringify(body) : undefined, signal: timeout }); }
     catch { throw new ApiError('Serveur injoignable.', 0, true); }
     const data = await res.json().catch(() => null);
     // No API at all (plain static preview) or storage not configured yet.
@@ -52,7 +58,19 @@
     logout() { setSession('', null); },
     async refresh() { if (!token) return null; const d = await request('me'); setSession(token, d.user); return d; },
     async startRun(game, daily = false) { const d = await request('runs', { method: 'POST', body: { game, daily } }); return { token: d.runToken, day: d.day }; },
-    async submitScore(runToken, score) { return request('scores', { method: 'POST', body: { runToken, score } }); },
+    // The server accepts an identical retry for the same run, so a transient
+    // outage (network, 5xx, 503) is retried with the same token and score
+    // instead of losing a finished run. 4xx answers are final.
+    async submitScore(runToken, score) {
+      for (let attempt = 0; ; attempt++) {
+        try { return await request('scores', { method: 'POST', body: { runToken, score } }); }
+        catch (err) {
+          const transient = err.offline || err.status >= 500;
+          if (!transient || attempt >= 2) throw err;
+          await wait(1500 * (attempt + 1));
+        }
+      }
+    },
     async leaderboard(game, daily = false, limit = 10, day = '') { return (await request(`scores?game=${encodeURIComponent(game)}&daily=${daily ? 1 : 0}&limit=${limit}${day ? `&day=${encodeURIComponent(day)}` : ''}`)).scores; },
     openModal,
     renderChip

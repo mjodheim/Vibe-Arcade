@@ -4,7 +4,9 @@ import { store, StorageUnavailable } from './store.js';
 // Games that can submit scores, with a generous plausibility ceiling:
 // a run cannot have scored faster than `perSecond` on average, plus a burst.
 export const GAMES = {
-  'stack-panic': { perSecond: 900, burst: 4000, max: 50_000_000 },
+  // Line clears pay up to 800 × 10 (the score multiplier stops at level 10),
+  // plus incident clears and bonuses: a fast player can clear every ~2 s.
+  'stack-panic': { perSecond: 4500, burst: 20000, max: 100_000_000 },
   // Kills pay up to 500 × 4 (capped combo) and replacements arrive every ~2.6 s
   // for up to four snakes, so the reachable rate is far above the idle 10/s.
   'forbidden-fruit': { perSecond: 3200, burst: 12000, max: 50_000_000 },
@@ -130,8 +132,9 @@ export function publicUser(user) {
 
 export function dayKey(d = new Date()) { return d.toISOString().slice(0, 10); }
 
-export function runToken(user, game, daily) {
-  return sign({ typ: 'run', rid: randomBytes(12).toString('hex'), uid: user.id, key: usernameKey(user.username), game, daily: !!daily, day: dayKey(), t: Date.now(), exp: Date.now() + RUN_MAX_MS });
+// `day` is passed in so the signed token and the response share one clock read.
+export function runToken(user, game, daily, day = dayKey()) {
+  return sign({ typ: 'run', rid: randomBytes(12).toString('hex'), uid: user.id, key: usernameKey(user.username), game, daily: !!daily, day, t: Date.now(), exp: Date.now() + RUN_MAX_MS });
 }
 
 export function boardKey(game, daily, day = dayKey()) {
