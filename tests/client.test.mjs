@@ -43,3 +43,28 @@ test('the run day comes back with the run token', async () => {
   const { api } = client([{ status:201, body:{ runToken:'t', day:'2026-09-29' } }]);
   assert.deepEqual({ ...(await api.startRun('stack-panic', true)) }, { token:'t', day:'2026-09-29' });
 });
+
+test('only the refresh right after a daily submission pins the board to that run day', async () => {
+  const boards = [];
+  const Account = {
+    loggedIn:true, user:{ username:'ana' },
+    onChange(){}, refresh:async () => {}, renderChip(){},
+    leaderboard:async (game, daily, limit, day) => { boards.push({ daily, day }); return []; },
+    startRun:async () => ({ token:'t', day:'2026-09-28' }),
+    submitScore:async () => ({ rank:1, dailyRank:1, day:'2026-09-28' })
+  };
+  const el = () => ({ classList:{ toggle(){} }, replaceChildren(){}, appendChild(){}, setAttribute(){}, addEventListener(){} });
+  const sandbox = { ArcadeAccount:Account, setTimeout, document:{ createElement:el } };
+  sandbox.window = sandbox;
+  vm.createContext(sandbox);
+  vm.runInContext(readFileSync('shared/cabinet.js', 'utf8'), sandbox);
+  const tab = { ...el(), dataset:{ board:'daily' }, addEventListener(type, fn){ this.click = fn; } };
+  const cab = sandbox.ArcadeCabinet.create({ game:'forbidden-fruit', start(){}, board:el(), tabs:[tab] });
+  tab.click();
+  await cab.play(true);
+  await cab.finish(10);
+  tab.click();
+  await new Promise(resolve => setImmediate(resolve));
+  const daily = boards.filter(b => b.daily).map(b => b.day);
+  assert.deepEqual(daily, ['', '2026-09-28', ''], 'a later daily refresh kept showing the old day');
+});

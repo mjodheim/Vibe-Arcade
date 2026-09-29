@@ -17,7 +17,6 @@
   function create({ game, start, playerLine, status, board, tabs = [], chip }) {
     let offline = false;
     let daily = false;
-    let lastDailyDay = ''; // UTC day of the last daily run submitted from this page
     let run = null;
 
     if (chip) Account?.renderChip(chip);
@@ -37,13 +36,15 @@
     }
 
     let boardRequest = 0;
-    async function refreshBoard() {
+    // `day` pins the daily board to a just-submitted run's day (a run started
+    // before UTC midnight); every other refresh shows the server's today.
+    async function refreshBoard(day = '') {
       if (!board || !Account) return paintPlayer();
       // Only the latest request may paint: a slow answer for the other tab
       // must not overwrite the one the player is looking at.
       const ticket = ++boardRequest;
       try {
-        const scores = await Account.leaderboard(game, daily, 8, daily ? lastDailyDay : '');
+        const scores = await Account.leaderboard(game, daily, 8, daily && typeof day === 'string' ? day : '');
         if (ticket !== boardRequest) return;
         offline = false;
         board.replaceChildren();
@@ -119,10 +120,9 @@
       if (r.daily && r.day !== r.seedDay) { setStatus('Défi joué sur une autre grille que celle du jour : score non classé.', 'warn'); return null; }
       try {
         const res = await Account.submitScore(r.token, Math.floor(score));
-        if (res.day) lastDailyDay = res.day;
         const where = res.dailyRank ? `#${res.dailyRank} du jour · #${res.rank} au général` : `#${res.rank} au général`;
         setStatus(`${res.newBest ? 'NOUVEAU RECORD PERSO · ' : ''}Score enregistré · ${where}`, 'ok');
-        refreshBoard();
+        refreshBoard(res.day || '');
         return res;
       } catch (err) {
         setStatus(err.message, 'warn');

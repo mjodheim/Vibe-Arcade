@@ -14,7 +14,6 @@
   const boardTabs = document.querySelectorAll('[data-board]');
   let offline = false;
   let boardDaily = false;
-  let lastDailyDay = ''; // UTC day of the last daily run submitted from this page
 
   Account.renderChip(document.getElementById('accountChip'));
 
@@ -27,12 +26,14 @@
   }
 
   let boardRequest = 0;
-  async function refreshBoard() {
+  // `day` pins the daily board to a just-submitted run's day (a run started
+  // before UTC midnight); every other refresh shows the server's today.
+  async function refreshBoard(day = '') {
     if (!boardList) return;
     // Only the latest request may paint (tabs can be toggled faster than the API answers).
     const ticket = ++boardRequest;
     try {
-      const scores = await Account.leaderboard(GAME, boardDaily, 8, boardDaily ? lastDailyDay : '');
+      const scores = await Account.leaderboard(GAME, boardDaily, 8, boardDaily ? day : '');
       if (ticket !== boardRequest) return;
       offline = false;
       boardList.innerHTML = '';
@@ -150,10 +151,9 @@
       if (run.daily && run.day !== run.seedDay) { setStatus('Défi joué sur une autre grille que celle du jour : score non classé.', 'warn'); return; }
       try {
         const r = await Account.submitScore(run.token, score);
-        if (r.day) lastDailyDay = r.day;
         const where = r.dailyRank ? `#${r.dailyRank} du jour · #${r.rank} au général` : `#${r.rank} au général`;
         setStatus(`${r.newBest ? 'NOUVEAU RECORD PERSO · ' : ''}Score enregistré · ${where}`, 'ok');
-        refreshBoard();
+        refreshBoard(r.day || '');
       } catch (err) {
         setStatus(err.message, 'warn');
       }
