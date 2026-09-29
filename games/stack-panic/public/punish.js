@@ -391,6 +391,44 @@ finishMini = function(){
   }, 1100);
 };
 
+// ------------------------------------------------------------------ frame loop
+
+// Gravity is accumulated instead of "one drop per animation frame": at 50 ms
+// per row the old loop rounded every drop up to the next frame and threw away
+// missed ones, so late-game speed depended on the display (30/60/144 Hz) and
+// slowed down on dropped frames. A long stall (tab switch) never teleports the
+// piece more than a few rows.
+gravityDrop = function(){
+  if(!canInput()) return;
+  const now = performance.now();
+  const every = dropInterval();
+  for(let n = 0; n < 4 && now - state.lastDrop >= every; n++){
+    if(!collides(state.piece, 0, 1)){ state.piece.y++; state.lastDrop += every; }
+    else{ merge(); state.lastDrop = now; return; }
+  }
+  if(now - state.lastDrop >= every) state.lastDrop = now;
+};
+
+// Same frame as runtime.js, but nothing touches the board or the score once a
+// top-out has ended the run mid-frame: the submitted score is the final one.
+update = function(t){
+  const dt = state.lastFrame ? clamp((t - state.lastFrame) / 1000, 0, .05) : 1/60;
+  state.lastFrame = t; state.frameDt = dt; state.time = t;
+  const live = () => state.running && !state.paused && !state.gameOver;
+  if(live()){
+    if(!state.mini && t - state.lastDrop > dropInterval()) gravityDrop();
+    if(live()) updateEvents(t, dt);
+    if(live()){
+      updateSheep(t, dt); updateBombs(t, dt); updateTank(t, dt); updateWater(dt);
+      updateMeteors(t, dt); updateWreck(t, dt); updateMagnet(t, dt); updateAcid(t, dt); updateDuck(t, dt);
+      if(state.mini) updateMini(t);
+    }
+  }
+  if(state.running && !state.paused){ updateParticles(dt); updateSmoke(dt); }
+  draw();
+  requestAnimationFrame(update);
+};
+
 // ------------------------------------------------------------------ lifecycle
 
 const resetBeforePunish = resetGame;

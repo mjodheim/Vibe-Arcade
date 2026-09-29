@@ -5,7 +5,9 @@ import { store, StorageUnavailable } from './store.js';
 // a run cannot have scored faster than `perSecond` on average, plus a burst.
 export const GAMES = {
   'stack-panic': { perSecond: 900, burst: 4000, max: 50_000_000 },
-  'forbidden-fruit': { perSecond: 250, burst: 3000, max: 10_000_000 },
+  // Kills pay up to 500 × 4 (capped combo) and replacements arrive every ~2.6 s
+  // for up to four snakes, so the reachable rate is far above the idle 10/s.
+  'forbidden-fruit': { perSecond: 3200, burst: 12000, max: 50_000_000 },
   'pigeon-control': { perSecond: 400, burst: 2000, max: 10_000_000 },
   'goose-delivery': { perSecond: 250, burst: 2000, max: 10_000_000 }
 };

@@ -112,3 +112,14 @@ test('a daily leaderboard can be read for the day the run was filed under', asyn
   assert.deepEqual(board.data.scores.map(s => s.username), ['Minuit']);
   assert.equal((await call(scores.GET, { method: 'GET', query: '?game=stack-panic&daily=1&day=../../x' })).status, 200, 'bad day param should fall back to today');
 });
+
+test('a score submission can be retried safely, but a run cannot change its score', async () => {
+  const { token } = await signup('Retente');
+  const opened = await call(runs.POST, { token, body: { game: 'stack-panic' } });
+  assert.match(opened.data.day, /^\d{4}-\d{2}-\d{2}$/, 'run start should return the server day');
+  const payload = JSON.parse(Buffer.from(opened.data.runToken.split('.')[0], 'base64url'));
+  const aged = sign({ ...payload, t: Date.now() - 60_000 });
+  assert.equal((await call(scores.POST, { token, body: { runToken: aged, score: 4200 } })).status, 201);
+  assert.equal((await call(scores.POST, { token, body: { runToken: aged, score: 4200 } })).status, 201, 'identical retry refused');
+  assert.equal((await call(scores.POST, { token, body: { runToken: aged, score: 9000 } })).status, 409, 'run score was changed');
+});

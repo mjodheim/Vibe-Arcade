@@ -84,14 +84,16 @@
   canvas.addEventListener('pointerup', endSwipe); canvas.addEventListener('pointercancel', endSwipe);
 
   // ------------------------------------------------------------ lifecycle
-  function todaySeed(){
-    const d = new Date(), k = `${d.getUTCFullYear()}-${d.getUTCMonth() + 1}-${d.getUTCDate()}:fruit`;
+  // Daily seed from the UTC day handed over by the arcade cabinet (the server's
+  // day when online), so everyone plays the same board.
+  function daySeed(day){
+    const k = `${day}:fruit`;
     let h = 2166136261; for(const ch of k){ h ^= ch.charCodeAt(0); h = Math.imul(h, 16777619); } return h >>> 0;
   }
 
-  function start(isDaily){
+  function start(isDaily, day){
     daily = isDaily;
-    game = L.newGame(isDaily ? todaySeed() : crypto.getRandomValues(new Uint32Array(1))[0]);
+    game = L.newGame(isDaily ? daySeed(day) : crypto.getRandomValues(new Uint32Array(1))[0]);
     running = true; paused = false; bestCombo = 0; held.length = 0;
     fx.particles = []; fx.texts = []; fx.flash = 0;
     ui.start.hidden = true; ui.over.hidden = true; ui.pause.textContent = 'PAUSE';

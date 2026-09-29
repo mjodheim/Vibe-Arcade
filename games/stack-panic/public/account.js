@@ -26,10 +26,14 @@
     else playerLine.textContent = 'INSCRIS-TOI POUR JOUER ET ENREGISTRER TES SCORES';
   }
 
+  let boardRequest = 0;
   async function refreshBoard() {
     if (!boardList) return;
+    // Only the latest request may paint (tabs can be toggled faster than the API answers).
+    const ticket = ++boardRequest;
     try {
       const scores = await Account.leaderboard(GAME, boardDaily, 8, boardDaily ? lastDailyDay : '');
+      if (ticket !== boardRequest) return;
       offline = false;
       boardList.innerHTML = '';
       if (!scores.length) {
@@ -47,6 +51,7 @@
         boardList.appendChild(li);
       });
     } catch (err) {
+      if (ticket !== boardRequest) return;
       if (err.offline) offline = true;
       boardList.innerHTML = '<li class="empty">Classement indisponible.</li>';
     }
@@ -75,16 +80,50 @@
 
   // Every run asks the server for a signed, single-use run token.
   state.accountRun = null;
+  let prefetched = null;
+  function openRun(daily) {
+    const run = { token: null, failed: false, day: '' };
+    run.ready = Account.startRun(GAME, daily)
+      .then(res => { run.token = res.token; run.day = res.day; })
+      .catch(err => { run.failed = true; if (err.offline) offline = true; });
+    return run;
+  }
+
+  // Daily boards are seeded from the server's UTC day, not the device clock,
+  // so everyone gets the same pieces and a changed clock picks nothing.
+  let serverDay = '';
+  const deviceTodaySeed = todaySeed;
+  todaySeed = function(d) {
+    return d === undefined && serverDay ? deviceTodaySeed(new Date(`${serverDay}T12:00:00Z`)) : deviceTodaySeed(d);
+  };
+
+  // A logged-in daily start first opens the run to learn that day.
+  let startingDaily = false;
+  document.addEventListener('click', async event => {
+    const btn = event.target.closest?.('button');
+    if (!btn || !Account.loggedIn || startingDaily) return;
+    const daily = btn.id === 'dailyBtn' || (btn.id === 'restartBtn' && state.daily);
+    if (!daily) return;
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    startingDaily = true;
+    const run = openRun(true);
+    await Promise.race([run.ready, new Promise(resolve => setTimeout(resolve, 4000))]);
+    serverDay = run.day || serverDay;
+    prefetched = run;
+    startingDaily = false;
+    ensureAudio();
+    resetGame(true);
+  }, true);
+
   const resetBeforeAccount = resetGame;
   resetGame = function(daily = false) {
     resetBeforeAccount(daily);
     if (scoreStatus) { scoreStatus.textContent = ''; scoreStatus.className = 'score-status'; }
+    const run = prefetched && daily ? prefetched : null;
+    prefetched = null;
     if (!Account.loggedIn) { state.accountRun = null; return; }
-    const run = { token: null, failed: false };
-    run.ready = Account.startRun(GAME, daily)
-      .then(token => { run.token = token; })
-      .catch(err => { run.failed = true; if (err.offline) offline = true; });
-    state.accountRun = run;
+    state.accountRun = run || openRun(daily);
   };
 
   function setStatus(text, kind) {

@@ -39,7 +39,9 @@ const startRun = route(async request => {
   const user = await requireUser(request);
   const data = await readJson(request);
   if (!GAMES[data.game]) throw new HttpError(400, 'Jeu inconnu.');
-  return json(201, { runToken: runToken(user, data.game, data.daily) });
+  const token = runToken(user, data.game, data.daily);
+  // The daily seed comes from the server's UTC day, never the device clock.
+  return json(201, { runToken: token, day: dayKey() });
 });
 
 const submitScore = route(async request => {
@@ -52,7 +54,13 @@ const submitScore = route(async request => {
   const elapsed = (Date.now() - run.t) / 1000;
   if (!Number.isFinite(score) || score < 0 || score > rules.max) throw new HttpError(400, 'Score invalide.');
   if (score > rules.burst + elapsed * rules.perSecond) throw new HttpError(400, 'Score refusé : partie trop courte pour ce total.');
-  if (!(await store().setNX(`run:${run.rid}`, '1', 7 * 86400))) throw new HttpError(409, 'Score déjà enregistré pour cette partie.');
+  // The run marker records the submitted score. A retry of the same
+  // submission (after a timeout or a storage hiccup) replays the idempotent
+  // leaderboard writes; a different score for the same run is refused.
+  const marker = `run:${run.rid}`;
+  if (!(await store().setNX(marker, String(score), 7 * 86400)) && (await store().get(marker)) !== String(score)) {
+    throw new HttpError(409, 'Score déjà enregistré pour cette partie.');
+  }
 
   const db = store();
   const all = boardKey(run.game, false);

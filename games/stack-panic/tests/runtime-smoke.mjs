@@ -91,7 +91,7 @@ for(const file of classic){
 vm.runInContext(`globalThis.__test={
   state,EVENT_POOL,SIDE_EVENTS,seedRun,makePiece,emptyBoard,spawn,clearLines,weightedEvent,
   scrambleSettledRows,liftBadlyPlacedBlocks,sabotagePulse,spawnSheep,dropInterval,glitchBoard,
-  togglePause,hardDrop,showBanner,updateEvents,liftStack,updateTank,spawnTank,explodeBomb,finishMini,draw,COLORS
+  togglePause,hardDrop,showBanner,updateEvents,liftStack,updateTank,spawnTank,explodeBomb,finishMini,draw,COLORS,gravityDrop,update
 }`,sandbox);
 const t=sandbox.__test;
 const countCells=board=>board.reduce((sum,row)=>sum+row.filter(Boolean).length,0);
@@ -211,6 +211,26 @@ assert.equal(t.state.tideLeft>0,true,'tide countdown not running');
 t.state.tideLeft=0;t.updateEvents(clock,.05);
 assert(countCells(t.state.board)>=n+9,'tide did not push a garbage row');
 assert(!t.state.gameOver,'tide ended a run that had room');
+
+// Gravity is accumulated: overdue drops are applied (a few at most) instead
+// of one per animation frame, so late-game speed does not depend on the display.
+t.state.board=t.emptyBoard();t.seedRun(5);t.state.next=t.makePiece();t.spawn();
+t.state.running=true;t.state.gameOver=false;t.state.paused=false;t.state.inputLocked=false;t.state.mini=null;
+t.state.level=20;t.state.chaos=100;
+const y0=t.state.piece.y;clock=50000;t.state.lastDrop=clock-3*t.dropInterval()-1;
+t.gravityDrop();
+assert.equal(t.state.piece.y-y0,3,'overdue gravity steps were dropped');
+
+// Once a top-out ends the run mid-frame, nothing else may touch the score.
+t.state.board=t.emptyBoard();t.seedRun(6);t.state.next=t.makePiece();t.spawn();
+t.state.running=true;t.state.gameOver=false;t.state.paused=false;t.state.cataclysm=null;t.state.mini=null;
+t.state.activeEvent=null;t.state.nextEventAt=Infinity;t.state.nextRealityFailAt=Infinity;
+t.state.board[0][4]=1;t.state.tideEvery=1000;t.state.tideLeft=0;
+t.state.sheep=[{x:100,y:500,vx:1,bounce:0,hits:0,mood:0}];t.state.board[13][2]=1;
+t.state.lastFrame=clock;clock+=16;t.update(clock);
+assert.equal(t.state.gameOver,true,'tide top-out did not end the run');
+const frozen=t.state.score;clock+=16;t.update(clock);
+assert.equal(t.state.score,frozen,'score changed after game over');
 
 // The renderer runs against the mocked canvas without throwing.
 t.draw();

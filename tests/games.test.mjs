@@ -192,3 +192,36 @@ test('pigeon: birds that have not entered the square cannot crash into each othe
   P.update(s, 16);
   assert.equal(s.over, true);
 });
+
+test('pigeon: a pigeon routed before fully entering still becomes collidable', () => {
+  const s = P.newGame(1);
+  s.nextSpawnAt = Infinity; s.nextGullAt = Infinity; s.nextBreadAt = Infinity;
+  const a = P.spawn(s, {x:-20, y:300, angle:0, kind:'city'});
+  P.setPath(s, a.id, [{x:400, y:300}]);
+  const b = P.spawn(s, {x:420, y:300, angle:Math.PI, kind:'dove'});
+  b.inside = true;
+  for(let i = 0; i < 600 && !s.over; i++) P.update(s, 16);
+  assert.equal(a.inside, true, 'routed pigeon never counted as inside');
+  assert.equal(s.over, true, 'routed pigeon flew through another one');
+});
+
+test('fruit: tapping or switching directions never moves the apple faster than its cooldown', () => {
+  const s = F.newGame(3);
+  s.snakes = []; s.pendingSpawns = []; s.nextSpawnAt = Infinity;
+  s.apple.x = 2; s.apple.y = 10;
+  const start = s.apple.x;
+  // Alternate right / nothing every 16 ms for one second.
+  for(let i = 0; i < 62; i++) F.update(s, 16, i % 2 ? null : 'right');
+  const moved = s.apple.x - start;
+  assert.ok(moved <= Math.ceil(1000 / 105) + 1, `apple moved ${moved} cells in 1 s`);
+});
+
+test('fruit: the kill combo multiplier is capped', () => {
+  const s = F.newGame(9);
+  for(let i = 0; i < 10; i++){
+    const sn = s.snakes[0] || (F.spawnSnake(s, {x:5, y:5}, F.DIRS.down, i), s.snakes[s.snakes.length - 1]);
+    sn.alive = true;
+    F.killSnake(s, sn, 'crash');
+  }
+  assert.equal(s.combo, F.POINTS.MAX_COMBO);
+});

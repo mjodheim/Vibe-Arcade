@@ -51,7 +51,7 @@
     async login(username, password) { const d = await request('login', { method: 'POST', body: { username, password } }); setSession(d.token, d.user); return d.user; },
     logout() { setSession('', null); },
     async refresh() { if (!token) return null; const d = await request('me'); setSession(token, d.user); return d; },
-    async startRun(game, daily = false) { return (await request('runs', { method: 'POST', body: { game, daily } })).runToken; },
+    async startRun(game, daily = false) { const d = await request('runs', { method: 'POST', body: { game, daily } }); return { token: d.runToken, day: d.day }; },
     async submitScore(runToken, score) { return request('scores', { method: 'POST', body: { runToken, score } }); },
     async leaderboard(game, daily = false, limit = 10, day = '') { return (await request(`scores?game=${encodeURIComponent(game)}&daily=${daily ? 1 : 0}&limit=${limit}${day ? `&day=${encodeURIComponent(day)}` : ''}`)).scores; },
     openModal,

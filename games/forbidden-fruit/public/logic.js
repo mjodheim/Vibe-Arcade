@@ -16,6 +16,9 @@
 
   const APPLE_STEP_MS = 105;
   const SEED_POINTS = 25, PEPIN_POINTS = 100, KILL_POINTS = 500, SECOND_POINTS = 10;
+  // The multiplier is capped so the scoring rate stays bounded (the server
+  // rejects scores faster than the fastest legitimate run).
+  const MAX_COMBO = 4;
 
   function mulberry(seed){
     let s = seed >>> 0 || 1;
@@ -34,7 +37,7 @@
     const rng = mulberry(seed);
     const s = {
       w:W, h:H, rng, time:0, score:0, secondsBank:0, over:false, cause:null,
-      apple:{x:10, y:15, dir:null, acc:0, lastDir:DIRS.up},
+      apple:{x:10, y:15, dir:null, acc:0, lastDir:DIRS.up, lastMoveAt:-1e9},
       snakes:[], seeds:[], events:[], spawnTimer:0, nextSpawnAt:0,
       confusedUntil:0, combo:0, comboUntil:0, kills:0, spawned:0, pendingSpawns:[]
     };
@@ -173,7 +176,7 @@
     sn.alive = false;
     sn.deadAt = s.time;
     s.kills++;
-    s.combo = s.time < s.comboUntil ? s.combo + 1 : 1;
+    s.combo = s.time < s.comboUntil ? Math.min(s.combo + 1, MAX_COMBO) : 1;
     s.comboUntil = s.time + 4000;
     const points = KILL_POINTS * s.combo;
     s.score += points;
@@ -258,12 +261,15 @@
     s.secondsBank += dt;
     while(s.secondsBank >= 1000){ s.secondsBank -= 1000; s.score += SECOND_POINTS; }
 
+    // The apple moves at most once per APPLE_STEP_MS. A new press moves it
+    // right away only if the cooldown has elapsed: tapping or switching
+    // directions never buys extra steps.
     const a = s.apple;
     const dir = input ? DIRS[input] : null;
-    if(dir !== a.dir){ a.dir = dir; a.acc = APPLE_STEP_MS; }
+    if(dir !== a.dir){ a.dir = dir; a.acc = Math.min(APPLE_STEP_MS, s.time - dt - a.lastMoveAt); }
     if(a.dir){
       a.acc += dt;
-      while(a.acc >= APPLE_STEP_MS && !s.over){ a.acc -= APPLE_STEP_MS; moveApple(s, a.dir); }
+      while(a.acc >= APPLE_STEP_MS && !s.over){ a.acc -= APPLE_STEP_MS; if(moveApple(s, a.dir)) a.lastMoveAt = s.time; }
     }
     if(s.over) return s;
 
@@ -306,5 +312,5 @@
   }
 
   root.FruitLogic = {W, H, DIRS, newGame, update, bfs, occupied, chooseDir, snakeStepMs, moveApple, spawnSnake, killSnake,
-    POINTS:{SEED_POINTS, PEPIN_POINTS, KILL_POINTS, SECOND_POINTS}};
+    POINTS:{SEED_POINTS, PEPIN_POINTS, KILL_POINTS, SECOND_POINTS, MAX_COMBO}};
 })(typeof window !== 'undefined' ? window : globalThis);

@@ -113,6 +113,12 @@
     p.angle += Math.max(-max, Math.min(max, diff));
   }
 
+  // A bird counts as over the square (and can collide) once it is fully in
+  // view, whether it is flying free or following a route.
+  function markInside(p){
+    if(!p.inside && p.x > p.r && p.y > p.r && p.x < W - p.r && p.y < H - p.r) p.inside = true;
+  }
+
   function movePigeon(s, p, dt){
     const step = p.speed * dt;
     if(p.path.length){
@@ -127,6 +133,7 @@
           p.x += Math.cos(p.angle) * left; p.y += Math.sin(p.angle) * left; left = 0;
         }
       }
+      markInside(p);
       if(!p.path.length && p.target){
         const st = STATUES.find(x => x.id === p.target);
         if(st && dist(p, st) <= st.r){ land(s, p, st); return; }
@@ -137,7 +144,7 @@
     p.x += Math.cos(p.angle) * step;
     p.y += Math.sin(p.angle) * step;
     // Once inside, the square's edges bounce birds back in.
-    if(!p.inside && p.x > p.r && p.y > p.r && p.x < W - p.r && p.y < H - p.r) p.inside = true;
+    markInside(p);
     if(p.inside){
       if(p.x < p.r || p.x > W - p.r){ p.angle = Math.PI - p.angle; p.x = Math.max(p.r, Math.min(W - p.r, p.x)); }
       if(p.y < p.r || p.y > H - p.r){ p.angle = -p.angle; p.y = Math.max(p.r, Math.min(H - p.r, p.y)); }

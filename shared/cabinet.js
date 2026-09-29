@@ -36,10 +36,15 @@
       status.className = `score-status ${kind}`;
     }
 
+    let boardRequest = 0;
     async function refreshBoard() {
       if (!board || !Account) return paintPlayer();
+      // Only the latest request may paint: a slow answer for the other tab
+      // must not overwrite the one the player is looking at.
+      const ticket = ++boardRequest;
       try {
         const scores = await Account.leaderboard(game, daily, 8, daily ? lastDailyDay : '');
+        if (ticket !== boardRequest) return;
         offline = false;
         board.replaceChildren();
         if (!scores.length) {
@@ -57,6 +62,7 @@
           board.appendChild(li);
         }
       } catch (err) {
+        if (ticket !== boardRequest) return;
         if (err.offline) offline = true;
         const li = document.createElement('li');
         li.className = 'empty'; li.textContent = 'Classement indisponible.';
@@ -71,17 +77,27 @@
       refreshBoard();
     }));
 
-    function begin(isDaily) {
+    // Today's UTC day according to this device, used only when the server
+    // cannot be reached (the run is then unranked anyway).
+    const localDay = () => new Date().toISOString().slice(0, 10);
+
+    async function begin(isDaily) {
       setStatus('');
       run = null;
-      if (Account?.loggedIn) {
-        const r = { token: null, failed: false };
-        r.ready = Account.startRun(game, isDaily)
-          .then(token => { r.token = token; })
-          .catch(err => { r.failed = true; if (err.offline) offline = true; });
-        run = r;
+      if (!Account?.loggedIn) return start(isDaily, localDay());
+      const r = { token: null, failed: false };
+      r.ready = Account.startRun(game, isDaily)
+        .then(res => { r.token = res.token; r.day = res.day; })
+        .catch(err => { r.failed = true; if (err.offline) offline = true; });
+      run = r;
+      // A daily run is seeded from the server's day, so every player gets the
+      // same board and changing the device clock picks nothing; a free run
+      // starts right away.
+      if (isDaily) {
+        await Promise.race([r.ready, new Promise(resolve => setTimeout(resolve, 4000))]);
+        if (run !== r) return;
       }
-      start(isDaily);
+      start(isDaily, r.day || localDay());
     }
 
     async function play(isDaily = false) {

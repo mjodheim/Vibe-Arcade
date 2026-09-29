@@ -88,13 +88,15 @@
   }
 
   // ------------------------------------------------------------ lifecycle
-  function todaySeed(){
-    const d = new Date(), k = `${d.getUTCFullYear()}-${d.getUTCMonth() + 1}-${d.getUTCDate()}:goose`;
+  // Daily seed from the UTC day handed over by the arcade cabinet (the server's
+  // day when online), so everyone plays the same board.
+  function daySeed(day){
+    const k = `${day}:goose`;
     let h = 2166136261; for(const ch of k){ h ^= ch.charCodeAt(0); h = Math.imul(h, 16777619); } return h >>> 0;
   }
-  function start(isDaily){
+  function start(isDaily, day){
     daily = isDaily; demo = false;
-    game = G.newGame(isDaily ? todaySeed() : crypto.getRandomValues(new Uint32Array(1))[0]);
+    game = G.newGame(isDaily ? daySeed(day) : crypto.getRandomValues(new Uint32Array(1))[0]);
     running = true; paused = false; keys.clear(); honkQueued = false;
     fx.rings = []; fx.texts = []; fx.dust = []; fx.flash = 0;
     ui.start.hidden = true; ui.over.hidden = true; ui.pause.textContent = 'PAUSE';
