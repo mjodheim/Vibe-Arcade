@@ -108,13 +108,13 @@ Il n'est pas nécessaire de parler d'API, de classes, de moteurs, de bases de do
 
 Un retour utile peut être aussi simple que :
 
-> *« Le mage ne donne pas une impression de puissance. »*
+> *« Les events doivent vraiment casser le jeu, là on peut aller très loin. »*
 >
-> *« Je veux du loot capable de changer complètement mon build. »*
+> *« Accélère les incidents, que ça soit vraiment punitif. »*
 >
-> *« Ce boss est ennuyeux. »*
+> *« Fais-moi un Snake, mais c'est toi la pomme. »*
 >
-> *« Laisse-moi modifier les touches. »*
+> *« Il faut pouvoir s'inscrire pour enregistrer son score. »*
 >
 > *« J'ai envie de relancer une partie. »*
 
@@ -130,7 +130,9 @@ La dernière phrase est la plus importante. 😈
 | `#003` | 🍎 **Forbidden Fruit** | Snake inversé | 🟢 JOUABLE |
 | `#004` | 🐦 **Pigeon Control** | Contrôle aérien de pigeons | 🟢 JOUABLE |
 | `#005` | 🪿 **Goose Delivery** | Livraison en oie, contre la montre | 🟢 JOUABLE |
-| `#004` | ❔ **???** | ??? | 🔒 VERROUILLÉ |
+| `#006` | ❔ **???** | ??? | 🔒 VERROUILLÉ |
+
+<sub>La borne `#001` a été retirée de l'arcade ; la numérotation est conservée.</sub>
 
 Les prochains jeux pourront partager la même identité d'arcade, les profils joueurs, les succès et un classement propre à chaque jeu, tout en proposant des expériences complètement différentes.
 

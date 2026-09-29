@@ -108,13 +108,13 @@ You do not need to describe APIs, classes, engines, databases, or patterns to in
 
 Useful input can simply be:
 
-> *“The mage doesn't feel powerful enough.”*
+> *“The events should really break the game — right now you can go on forever.”*
 >
-> *“I want loot that can completely change my build.”*
+> *“Speed up the incidents, make it properly punishing.”*
 >
-> *“This boss is boring.”*
+> *“Make me a Snake, but you're the apple.”*
 >
-> *“Let me remap the controls.”*
+> *“Players should sign up so their scores are saved.”*
 >
 > *“I want to play one more run.”*
 
@@ -130,7 +130,9 @@ That last one is the important one. 😈
 | `#003` | 🍎 **Forbidden Fruit** | Reverse Snake | 🟢 PLAYABLE |
 | `#004` | 🐦 **Pigeon Control** | Pigeon air traffic control | 🟢 PLAYABLE |
 | `#005` | 🪿 **Goose Delivery** | Goose courier, against the clock | 🟢 PLAYABLE |
-| `#004` | ❔ **???** | ??? | 🔒 LOCKED |
+| `#006` | ❔ **???** | ??? | 🔒 LOCKED |
+
+<sub>Cabinet `#001` has been retired from the arcade; numbering is kept as is.</sub>
 
 Future games can share the same arcade identity, player profiles, achievements, and per-game leaderboards while remaining completely different experiences.
 
