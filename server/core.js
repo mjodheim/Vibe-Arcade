@@ -51,9 +51,9 @@ export async function readJson(request) {
   try { return text ? JSON.parse(text) : {}; } catch { throw new HttpError(400, 'JSON invalide.'); }
 }
 
-// The HTTP server resolves the client address (honouring X-Forwarded-For only
-// when TRUST_PROXY is set) and hands it over in this header, overwriting
-// anything the client sent.
+// The caller resolves the client address — api/_vercel.js from Vercel's own
+// headers, the local dev server from the socket — and hands it over in this
+// header, overwriting anything the client sent.
 export function clientIp(request) {
   return request.headers.get('x-arcade-client-ip') || 'local';
 }

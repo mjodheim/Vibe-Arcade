@@ -1,14 +1,60 @@
 // Storage for accounts and leaderboards.
 //
-// The arcade runs as a single Node process on the VPS, so the store is kept
-// in memory and snapshotted to a JSON file (atomic write, debounced). Tests
-// use the same store without a file.
+// Production (Vercel Functions) uses Redis over the Upstash REST API — what the
+// Vercel marketplace integration provisions — so no npm package is needed.
+// The local dev server keeps everything in memory and snapshots it to a JSON
+// file; tests use the in-memory store directly. On Vercel without Redis we
+// refuse to pretend: memory would be wiped between invocations.
 
 import { readFileSync, mkdirSync } from 'node:fs';
 import { writeFile, rename } from 'node:fs/promises';
 import { dirname } from 'node:path';
 
 export class StorageUnavailable extends Error {}
+
+const REDIS_URL = process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL || '';
+const REDIS_TOKEN = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN || '';
+
+function redisStore() {
+  async function cmd(...args) {
+    const res = await fetch(REDIS_URL, {
+      method: 'POST',
+      headers: { authorization: `Bearer ${REDIS_TOKEN}`, 'content-type': 'application/json' },
+      body: JSON.stringify(args.map(String))
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok || data.error) throw new StorageUnavailable(data.error || `redis ${res.status}`);
+    return data.result;
+  }
+  return {
+    async get(key) { return cmd('GET', key); },
+    async setNX(key, value, ttlSeconds = 0) {
+      const args = ['SET', key, value, 'NX'];
+      if (ttlSeconds) args.push('EX', ttlSeconds);
+      return (await cmd(...args)) === 'OK';
+    },
+    async incr(key, ttlSeconds) {
+      const n = await cmd('INCR', key);
+      if (n === 1 && ttlSeconds) await cmd('EXPIRE', key, ttlSeconds);
+      return n;
+    },
+    async zaddGT(key, member, score, ttlSeconds = 0) {
+      await cmd('ZADD', key, 'GT', score, member);
+      if (ttlSeconds) await cmd('EXPIRE', key, ttlSeconds);
+    },
+    async zscore(key, member) {
+      const v = await cmd('ZSCORE', key, member);
+      return v === null ? null : Number(v);
+    },
+    async zrevrank(key, member) { return cmd('ZREVRANK', key, member); },
+    async ztop(key, count) {
+      const flat = await cmd('ZRANGE', key, 0, count - 1, 'REV', 'WITHSCORES');
+      const out = [];
+      for (let i = 0; i < flat.length; i += 2) out.push({ member: flat[i], score: Number(flat[i + 1]) });
+      return out;
+    }
+  };
+}
 
 export function memoryStore({ onChange = () => {}, snapshot = null } = {}) {
   const kv = new Map(snapshot?.kv || []);
@@ -88,7 +134,10 @@ export function fileStore(file) {
 
 let current = null;
 export function store() {
-  if (!current) current = memoryStore();
+  if (current) return current;
+  if (REDIS_URL && REDIS_TOKEN) current = redisStore();
+  else if (process.env.VERCEL) throw new StorageUnavailable('storage-not-configured');
+  else current = memoryStore();
   return current;
 }
 export function useStore(s) { current = s; }

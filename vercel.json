@@ -1,0 +1,21 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "redirects": [
+    { "source": "/hivebound", "destination": "/", "permanent": true },
+    { "source": "/hivebound/:path*", "destination": "/", "permanent": true },
+    { "source": "/stack-panic", "destination": "/stack-panic/", "permanent": false },
+    { "source": "/forbidden-fruit", "destination": "/forbidden-fruit/", "permanent": false },
+    { "source": "/pigeon-control", "destination": "/pigeon-control/", "permanent": false },
+    { "source": "/goose-delivery", "destination": "/goose-delivery/", "permanent": false }
+  ],
+  "rewrites": [
+    { "source": "/stack-panic/", "destination": "/games/stack-panic/public/index.html" },
+    { "source": "/stack-panic/:path*", "destination": "/games/stack-panic/public/:path*" },
+    { "source": "/forbidden-fruit/", "destination": "/games/forbidden-fruit/public/index.html" },
+    { "source": "/forbidden-fruit/:path*", "destination": "/games/forbidden-fruit/public/:path*" },
+    { "source": "/pigeon-control/", "destination": "/games/pigeon-control/public/index.html" },
+    { "source": "/pigeon-control/:path*", "destination": "/games/pigeon-control/public/:path*" },
+    { "source": "/goose-delivery/", "destination": "/games/goose-delivery/public/index.html" },
+    { "source": "/goose-delivery/:path*", "destination": "/games/goose-delivery/public/:path*" }
+  ]
+}

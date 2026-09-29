@@ -155,29 +155,20 @@ La contrainte importante reste la même : **le joueur oriente le produit par ses
 
 ## 🚀 Lancer l'arcade
 
-Tout tourne dans **un seul process Node** (`server/`) : page d'accueil, bornes sous `/<jeu>/` et API comptes/classements. Aucune dépendance npm, Node 20+.
+L'arcade est hébergée sur **Vercel** : les jeux sont servis en statique (routes dans `vercel.json`) et les comptes/classements tournent en **Vercel Functions** (`api/`), sans aucune dépendance npm.
 
 ```bash
-npm run dev    # http://localhost:8080 — rechargement auto, données dans ./data
-npm test       # serveur, API, logique des jeux + smoke test Stack Panic
+npm run dev    # http://localhost:8080 — serveur local qui imite Vercel, données dans ./data
+npm test       # API (dont le client Redis), routes Vercel, logique des jeux + smoke test Stack Panic
 ```
 
-### Sur le VPS (Docker)
+### Configuration Vercel (une seule fois)
 
-```bash
-cp .env.example .env          # mettre un ARCADE_SECRET long et aléatoire
-docker compose up -d --build  # écoute sur 127.0.0.1:8080
-```
+1. **Storage → Upstash Redis** : créer une base et la lier au projet. Elle injecte `KV_REST_API_URL` et `KV_REST_API_TOKEN` (les noms `UPSTASH_REDIS_REST_URL` / `UPSTASH_REDIS_REST_TOKEN` marchent aussi).
+2. **Settings → Environment Variables** : ajouter `ARCADE_SECRET`, une chaîne aléatoire de 16 caractères ou plus (`openssl rand -hex 32`). Elle signe les sessions et les parties.
+3. Redéployer. Chaque push sur `main` part ensuite en production automatiquement.
 
-- Les comptes et scores vivent dans le volume `arcade_data` (`/app/data/arcade.json`).
-- Mettre le reverse proxy existant (Nginx, Caddy…) devant `127.0.0.1:8080` pour le HTTPS. Garder `TRUST_PROXY=1` pour que la limitation des tentatives de connexion voie les vraies IP.
-- Mise à jour manuelle : `git pull && docker compose up -d --build`.
-
-### Déploiement automatique
-
-Chaque push sur `main` redéploie le VPS via `.github/workflows/deploy-vps.yml` (SSH → `git reset --hard origin/main` → `docker compose up -d --build` → health check). Le premier déploiement installe tout seul : il clone le repo dans `VPS_PATH` et crée `.env` à partir du secret `ARCADE_SECRET`.
-
-Secrets GitHub à créer : `VPS_HOST`, `VPS_USER`, `VPS_SSH_KEY`, `VPS_PATH`, `ARCADE_SECRET` (et optionnellement `VPS_PORT`, `VPS_KNOWN_HOSTS`). Le VPS a juste besoin de git, Docker (avec compose) et d'un reverse proxy qui envoie `arcade.mjodheim.be` vers `127.0.0.1:8080`.
+Sans ces variables, l'API répond « serveur de scores indisponible » et les jeux restent jouables en mode non classé.
 
 ---
 
@@ -190,8 +181,9 @@ Vibe-Arcade/
 │   ├── 🍎 forbidden-fruit/ # Jeu #003
 │   ├── 🐦 pigeon-control/  # Jeu #004
 │   └── 🪿 goose-delivery/  # Jeu #005
-├── 🖥️ server/               # Serveur Node : site, jeux, comptes & classements
-├── 🐳 Dockerfile · docker-compose.yml
+├── 🔐 api/                  # Vercel Functions : comptes & classements
+├── 🖥️ server/               # Logique de l'API + serveur de dev local
+├── ⚙️ vercel.json           # Routes des bornes
 ├── 🤝 shared/               # Client compte partagé par toutes les bornes
 ├── 🎨 assets/               # Visuels de l'arcade
 ├── 📚 docs/

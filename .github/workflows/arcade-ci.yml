@@ -11,7 +11,8 @@ on:
       - 'arcade*.css'
       - 'arcade.js'
       - 'package.json'
-      - 'Dockerfile'
+      - 'api/**'
+      - 'vercel.json'
       - '.github/workflows/arcade-ci.yml'
   pull_request:
     paths:
@@ -23,7 +24,8 @@ on:
       - 'arcade*.css'
       - 'arcade.js'
       - 'package.json'
-      - 'Dockerfile'
+      - 'api/**'
+      - 'vercel.json'
       - '.github/workflows/arcade-ci.yml'
 
 jobs:
@@ -36,8 +38,6 @@ jobs:
           node-version: '22'
       - name: Check every script parses
         run: |
-          find server shared games/forbidden-fruit games/pigeon-control games/goose-delivery -name '*.js' -print0 | xargs -0 -n1 node --check
+          find api server shared games/forbidden-fruit games/pigeon-control games/goose-delivery -name '*.js' -print0 | xargs -0 -n1 node --check
       - name: Server, API and game logic tests
         run: node --test tests/*.test.mjs
-      - name: Docker image builds
-        run: docker build -t vibe-arcade:ci .

@@ -1,10 +1,11 @@
-// Vibe Arcade server: the landing page, every cabinet under /<game>/ and the
-// account/leaderboard API, in one Node process with no dependencies.
+// Local development server. Production runs on Vercel (static files routed by
+// vercel.json + the functions in api/); this mirrors that setup in a single
+// dependency-free Node process: the landing page, every cabinet under
+// /<game>/ and the account/leaderboard API, with a JSON-file store.
 //
 //   PORT            listen port (default 8080)
 //   ARCADE_SECRET   signs sessions and runs — required when NODE_ENV=production
 //   DATA_DIR        where the JSON store lives (default ./data)
-//   TRUST_PROXY=1   read the client IP from X-Forwarded-For (behind Nginx/Caddy)
 
 import http from 'node:http';
 import { stat, readFile } from 'node:fs/promises';
@@ -15,7 +16,6 @@ import { fileStore, useStore } from './store.js';
 const ROOT = new URL('..', import.meta.url).pathname;
 const PORT = Number(process.env.PORT || 8080);
 const DATA_DIR = process.env.DATA_DIR || join(ROOT, 'data');
-const TRUST_PROXY = process.env.TRUST_PROXY === '1';
 
 if (process.env.NODE_ENV === 'production' && (process.env.ARCADE_SECRET || '').length < 16) {
   console.error('ARCADE_SECRET (16+ characters) is required in production.');
@@ -67,10 +67,6 @@ async function resolvePath(pathname) {
 }
 
 function clientIp(req) {
-  if (TRUST_PROXY) {
-    const forwarded = String(req.headers['x-forwarded-for'] || '').split(',')[0].trim();
-    if (forwarded) return forwarded;
-  }
   return req.socket.remoteAddress || 'unknown';
 }
 
