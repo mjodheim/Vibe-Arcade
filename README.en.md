@@ -29,31 +29,6 @@ The source is public. The private conversations used to steer development are **
 
 ---
 
-# 🐝 CABINET #001
-
-## **Hivebound: Relics of the Bloom**
-
-> *The Bloom is fading. The Hive remembers.*
-
-A fantasy action roguelite where heroic bees venture beyond the safety of the hive, chase strange relics, build ridiculous combinations, defeat corrupted creatures, and risk everything for a higher score.
-
-| 🛡️ Waxguard | ✨ Bloomweaver | 🏹 Thornstrider | 🎶 Hymnkeeper |
-|:---:|:---:|:---:|:---:|
-| Warrior | Mage | Ranger | Support |
-| Armor & retaliation | Arcane pollen & bursts | Speed & critical hits | Auras & swarm power |
-
-### 🍯 What's already inside?
-
-`⚔️ real-time combat` · `🗺️ procedural routes` · `💎 randomized loot` · `🌿 talents` · `🔨 crafting` · `👑 bosses` · `🌀 resonances` · `🌑 risk/reward pacts` · `🏆 leaderboards` · `☀️ Daily Hive`
-
-Every run is about becoming increasingly unreasonable before the corruption catches up with you.
-
-**Current build:** `v0.2 — playable prototype`
-
-➡️ **[Enter Hivebound](games/hivebound)**
-
----
-
 # 🧱 CABINET #002
 
 ## **Stack Panic**
@@ -62,11 +37,47 @@ Every run is about becoming increasingly unreasonable before the corruption catc
 
 A **falling-block game** that refuses to behave. You stack, you clear lines — and the chaos director sends in sheep that shove cells around, water that pours into the holes, a bomb, a tank, a blackout, an inspecting duck, or a **structural breach**: the game opens into 3D and you fly a ship through a tunnel built out of your own stack.
 
-Every incident can save the run… or finish it. The chaos still has rules: it never piles on twice in a row, and it holds back while your stack is scraping the ceiling.
+Since **v1.0 — NO MERCY**, no incident is on your side any more: blocks never just vanish, they get displaced, buried or thrown back on top of your stack. Chaos rises on its own, a new level lands every 30 seconds and a tide of rubble pushes up from the floor more and more often. Every run ends up breaking — the only question is when.
 
-`🐑 sheep` · `💧 liquid blocks` · `💣 bombs` · `🪖 tank` · `🌑 blackout` · `📼 glitch` · `🦆 duck` · `🌀 3D breach` · `☀️ daily challenge` · `🏆 local records`
+`🐑 sheep` · `💧 slippery controls` · `💣 rubble` · `🪖 backfill tank` · `🌑 blackout` · `📼 inverted controls` · `🦆 quality-control duck` · `🌀 3D breach` · `☀️ daily challenge` · `👤 player accounts` · `🏆 online leaderboards`
 
 ➡️ **[Play Stack Panic](https://arcade.mjodheim.be/stack-panic/)** · [the code and the game notes](games/stack-panic)
+
+---
+
+# 🍎 CABINET #003
+
+## **Forbidden Fruit**
+
+> *Snake, but you're the apple.*
+
+You run. Three snakes hunt you: **the Chaser** goes straight for you, **the Ambusher** aims where you're going, **the Drunk** zigzags at random. They keep growing and speeding up, and a new one arrives every 22 seconds. A snake that hits a wall, itself or another snake explodes into seeds (+500, ×2, ×3 combos…): the real game is making them take each other out.
+
+➡️ **[Play Forbidden Fruit](https://arcade.mjodheim.be/forbidden-fruit/)**
+
+---
+
+# 🐦 CABINET #004
+
+## **Pigeon Control**
+
+> *Control tower, this is pigeon.*
+
+Draw each pigeon's route, with the mouse or a finger, to the monument of its colour. Two pigeons touching ends your shift. Featuring fat pigeons, ninja pigeons, seagulls that answer to nobody, and a kid throwing bread at the worst possible moment.
+
+➡️ **[Play Pigeon Control](https://arcade.mjodheim.be/pigeon-control/)**
+
+---
+
+# 🪿 CABINET #005
+
+## **Goose Delivery**
+
+> *Express delivery. Customer service: HONK.*
+
+You are a goose on a temp contract at a courier. Grab the parcel and waddle it to the right door before the clock runs out: every delivery buys time. Your only tool is **HONK**: people flee and drop their baguettes, and a honked-at policeman slips. Honk too much and the police come for you, and cars don't brake for geese.
+
+➡️ **[Play Goose Delivery](https://arcade.mjodheim.be/goose-delivery/)**
 
 ---
 
@@ -97,13 +108,13 @@ You do not need to describe APIs, classes, engines, databases, or patterns to in
 
 Useful input can simply be:
 
-> *“The mage doesn't feel powerful enough.”*
+> *“The events should really break the game — right now you can go on forever.”*
 >
-> *“I want loot that can completely change my build.”*
+> *“Speed up the incidents, make it properly punishing.”*
 >
-> *“This boss is boring.”*
+> *“Make me a Snake, but you're the apple.”*
 >
-> *“Let me remap the controls.”*
+> *“Players should sign up so their scores are saved.”*
 >
 > *“I want to play one more run.”*
 
@@ -115,10 +126,13 @@ That last one is the important one. 😈
 
 | Cabinet | Game | Genre | Status |
 |:--:|---|---|:--:|
-| `#001` | 🐝 **Hivebound: Relics of the Bloom** | Fantasy action roguelite | 🟢 PLAYABLE |
 | `#002` | 🧱 **Stack Panic** | Chaotic falling-block puzzle | 🟢 PLAYABLE |
-| `#003` | ❔ **???** | ??? | 🔒 LOCKED |
-| `#004` | ❔ **???** | ??? | 🔒 LOCKED |
+| `#003` | 🍎 **Forbidden Fruit** | Reverse Snake | 🟢 PLAYABLE |
+| `#004` | 🐦 **Pigeon Control** | Pigeon air traffic control | 🟢 PLAYABLE |
+| `#005` | 🪿 **Goose Delivery** | Goose courier, against the clock | 🟢 PLAYABLE |
+| `#006` | ❔ **???** | ??? | 🔒 LOCKED |
+
+<sub>Cabinet `#001` has been retired from the arcade; numbering is kept as is.</sub>
 
 Future games can share the same arcade identity, player profiles, achievements, and per-game leaderboards while remaining completely different experiences.
 
@@ -128,8 +142,8 @@ Future games can share the same arcade identity, player profiles, achievements, 
 
 As the cabinet grows, Vibe Arcade is intended to gain a shared layer around the games:
 
-- 👤 one player identity across the arcade
-- 🏆 a leaderboard for every game
+- ✅ 👤 one player identity across the arcade
+- ✅ 🏆 a leaderboard for every game
 - 🥇 daily and all-time challenges
 - 🎖️ cross-game achievements
 - 📊 personal records and arcade statistics
@@ -139,34 +153,22 @@ The important constraint remains the same: **the player steers the product throu
 
 ---
 
-## 🚀 Run the current arcade
+## 🚀 Run the arcade
 
-### Docker
-
-```bash
-cp games/hivebound/.env.example games/hivebound/.env
-# Set a strong HIVEBOUND_SECRET in the .env file
-
-docker compose up -d --build
-```
-
-Then open:
-
-```text
-http://localhost:8080
-```
-
-### Without Docker
-
-Hivebound currently requires **Node.js 20+** and has zero runtime npm dependencies.
+The arcade is hosted on **Vercel**: games are served statically (routes in `vercel.json`) and accounts/leaderboards run as **Vercel Functions** (`api/`), with no npm dependencies.
 
 ```bash
-cd games/hivebound
-export HIVEBOUND_SECRET='a-long-random-secret'
-node server.js
+npm run dev    # http://localhost:8080 — local server mirroring Vercel, data in ./data
+npm test       # API (including the Redis client), Vercel routes, game logic + Stack Panic smoke test
 ```
 
-For controls, mechanics and game-specific notes, visit **[games/hivebound](games/hivebound)**.
+### Vercel setup (once)
+
+1. **Storage → Upstash Redis**: create a database and connect it to the project. It injects `KV_REST_API_URL` and `KV_REST_API_TOKEN` (`UPSTASH_REDIS_REST_URL` / `UPSTASH_REDIS_REST_TOKEN` work too).
+2. **Settings → Environment Variables**: add `ARCADE_SECRET`, a random string of 16+ characters (`openssl rand -hex 32`). It signs sessions and runs.
+3. Redeploy. Every push to `main` then goes to production automatically.
+
+Without these variables the API answers "score server unavailable" and the games stay playable, unranked.
 
 ---
 
@@ -175,11 +177,17 @@ For controls, mechanics and game-specific notes, visit **[games/hivebound](games
 ```text
 Vibe-Arcade/
 ├── 🎮 games/
-│   └── 🐝 hivebound/       # Game #001
+│   ├── 🧱 stack-panic/     # Game #002
+│   ├── 🍎 forbidden-fruit/ # Game #003
+│   ├── 🐦 pigeon-control/  # Game #004
+│   └── 🪿 goose-delivery/  # Game #005
+├── 🔐 api/                  # Vercel Functions: accounts & leaderboards
+├── 🖥️ server/               # API logic + local dev server
+├── ⚙️ vercel.json           # Cabinet routes
+├── 🤝 shared/               # Account client shared by every cabinet
 ├── 🎨 assets/               # Arcade visuals
 ├── 📚 docs/
 │   └── PHILOSOPHY.md        # What the experiment explores
-├── 🐳 docker-compose.yml
 ├── 📖 README.md             # Français
 └── 📖 README.en.md          # English
 ```

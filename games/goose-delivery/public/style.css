@@ -1,0 +1,16 @@
+:root{--bg:#0d140c;--accent:#ffd166;--accent-2:#ff9d3d;--glow:rgba(255,209,102,.18)}
+body{background:
+  radial-gradient(circle at 15% -10%,rgba(255,209,102,.16),transparent 40%),
+  radial-gradient(circle at 90% 20%,rgba(185,255,102,.08),transparent 35%),
+  linear-gradient(#0d140c,#0f1a0e 60%,#070b07)}
+.cab-shell.wide{max-width:1100px}
+.cab-shell.wide>.cab-screen{max-width:1000px;margin:0 auto}
+.goose-panels{display:grid;grid-template-columns:1fr 1.4fr 1fr;gap:16px;max-width:1000px;margin:16px auto 0}
+.cab-rules b{font-weight:800;color:#fff}
+.honk-btn{display:none;position:absolute;right:22px;bottom:22px;z-index:4;width:84px;height:84px;border-radius:50%;border:3px solid #fff;
+  background:radial-gradient(circle at 35% 30%,#ffe29a,#ff9d3d);color:#3a1d00;font:950 .95rem/1 ui-monospace,Menlo,monospace;letter-spacing:.04em;
+  box-shadow:0 10px 30px rgba(0,0,0,.45);touch-action:none;user-select:none;-webkit-user-select:none}
+.honk-btn:active{transform:scale(.92)}
+@media (pointer:coarse){.honk-btn{display:block}}
+@media(max-width:900px){.goose-panels{grid-template-columns:1fr}.goose-panels .cab-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}}
+@media(max-width:520px){.goose-panels .cab-stats{grid-template-columns:repeat(2,1fr)}.honk-btn{width:68px;height:68px;right:16px;bottom:16px}}

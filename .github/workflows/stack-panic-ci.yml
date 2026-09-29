@@ -4,10 +4,12 @@ on:
   push:
     paths:
       - 'games/stack-panic/**'
+      - 'shared/**'
       - '.github/workflows/stack-panic-ci.yml'
   pull_request:
     paths:
       - 'games/stack-panic/**'
+      - 'shared/**'
       - '.github/workflows/stack-panic-ci.yml'
 
 jobs:
@@ -79,7 +81,6 @@ jobs:
           const sabotage=readFileSync('public/sabotage.js','utf8');
           for(const asset of ['sabotage.css','sabotage.js']) if(!html.includes('/stack-panic/'+asset)) throw new Error('index missing '+asset);
           for(const feature of ['RECONFIGURATION NON SOLLICITÉE','scrambleSettledRows','liftBadlyPlacedBlocks','sabotagePulse','12+rand(9)','state.chaos<55']) if(!sabotage.includes(feature)) throw new Error('hostile chaos feature missing: '+feature);
-          if(!sabotage.includes('Math.max(72, 590')) throw new Error('gravity difficulty regression');
           if(!sabotage.includes("HEAVY_EVENTS.includes('sheep')")) throw new Error('sheepocalypse no longer classified as heavy sabotage');
           console.log('hostile sabotage contract intact');
           NODE
@@ -96,6 +97,18 @@ jobs:
           for(const selector of ['.banner','.incident-cinematic','.event-card','.advert','.crash','.reality-fail-copy']) if(!css.includes(selector)) throw new Error('message overlay not hidden: '+selector);
           if(html.includes('PAUSE SPONSORISÉE') || html.includes('BLOCS PREMIUM') || html.includes('ERREUR FATALE')) throw new Error('message-only copy leaked back into the cabinet');
           console.log('events-only mode intact: gameplay/animation incidents only');
+          NODE
+      - name: Check NO MERCY contract
+        run: |
+          node --input-type=module <<'NODE'
+          import { readFileSync } from 'node:fs';
+          const html=readFileSync('public/index.html','utf8');
+          const punish=readFileSync('public/punish.js','utf8');
+          const order=['sabotage.js','visuals.js','punish.js','ui-cinematics.js'].map(f=>html.indexOf('/stack-panic/'+f));
+          if(order.some(i=>i<0)||order.some((v,i)=>i&&v<order[i-1])) throw new Error('visuals/punish must load between sabotage and the presentation layers');
+          for(const feature of ['pushGarbageRows','scatterDebris','updateTide','escalate','Math.max(50, 520']) if(!punish.includes(feature)) throw new Error('NO MERCY feature missing: '+feature);
+          for(const asset of ['/shared/account.js','/stack-panic/account.js']) if(!html.includes(asset)) throw new Error('index missing '+asset);
+          console.log('NO MERCY contract intact');
           NODE
       - name: Run gameplay runtime smoke suite
         run: node tests/runtime-smoke.mjs

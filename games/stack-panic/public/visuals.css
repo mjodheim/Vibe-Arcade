@@ -1,0 +1,51 @@
+/* V1.0 visual pass: the board is rendered at device resolution, so it must not be pixelated. */
+#game,#next{image-rendering:auto}
+#game{background:#04050c;box-shadow:inset 0 0 0 1px rgba(67,239,255,.08)}
+
+/* Neon cabinet frame that slowly cycles, and burns red when the stack is high. */
+.cabinet{
+  border:2px solid transparent;
+  background:
+    linear-gradient(145deg,#11172a,#070a14) padding-box,
+    conic-gradient(from var(--frame-angle,0deg),#43efff,#8f7cff,#ff5ab7,#ffd166,#43efff) border-box;
+  animation:frame-spin 9s linear infinite;
+}
+@property --frame-angle{syntax:'<angle>';inherits:false;initial-value:0deg}
+@keyframes frame-spin{to{--frame-angle:360deg}}
+.cabinet.danger-high{
+  background:
+    linear-gradient(145deg,#1a0f18,#0a0610) padding-box,
+    conic-gradient(from var(--frame-angle,0deg),#ff5f68,#ff9d3d,#ff5f68,#7a1020,#ff5f68) border-box;
+  animation:frame-spin 2.2s linear infinite,dangerPulse 1.15s ease-in-out infinite;
+}
+
+/* Stats read like an instrument cluster. */
+.stat strong{text-shadow:0 0 18px rgba(67,239,255,.25)}
+#score{color:#fff;text-shadow:0 0 22px rgba(255,90,183,.35)}
+.chaos-stat .meter i{background:linear-gradient(90deg,#43efff,#8f7cff,#ff5ab7,#ff5f68)}
+.next-box canvas{box-shadow:inset 0 0 30px rgba(67,239,255,.06),0 0 24px rgba(143,124,255,.12)}
+
+@media (prefers-reduced-motion:reduce){.cabinet,.cabinet.danger-high{animation:none!important}}
+
+/* Accounts & leaderboard */
+.top-actions{align-items:center;flex-wrap:wrap;justify-content:flex-end}
+.player-line{margin:4px 0 0;font:800 .66rem/1.4 ui-monospace,Menlo,monospace;letter-spacing:.12em;color:#b9ff66!important}
+.player-line.guest{color:#ffd166!important}
+.score-status{min-height:1.2em;margin:6px 0 0;font:700 .72rem/1.4 ui-monospace,Menlo,monospace;letter-spacing:.06em;color:#9aa4bd!important}
+.score-status.ok{color:#b9ff66!important}
+.score-status.warn{color:#ff9d6b!important}
+.leaderboard-box{margin-top:16px}
+.leaderboard-box small{display:block;color:#7f8ba4;font-size:.62rem;font-weight:900;letter-spacing:.2em}
+.board-tabs{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin:10px 0 8px;padding:3px;border-radius:10px;background:rgba(255,255,255,.035)}
+.board-tabs button{border:0;border-radius:8px;padding:6px 4px;background:none;color:#8792ab;font:800 .6rem/1 inherit;letter-spacing:.12em;cursor:pointer}
+.board-tabs button[aria-selected="true"]{background:rgba(67,239,255,.14);color:#fff}
+.leaderboard{list-style:none;counter-reset:rank;margin:0;padding:0;display:grid;gap:3px}
+.leaderboard li{counter-increment:rank;display:grid;grid-template-columns:2.2ch 1fr auto;gap:8px;align-items:center;padding:6px 8px;border-radius:8px;background:rgba(255,255,255,.025);font:700 .74rem/1.2 ui-monospace,Menlo,monospace}
+.leaderboard li:before{content:counter(rank);color:#6f7b92}
+.leaderboard li:nth-child(1):before{color:#ffd166}
+.leaderboard li span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#dce5f7}
+.leaderboard li b{color:#43efff;letter-spacing:.04em}
+.leaderboard li.me{background:rgba(185,255,102,.1);box-shadow:inset 0 0 0 1px rgba(185,255,102,.3)}
+.leaderboard li.empty{display:block;color:#7f8ba4;font-weight:600;font-family:inherit}
+.leaderboard li.empty:before{content:none}
+@media(max-width:760px){.leaderboard-box{grid-column:1/-1;margin:0}}

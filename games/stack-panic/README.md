@@ -15,7 +15,29 @@ STACK PANIC is Vibe Arcade cabinet #002: a browser falling-block game where shor
 - procedural Web Audio soundtrack with per-event themes and SFX
 - screen shake, blackout, glitch lines, smoke, particles and event banners
 - weighted incident director with cooldowns and level gates
-- Vercel route at `/stack-panic/`
+- served by the arcade server at `/stack-panic/`
+
+## v1.0 — NO MERCY
+
+Incidents used to secretly help: craters, the wrecking ball, acid and a sealed
+breach all *removed* blocks, so a run could last forever. `public/punish.js`
+turns them hostile — blocks are displaced, buried or thrown back on the stack:
+
+- 🪖 tank: each shell pushes a garbage row in from the floor
+- ☄️ meteors / 💣 bombs: small crater, more debris thrown back on top (overhangs)
+- 🏗️ wrecking ball: rips cells from the top of the stack and flings them elsewhere
+- 🧪 acid: eats the rows you were about to complete
+- 🙃 gravity: the floor rises by 2–4 garbage rows and stays there
+- 💧 water: slippery controls · 📼 glitch: inverted left/right, lying preview
+- 🦆 duck: replaces your next piece with an S or Z
+- 🌀 sealed breach clears 1 row (was 2–4); REALITY FAIL spits swallowed cells back as garbage
+- chaos rises on its own, a level every 30 s, gravity down to 50 ms
+- the **tide**: a garbage row from the floor every 19 s → 4.2 s, telegraphed by a gauge
+
+Rubble pushed past the ceiling ends the run. `public/visuals.js` is the HiDPI
+renderer (glass blocks, line-clear sweeps, lock flash, drop trails, tide gauge).
+Playing requires an arcade account (`/shared/account.js`); scores go to the
+leaderboard API served by `/server`.
 
 ## Incidents implemented
 

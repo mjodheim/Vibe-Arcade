@@ -4,11 +4,12 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <meta name="theme-color" content="#05070d" />
-  <meta name="description" content="Vibe Arcade — deux mondes gratuits à lancer directement dans le navigateur : Hivebound, action-RPG 3D, et Stack Panic, puzzle chaotique." />
-  <title>Vibe Arcade — Deux mondes, zéro installation</title>
+  <meta name="description" content="Vibe Arcade — des jeux d’arcade gratuits et chaotiques à lancer directement dans le navigateur. Crée ton compte, joue, grimpe au classement." />
+  <title>Vibe Arcade — Choisis un jeu</title>
   <link rel="stylesheet" href="/arcade.css" />
   <link rel="stylesheet" href="/arcade-stack.css" />
   <link rel="stylesheet" href="/arcade-v2.css" />
+  <link rel="stylesheet" href="/shared/account.css" />
 </head>
 <body>
   <div class="bg" aria-hidden="true"><div class="grid"></div><div class="orb o1"></div><div class="orb o2"></div></div>
@@ -18,6 +19,7 @@
     <nav>
       <a href="#games" data-fr="Jeux" data-en="Games">Jeux</a>
       <a href="https://github.com/mjodheim/Vibe-Arcade" target="_blank" rel="noreferrer">GitHub</a>
+      <span id="accountChip"></span>
       <button id="langBtn" class="lang" type="button">EN</button>
     </nav>
   </header>
@@ -25,23 +27,22 @@
   <main>
     <section class="hero">
       <div class="hero-copy">
-        <div class="hero-kicker" data-fr="VIBE ARCADE · DEUX MONDES JOUABLES · ZÉRO INSTALLATION" data-en="VIBE ARCADE · TWO PLAYABLE WORLDS · ZERO INSTALLS">VIBE ARCADE · DEUX MONDES JOUABLES · ZÉRO INSTALLATION</div>
-        <h1><span data-fr="ENTRE DANS UN MONDE." data-en="STEP INTO A WORLD.">ENTRE DANS UN MONDE.</span><br><em data-fr="PAS DANS UN MENU." data-en="NOT A MENU.">PAS DANS UN MENU.</em></h1>
-        <p class="hero-text" data-fr="Une petite arcade web où chaque jeu essaie d’avoir sa propre identité. Explore une ruche 3D envahie par le Gloam, ou empile des blocs pendant que la réalité sabote ta partie." data-en="A small web arcade where every game tries to feel like its own place. Explore a 3D hive world invaded by the Gloam, or stack blocks while reality sabotages your run.">Une petite arcade web où chaque jeu essaie d’avoir sa propre identité. Explore une ruche 3D envahie par le Gloam, ou empile des blocs pendant que la réalité sabote ta partie.</p>
+        <div class="hero-kicker" data-fr="VIBE ARCADE · ARCADE WTF · ZÉRO INSTALLATION" data-en="VIBE ARCADE · WTF ARCADE · ZERO INSTALLS">VIBE ARCADE · ARCADE WTF · ZÉRO INSTALLATION</div>
+        <h1><span data-fr="INSÈRE UNE PIÈCE." data-en="INSERT COIN.">INSÈRE UNE PIÈCE.</span><br><em data-fr="PERDS TA DIGNITÉ." data-en="LOSE YOUR DIGNITY.">PERDS TA DIGNITÉ.</em></h1>
+        <p class="hero-text" data-fr="Une petite arcade web de jeux courts, absurdes et injustes. Empile des blocs pendant que la réalité sabote ta partie, joue la pomme traquée par des serpents, tiens la tour de contrôle d’une place envahie de pigeons, ou livre des colis en oie. HONK." data-en="A small web arcade of short, absurd and unfair games. Stack blocks while reality sabotages your run, play the apple hunted by snakes, run air traffic control for a square full of pigeons, or deliver parcels as a goose. HONK.">Une petite arcade web de jeux courts, absurdes et injustes. Empile des blocs pendant que la réalité sabote ta partie, joue la pomme traquée par des serpents, tiens la tour de contrôle d’une place envahie de pigeons, ou livre des colis en oie. HONK.</p>
         <div class="hero-actions">
-          <a class="cta primary" href="/hivebound/" data-fr="Explorer Hivebound" data-en="Explore Hivebound">Explorer Hivebound</a>
-          <a class="cta" href="/stack-panic/" data-fr="Entrer dans Stack Panic" data-en="Enter Stack Panic">Entrer dans Stack Panic</a>
+          <a class="cta primary" href="/stack-panic/" data-fr="Entrer dans Stack Panic" data-en="Enter Stack Panic">Entrer dans Stack Panic</a>
+          <a class="cta" href="#games" data-fr="Voir les bornes" data-en="See the cabinets">Voir les bornes</a>
         </div>
-        <div class="pulse-line"><span></span><small data-fr="2 jeux jouables maintenant · navigateur desktop recommandé" data-en="2 games playable now · desktop browser recommended">2 jeux jouables maintenant · navigateur desktop recommandé</small></div>
+        <div class="pulse-line"><span></span><small data-fr="4 jeux jouables · un compte · un classement par jeu" data-en="4 playable games · one account · a leaderboard per game">4 jeux jouables · un compte · un classement par jeu</small></div>
       </div>
 
       <div class="hero-worlds" aria-hidden="true">
         <div class="world-orbit">
-          <div class="world-card hive">
-            <div class="honey-field"></div>
-            <div class="hive-city"><i></i><i></i><i></i></div>
-            <div class="preview-swarm"><b style="left:0;top:25%;--delay:-1s"></b><b style="left:5%;top:55%;--delay:-4s;--d:8s"></b><b style="left:-8%;top:73%;--delay:-6s;--d:9s"></b></div>
-            <div class="world-label"><small>3D ACTION RPG</small><strong>HIVEBOUND</strong></div>
+          <div class="world-card mystery">
+            <div class="fruit-grid"></div>
+            <div class="mystery-mark">🍎</div>
+            <div class="world-label"><small>SNAKE, MAIS T'ES LA POMME</small><strong>FORBIDDEN FRUIT</strong></div>
           </div>
           <div class="world-card stack">
             <div class="stack-mini-grid"></div><div class="stack-meteor"></div>
@@ -54,36 +55,20 @@
 
     <section class="world-strip" aria-label="Arcade highlights">
       <div class="world-strip-inner">
-        <div class="world-stat"><small data-fr="HIVEBOUND" data-en="HIVEBOUND">HIVEBOUND</small><strong data-fr="Monde 3D explorable" data-en="Explorable 3D world">Monde 3D explorable</strong></div>
-        <div class="world-stat"><small data-fr="PROGRESSION" data-en="PROGRESSION">PROGRESSION</small><strong data-fr="Talents · craft · potions" data-en="Talents · craft · potions">Talents · craft · potions</strong></div>
-        <div class="world-stat"><small data-fr="STACK PANIC" data-en="STACK PANIC">STACK PANIC</small><strong data-fr="Incidents qui touchent vraiment la grille" data-en="Incidents that really hit the board">Incidents qui touchent vraiment la grille</strong></div>
+        <div class="world-stat"><small data-fr="COMPTE JOUEUR" data-en="PLAYER ACCOUNT">COMPTE JOUEUR</small><strong data-fr="Un pseudo pour toute l’arcade" data-en="One name across the arcade">Un pseudo pour toute l’arcade</strong></div>
+        <div class="world-stat"><small data-fr="CLASSEMENTS" data-en="LEADERBOARDS">CLASSEMENTS</small><strong data-fr="Général · défi du jour" data-en="All-time · daily challenge">Général · défi du jour</strong></div>
+        <div class="world-stat"><small data-fr="4 BORNES" data-en="4 CABINETS">4 BORNES</small><strong data-fr="Blocs · pomme · pigeons · oie" data-en="Blocks · apple · pigeons · goose">Blocs · pomme · pigeons · oie</strong></div>
         <div class="world-stat"><small data-fr="REALITY FAIL" data-en="REALITY FAIL">REALITY FAIL</small><strong data-fr="Cataclysmes 3D à 100% chaos" data-en="3D cataclysms at 100% chaos">Cataclysmes 3D à 100% chaos</strong></div>
       </div>
     </section>
 
     <section id="games" class="games-section">
       <div class="section-head">
-        <div><span class="eyebrow" data-fr="CHOISIS TA BORNE" data-en="CHOOSE YOUR CABINET">CHOISIS TA BORNE</span><h2 data-fr="Deux jeux. Deux personnalités." data-en="Two games. Two personalities.">Deux jeux. Deux personnalités.</h2></div>
+        <div><span class="eyebrow" data-fr="CHOISIS TA BORNE" data-en="CHOOSE YOUR CABINET">CHOISIS TA BORNE</span><h2 data-fr="Des jeux courts. Des défaites longues." data-en="Short games. Long defeats.">Des jeux courts. Des défaites longues.</h2></div>
         <p data-fr="Pas de launcher, pas de téléchargement. Clique, apprends le monde en jouant et reviens quand une mise à jour a encore empiré les choses." data-en="No launcher, no download. Click, learn the world by playing, and come back when an update has made things even stranger.">Pas de launcher, pas de téléchargement. Clique, apprends le monde en jouant et reviens quand une mise à jour a encore empiré les choses.</p>
       </div>
 
       <div class="cabinet-grid">
-        <article class="cabinet live">
-          <div class="cabinet-screen hivebound-preview">
-            <div class="screen-noise"></div><div class="honey-field"></div>
-            <span class="cabinet-number">#001</span><span class="status"><i></i> WORLD ONLINE</span>
-            <div class="hive-city"><i></i><i></i><i></i></div>
-            <div class="preview-swarm"><b></b><b></b><b></b><b></b></div>
-            <div class="game-title"><small>RELICS OF THE BLOOM</small><strong>HIVEBOUND</strong></div>
-          </div>
-          <div class="cabinet-body">
-            <div><span class="genre">3D ACTION RPG · EXPLORATION</span><h3>Hivebound: Relics of the Bloom</h3></div>
-            <p data-fr="Traverse Verdant Reach comme un éclaireur de la ruche. Explore, récolte, résous des sanctuaires, combats le Gloam, apprends des talents et transforme nectar, cire et pollen en outils de survie." data-en="Cross Verdant Reach as a hive wanderer. Explore, harvest, solve shrines, fight the Gloam, learn talents and turn nectar, wax and pollen into survival tools.">Traverse Verdant Reach comme un éclaireur de la ruche. Explore, récolte, résous des sanctuaires, combats le Gloam, apprends des talents et transforme nectar, cire et pollen en outils de survie.</p>
-            <div class="feature-tags"><span>3D WORLD</span><span>PUZZLES</span><span>COMBAT</span><span>TALENTS</span><span>CRAFT</span></div>
-            <a class="play" href="/hivebound/"><span data-fr="ENTRER DANS VERDANT REACH" data-en="ENTER VERDANT REACH">ENTRER DANS VERDANT REACH</span><b>→</b></a>
-          </div>
-        </article>
-
         <article class="cabinet live stack-card">
           <div class="cabinet-screen stack-preview">
             <div class="screen-noise"></div><span class="cabinet-number">#002</span><span class="status"><i></i> UNSTABLE</span><span class="chaos-sticker">CHAOS ENABLED</span>
@@ -97,17 +82,61 @@
             <a class="play" href="/stack-panic/"><span data-fr="ENTRER DANS LE CHAOS" data-en="ENTER THE CHAOS">ENTRER DANS LE CHAOS</span><b>→</b></a>
           </div>
         </article>
+
+        <article class="cabinet live fruit-card">
+          <div class="cabinet-screen fruit-preview">
+            <div class="screen-noise"></div><div class="fruit-grid"></div><span class="cabinet-number">#003</span><span class="status"><i></i> <span data-fr="EN FUITE" data-en="ON THE RUN">EN FUITE</span></span>
+            <div class="fruit-snake"><i></i><i></i><i></i><i></i><i></i></div><div class="mystery-mark">🍎</div>
+            <div class="game-title"><small>SNAKE, BUT YOU'RE THE APPLE</small><strong>FORBIDDEN FRUIT</strong></div>
+          </div>
+          <div class="cabinet-body">
+            <div><span class="genre">SNAKE INVERSÉ · SURVIE</span><h3>Forbidden Fruit</h3></div>
+            <p data-fr="Tu es la pomme. Trois serpents aux personnalités douteuses te chassent, grandissent et accélèrent. Fais-les s’écraser les uns contre les autres : ils explosent en graines." data-en="You are the apple. Three snakes with questionable personalities hunt you, grow and speed up. Make them crash into each other: they explode into seeds.">Tu es la pomme. Trois serpents aux personnalités douteuses te chassent, grandissent et accélèrent. Fais-les s’écraser les uns contre les autres : ils explosent en graines.</p>
+            <div class="feature-tags"><span>SNAKE INVERSÉ</span><span>COMBOS</span><span>DAILY SEED</span></div>
+            <a class="play fruit-play" href="/forbidden-fruit/"><span data-fr="FUIR LES SERPENTS" data-en="RUN FROM THE SNAKES">FUIR LES SERPENTS</span><b>→</b></a>
+          </div>
+        </article>
+
+        <article class="cabinet live pigeon-card">
+          <div class="cabinet-screen pigeon-preview">
+            <div class="screen-noise"></div><span class="cabinet-number">#004</span><span class="status"><i></i> <span data-fr="TRAFIC DENSE" data-en="HEAVY TRAFFIC">TRAFIC DENSE</span></span>
+            <div class="pigeon-ring r1"></div><div class="pigeon-ring r2"></div><div class="pigeon-route"></div><div class="mystery-mark pigeon-mark">🐦</div>
+            <div class="game-title"><small>AIR TRAFFIC, BUT PIGEONS</small><strong>PIGEON CONTROL</strong></div>
+          </div>
+          <div class="cabinet-body">
+            <div><span class="genre">CONTRÔLE AÉRIEN · PANIQUE</span><h3>Pigeon Control</h3></div>
+            <p data-fr="Trace la route de chaque pigeon jusqu’au monument de sa couleur. Pigeons obèses, pigeons ninja, mouettes hors-la-loi et un gamin avec du pain. Une collision et c’est fini." data-en="Draw each pigeon’s route to the monument of its colour. Fat pigeons, ninja pigeons, outlaw seagulls and a kid with bread. One collision and it’s over.">Trace la route de chaque pigeon jusqu’au monument de sa couleur. Pigeons obèses, pigeons ninja, mouettes hors-la-loi et un gamin avec du pain. Une collision et c’est fini.</p>
+            <div class="feature-tags"><span>DESSINE LES ROUTES</span><span>TACTILE</span><span>DAILY SEED</span></div>
+            <a class="play pigeon-play" href="/pigeon-control/"><span data-fr="PRENDRE MON SERVICE" data-en="START MY SHIFT">PRENDRE MON SERVICE</span><b>→</b></a>
+          </div>
+        </article>
+
+        <article class="cabinet live goose-card">
+          <div class="cabinet-screen goose-preview">
+            <div class="screen-noise"></div><span class="cabinet-number">#005</span><span class="status"><i></i> <span data-fr="EN TOURNÉE" data-en="OUT FOR DELIVERY">EN TOURNÉE</span></span>
+            <div class="goose-road"></div><div class="goose-honk"></div><div class="mystery-mark goose-mark">🪿</div><div class="goose-parcel">📦</div>
+            <div class="game-title"><small>PARCELS, BUT A GOOSE</small><strong>GOOSE DELIVERY</strong></div>
+          </div>
+          <div class="cabinet-body">
+            <div><span class="genre">LIVRAISON · CHAOS</span><h3>Goose Delivery</h3></div>
+            <p data-fr="Tu es une oie en CDD chez un transporteur. Livre les colis avant la fin du chrono. Ton seul outil : HONK. Les passants lâchent leur baguette, la police arrive, les voitures ne freinent pas." data-en="You are a goose on a temp contract at a courier. Deliver parcels before the clock runs out. Your only tool: HONK. People drop their baguettes, the police show up, cars don’t brake.">Tu es une oie en CDD chez un transporteur. Livre les colis avant la fin du chrono. Ton seul outil : HONK. Les passants lâchent leur baguette, la police arrive, les voitures ne freinent pas.</p>
+            <div class="feature-tags"><span>HONK</span><span>CONTRE LA MONTRE</span><span>DAILY SEED</span></div>
+            <a class="play goose-play" href="/goose-delivery/"><span data-fr="COMMENCER LA TOURNÉE" data-en="START THE ROUND">COMMENCER LA TOURNÉE</span><b>→</b></a>
+          </div>
+        </article>
       </div>
     </section>
 
     <section class="manifesto">
       <span class="eyebrow">VIBE ARCADE</span>
       <div class="loop"><span>⚡ <b data-fr="JOUER DIRECTEMENT" data-en="PLAY INSTANTLY">JOUER DIRECTEMENT</b></span><span>🌍 <b data-fr="DES MONDES, PAS DES MENUS" data-en="WORLDS, NOT MENUS">DES MONDES, PAS DES MENUS</b></span><span>🧪 <b data-fr="EXPÉRIMENTER" data-en="EXPERIMENT">EXPÉRIMENTER</b></span><span>🎮 <b data-fr="REVENIR APRÈS CHAQUE UPDATE" data-en="COME BACK AFTER EVERY UPDATE">REVENIR APRÈS CHAQUE UPDATE</b></span></div>
-      <p data-fr="Pas besoin de compte pour commencer. Choisis un monde et entre dedans." data-en="No account needed to start. Pick a world and step inside.">Pas besoin de compte pour commencer. Choisis un monde et entre dedans.</p>
+      <p data-fr="Un compte gratuit, un pseudo, et tes scores rejoignent le classement. Choisis une borne." data-en="One free account, one name, and your scores join the leaderboard. Pick a cabinet.">Un compte gratuit, un pseudo, et tes scores rejoignent le classement. Choisis une borne.</p>
     </section>
   </main>
 
   <footer><span>VIBE ARCADE</span><small>mjodheim · 2026</small></footer>
   <script src="/arcade.js"></script>
+  <script src="/shared/account.js"></script>
+  <script>window.ArcadeAccount?.renderChip(document.getElementById('accountChip'));</script>
 </body>
 </html>

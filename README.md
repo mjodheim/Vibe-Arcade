@@ -29,31 +29,6 @@ Le code source est public. Les conversations privées utilisées pour orienter l
 
 ---
 
-# 🐝 BORNE #001
-
-## **Hivebound: Relics of the Bloom**
-
-> *The Bloom is fading. The Hive remembers.*
-
-Un roguelite d'action fantasy dans lequel des abeilles héroïques quittent la sécurité de la ruche, poursuivent d'étranges reliques, construisent des combinaisons absurdes, affrontent des créatures corrompues et risquent toujours davantage pour battre leur meilleur score.
-
-| 🛡️ Waxguard | ✨ Bloomweaver | 🏹 Thornstrider | 🎶 Hymnkeeper |
-|:---:|:---:|:---:|:---:|
-| Guerrier | Mage | Rôdeur | Support |
-| Armure & riposte | Pollen arcanique & explosions | Vitesse & critiques | Auras & puissance de l'essaim |
-
-### 🍯 Qu'est-ce qui est déjà présent ?
-
-`⚔️ combats en temps réel` · `🗺️ routes procédurales` · `💎 loot aléatoire` · `🌿 talents` · `🔨 craft` · `👑 boss` · `🌀 résonances` · `🌑 pactes risque/récompense` · `🏆 classements` · `☀️ Daily Hive`
-
-Chaque run consiste à devenir de plus en plus déraisonnablement puissant avant que la corruption ne finisse par te rattraper.
-
-**Version actuelle :** `v0.2 — prototype jouable`
-
-➡️ **[Entrer dans Hivebound](games/hivebound)**
-
----
-
 # 🧱 BORNE #002
 
 ## **Stack Panic**
@@ -62,11 +37,47 @@ Chaque run consiste à devenir de plus en plus déraisonnablement puissant avant
 
 Un **jeu de blocs qui tombent** dans lequel la partie refuse de rester sage. Tu empiles, tu nettoies des lignes — et le directeur du chaos envoie des moutons qui poussent les cases, de l'eau qui coule dans les trous, une bombe, un tank, une panne de courant, un canard inspecteur, ou une **brèche structurelle** : le jeu s'ouvre alors en 3D et tu pilotes un vaisseau dans un tunnel construit à partir de ta propre pile.
 
-Chaque incident peut sauver ta partie… ou l'achever. Le chaos a quand même ses règles : il ne s'acharne jamais deux fois de suite et se retient quand ta pile touche le plafond.
+Depuis la **v1.0 — NO MERCY**, plus aucun incident ne joue pour toi : les blocs ne disparaissent plus, ils sont déplacés, enterrés ou renvoyés sur ta pile. Le chaos monte tout seul, un niveau tombe toutes les 30 secondes et une marée de gravats remonte du sol de plus en plus souvent. Chaque partie finit par casser — la question est quand.
 
-`🐑 moutons` · `💧 blocs liquides` · `💣 bombes` · `🪖 tank` · `🌑 panne de courant` · `📼 glitch` · `🦆 canard` · `🌀 brèche 3D` · `☀️ défi du jour` · `🏆 records locaux`
+`🐑 moutons` · `💧 commandes qui glissent` · `💣 gravats` · `🪖 tank à remblai` · `🌑 panne de courant` · `📼 commandes inversées` · `🦆 canard contrôleur` · `🌀 brèche 3D` · `☀️ défi du jour` · `👤 comptes joueurs` · `🏆 classements en ligne`
 
 ➡️ **[Jouer à Stack Panic](https://arcade.mjodheim.be/stack-panic/)** · [le code et les notes de jeu](games/stack-panic)
+
+---
+
+# 🍎 BORNE #003
+
+## **Forbidden Fruit**
+
+> *Snake, mais c'est toi la pomme.*
+
+Tu fuis. Trois serpents te chassent : **le Chasseur** fonce droit sur toi, **l'Embusqué** vise là où tu vas, **le Bourré** zigzague au hasard. Ils grandissent et accélèrent sans arrêt, et un nouveau débarque toutes les 22 secondes. Un serpent qui percute un mur, lui-même ou un autre serpent explose en graines (+500, combos ×2, ×3…) : le vrai jeu, c'est de les faire s'entretuer.
+
+➡️ **[Jouer à Forbidden Fruit](https://arcade.mjodheim.be/forbidden-fruit/)**
+
+---
+
+# 🐦 BORNE #004
+
+## **Pigeon Control**
+
+> *Tour de contrôle, ici le pigeon.*
+
+Trace à la souris ou au doigt la route de chaque pigeon jusqu'au monument de sa couleur. Deux pigeons qui se touchent, c'est fini. Au programme : pigeons obèses, pigeons ninja, mouettes qui n'obéissent à personne et un gamin qui jette du pain au pire moment.
+
+➡️ **[Jouer à Pigeon Control](https://arcade.mjodheim.be/pigeon-control/)**
+
+---
+
+# 🪿 BORNE #005
+
+## **Goose Delivery**
+
+> *Livraison express. Service client : HONK.*
+
+Tu es une oie en CDD chez un transporteur. Ramasse le colis, apporte-le devant la bonne porte avant la fin du chrono : chaque livraison rallonge le temps. Ton seul outil, c'est **HONK** : les passants fuient et lâchent leur baguette, et un policier qui se fait klaxonner glisse. Mais trop de HONK fait débarquer la police, et les voitures ne freinent pas pour les oies.
+
+➡️ **[Jouer à Goose Delivery](https://arcade.mjodheim.be/goose-delivery/)**
 
 ---
 
@@ -97,13 +108,13 @@ Il n'est pas nécessaire de parler d'API, de classes, de moteurs, de bases de do
 
 Un retour utile peut être aussi simple que :
 
-> *« Le mage ne donne pas une impression de puissance. »*
+> *« Les events doivent vraiment casser le jeu, là on peut aller très loin. »*
 >
-> *« Je veux du loot capable de changer complètement mon build. »*
+> *« Accélère les incidents, que ça soit vraiment punitif. »*
 >
-> *« Ce boss est ennuyeux. »*
+> *« Fais-moi un Snake, mais c'est toi la pomme. »*
 >
-> *« Laisse-moi modifier les touches. »*
+> *« Il faut pouvoir s'inscrire pour enregistrer son score. »*
 >
 > *« J'ai envie de relancer une partie. »*
 
@@ -115,10 +126,13 @@ La dernière phrase est la plus importante. 😈
 
 | Borne | Jeu | Genre | Statut |
 |:--:|---|---|:--:|
-| `#001` | 🐝 **Hivebound: Relics of the Bloom** | Roguelite d'action fantasy | 🟢 JOUABLE |
 | `#002` | 🧱 **Stack Panic** | Puzzle de blocs chaotique | 🟢 JOUABLE |
-| `#003` | ❔ **???** | ??? | 🔒 VERROUILLÉ |
-| `#004` | ❔ **???** | ??? | 🔒 VERROUILLÉ |
+| `#003` | 🍎 **Forbidden Fruit** | Snake inversé | 🟢 JOUABLE |
+| `#004` | 🐦 **Pigeon Control** | Contrôle aérien de pigeons | 🟢 JOUABLE |
+| `#005` | 🪿 **Goose Delivery** | Livraison en oie, contre la montre | 🟢 JOUABLE |
+| `#006` | ❔ **???** | ??? | 🔒 VERROUILLÉ |
+
+<sub>La borne `#001` a été retirée de l'arcade ; la numérotation est conservée.</sub>
 
 Les prochains jeux pourront partager la même identité d'arcade, les profils joueurs, les succès et un classement propre à chaque jeu, tout en proposant des expériences complètement différentes.
 
@@ -128,8 +142,8 @@ Les prochains jeux pourront partager la même identité d'arcade, les profils jo
 
 À mesure que la collection grandit, Vibe Arcade doit obtenir une couche commune autour des jeux :
 
-- 👤 une seule identité joueur dans toute l'arcade
-- 🏆 un classement pour chaque jeu
+- ✅ 👤 une seule identité joueur dans toute l'arcade
+- ✅ 🏆 un classement pour chaque jeu
 - 🥇 des défis quotidiens et permanents
 - 🎖️ des succès inter-jeux
 - 📊 des records personnels et statistiques d'arcade
@@ -139,34 +153,22 @@ La contrainte importante reste la même : **le joueur oriente le produit par ses
 
 ---
 
-## 🚀 Lancer l'arcade actuelle
+## 🚀 Lancer l'arcade
 
-### Docker
-
-```bash
-cp games/hivebound/.env.example games/hivebound/.env
-# Définir une valeur HIVEBOUND_SECRET robuste dans le fichier .env
-
-docker compose up -d --build
-```
-
-Puis ouvrir :
-
-```text
-http://localhost:8080
-```
-
-### Sans Docker
-
-Hivebound nécessite actuellement **Node.js 20+** et n'a aucune dépendance npm nécessaire à l'exécution.
+L'arcade est hébergée sur **Vercel** : les jeux sont servis en statique (routes dans `vercel.json`) et les comptes/classements tournent en **Vercel Functions** (`api/`), sans aucune dépendance npm.
 
 ```bash
-cd games/hivebound
-export HIVEBOUND_SECRET='un-secret-long-et-aleatoire'
-node server.js
+npm run dev    # http://localhost:8080 — serveur local qui imite Vercel, données dans ./data
+npm test       # API (dont le client Redis), routes Vercel, logique des jeux + smoke test Stack Panic
 ```
 
-Pour les contrôles, les mécaniques et les informations propres au jeu, voir **[games/hivebound](games/hivebound)**.
+### Configuration Vercel (une seule fois)
+
+1. **Storage → Upstash Redis** : créer une base et la lier au projet. Elle injecte `KV_REST_API_URL` et `KV_REST_API_TOKEN` (les noms `UPSTASH_REDIS_REST_URL` / `UPSTASH_REDIS_REST_TOKEN` marchent aussi).
+2. **Settings → Environment Variables** : ajouter `ARCADE_SECRET`, une chaîne aléatoire de 16 caractères ou plus (`openssl rand -hex 32`). Elle signe les sessions et les parties.
+3. Redéployer. Chaque push sur `main` part ensuite en production automatiquement.
+
+Sans ces variables, l'API répond « serveur de scores indisponible » et les jeux restent jouables en mode non classé.
 
 ---
 
@@ -175,11 +177,17 @@ Pour les contrôles, les mécaniques et les informations propres au jeu, voir **
 ```text
 Vibe-Arcade/
 ├── 🎮 games/
-│   └── 🐝 hivebound/       # Jeu #001
+│   ├── 🧱 stack-panic/     # Jeu #002
+│   ├── 🍎 forbidden-fruit/ # Jeu #003
+│   ├── 🐦 pigeon-control/  # Jeu #004
+│   └── 🪿 goose-delivery/  # Jeu #005
+├── 🔐 api/                  # Vercel Functions : comptes & classements
+├── 🖥️ server/               # Logique de l'API + serveur de dev local
+├── ⚙️ vercel.json           # Routes des bornes
+├── 🤝 shared/               # Client compte partagé par toutes les bornes
 ├── 🎨 assets/               # Visuels de l'arcade
 ├── 📚 docs/
 │   └── PHILOSOPHY.md        # Ce que l'expérience cherche à explorer
-├── 🐳 docker-compose.yml
 ├── 📖 README.md             # Français
 └── 📖 README.en.md          # English
 ```

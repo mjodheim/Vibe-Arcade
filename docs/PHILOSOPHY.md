@@ -17,10 +17,10 @@ Anything a player would naturally say after trying the game.
 
 Examples:
 
-- “The mage does not feel powerful enough.”
-- “I want loot that makes me change my build.”
-- “I should be able to remap the controls.”
-- “The map feels too linear.”
+- “The events should really break the game — right now you can go on forever.”
+- “Speed up the incidents, make it properly punishing.”
+- “Make me a Snake, but you're the apple.”
+- “Players should sign up so their scores are saved.”
 - “I want one more run.”
 
 A request does not need to mention classes, APIs, data structures, frameworks, or patterns. The implementation should follow the desired experience rather than the other way around.

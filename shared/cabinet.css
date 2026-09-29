@@ -1,0 +1,86 @@
+/* Shared cabinet chrome for Vibe Arcade games. Each game themes it through
+   --accent / --accent-2 / --glow and keeps its own playfield styles. */
+:root{
+  color-scheme:dark;
+  --bg:#05070d;--panel:rgba(12,16,30,.82);--line:rgba(255,255,255,.1);
+  --ink:#f3f6ff;--muted:#8f9ab3;--accent:#43efff;--accent-2:#ff5ab7;--glow:rgba(67,239,255,.25);
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+body{overflow-x:hidden}
+button,a{font:inherit}
+.cab-topbar{position:relative;z-index:10;max-width:1180px;margin:auto;padding:16px 20px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.cab-brand{font-size:.72rem;font-weight:950;letter-spacing:.18em;color:#d9e0f2;text-decoration:none}
+.cab-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+.cab-chip{border:1px solid var(--line);background:rgba(13,17,32,.78);color:#d9e3f5;padding:8px 11px;border-radius:999px;font-size:.66rem;font-weight:850;letter-spacing:.1em;cursor:pointer}
+.cab-shell{position:relative;z-index:1;max-width:1180px;margin:auto;padding:4px 20px 60px}
+.cab-intro{text-align:center;margin:4px 0 20px}
+.cab-kicker{color:var(--accent);font-size:.66rem;letter-spacing:.22em;font-weight:900;margin:0}
+.cab-intro h1{margin:.2rem 0 0;font-size:clamp(2.4rem,7vw,4.6rem);line-height:.92;letter-spacing:-.06em}
+.cab-intro h1 span{background:linear-gradient(90deg,var(--accent),var(--accent-2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.cab-intro p:last-child{margin:.6rem 0 0;color:var(--muted)}
+.cab-layout{display:grid;grid-template-columns:minmax(180px,1fr) minmax(300px,620px) minmax(200px,1fr);gap:18px;align-items:start}
+.cab-panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:16px;backdrop-filter:blur(10px)}
+.cab-panel small,.cab-label{display:block;color:#7f8ba4;font-size:.6rem;font-weight:900;letter-spacing:.2em}
+.cab-stat{padding:10px 0;border-bottom:1px solid var(--line)}
+.cab-stat:last-child{border-bottom:0}
+.cab-stat strong{display:block;margin-top:4px;font:800 1.35rem/1.1 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.06em}
+.cab-rules p{font-size:.8rem;color:var(--muted);line-height:1.5;margin:.6rem 0 0}
+.cab-screen{position:relative;border-radius:22px;padding:12px;border:2px solid transparent;
+  background:linear-gradient(145deg,#10152a,#070a14) padding-box,linear-gradient(135deg,var(--accent),var(--accent-2)) border-box;
+  box-shadow:0 30px 90px rgba(0,0,0,.45),0 0 70px var(--glow)}
+.cab-screen canvas{display:block;width:100%;height:auto;border-radius:12px;touch-action:none}
+.cab-overlay{position:absolute;inset:12px;z-index:5;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;border-radius:12px;
+  background:radial-gradient(circle at 50% 35%,rgba(255,255,255,.07),transparent 40%),rgba(4,6,12,.86);backdrop-filter:blur(4px)}
+.cab-overlay[hidden]{display:none}
+.cab-overlay h2{margin:0;font-size:clamp(1.8rem,5vw,2.6rem);letter-spacing:-.04em}
+.cab-overlay p{color:var(--muted);margin:.5rem 0}
+.cab-overlay .big{font:900 clamp(2rem,6vw,3rem)/1 ui-monospace,Menlo,monospace;color:var(--accent);margin:.4rem 0}
+.cab-overlay small{max-width:320px;color:#7d879b;line-height:1.5}
+.cab-btn{margin:14px 4px 6px;border:0;border-radius:12px;padding:13px 20px;background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#061018;font-weight:950;letter-spacing:.1em;cursor:pointer;box-shadow:0 12px 40px var(--glow)}
+.cab-btn.ghost{background:rgba(255,255,255,.07);color:#e6ebf7;box-shadow:none;border:1px solid var(--line)}
+.cab-btn:active{transform:translateY(1px) scale(.98)}
+.player-line{margin:6px 0 0;font:800 .64rem/1.4 ui-monospace,Menlo,monospace;letter-spacing:.12em;color:#b9ff66}
+.player-line.guest{color:#ffd166}
+.score-status{min-height:1.2em;margin:6px 0 0;font:700 .72rem/1.4 ui-monospace,Menlo,monospace;letter-spacing:.06em;color:#9aa4bd}
+.score-status.ok{color:#b9ff66}.score-status.warn{color:#ff9d6b}
+.board-tabs{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin:10px 0 8px;padding:3px;border-radius:10px;background:rgba(255,255,255,.035)}
+.board-tabs button{border:0;border-radius:8px;padding:6px 4px;background:none;color:#8792ab;font-size:.6rem;font-weight:800;letter-spacing:.12em;cursor:pointer}
+.board-tabs button[aria-selected="true"]{background:rgba(255,255,255,.1);color:#fff}
+.leaderboard{list-style:none;counter-reset:rank;margin:0;padding:0;display:grid;gap:3px}
+.leaderboard li{counter-increment:rank;display:grid;grid-template-columns:2.2ch 1fr auto;gap:8px;align-items:center;padding:6px 8px;border-radius:8px;background:rgba(255,255,255,.03);font:700 .74rem/1.2 ui-monospace,Menlo,monospace}
+.leaderboard li:before{content:counter(rank);color:#6f7b92}
+.leaderboard li:nth-child(1):before{color:#ffd166}
+.leaderboard li span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#dce5f7}
+.leaderboard li b{color:var(--accent);letter-spacing:.04em}
+.leaderboard li.me{background:rgba(185,255,102,.1);box-shadow:inset 0 0 0 1px rgba(185,255,102,.3)}
+.leaderboard li.empty{display:block;color:#7f8ba4;font-weight:600;font-family:inherit}
+.leaderboard li.empty:before{content:none}
+.cab-dpad{display:none;grid-template-columns:repeat(3,64px);grid-template-rows:repeat(3,54px);gap:6px;justify-content:center;margin:14px auto 0}
+.cab-dpad button{border:1px solid var(--line);border-radius:12px;background:#111629;color:#fff;font-size:1.2rem;font-weight:900;touch-action:none;user-select:none;-webkit-user-select:none}
+.cab-dpad button:active,.cab-dpad button.on{background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#061018}
+.cab-dpad [data-dir="up"]{grid-column:2;grid-row:1}.cab-dpad [data-dir="left"]{grid-column:1;grid-row:2}
+.cab-dpad [data-dir="right"]{grid-column:3;grid-row:2}.cab-dpad [data-dir="down"]{grid-column:2;grid-row:3}
+.cab-foot{text-align:center;margin-top:22px;color:#6e7890;font-size:.72rem}
+@media(max-width:900px){
+  .cab-layout{display:flex;flex-direction:column}
+  .cab-screen{order:1;width:100%;max-width:620px;margin:auto}
+  .cab-layout>.cab-panel{order:2;width:100%;max-width:620px;margin:auto}
+  .cab-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+  .cab-stats .cab-stat{border:0;padding:6px}
+  .cab-stats .cab-stat strong{font-size:1rem}
+}
+@media(max-width:900px) and (pointer:coarse){.cab-dpad{display:grid}}
+@media(max-width:520px){.cab-shell{padding:4px 10px 40px}.cab-stats{grid-template-columns:repeat(2,1fr)}}
+/* On small screens the playfield can be shorter than the menus: let the
+   cabinet grow while an overlay is open and tighten the overlay copy. */
+@media(max-width:700px){
+  .cab-screen:has(.cab-overlay:not([hidden])){min-height:470px}
+  .cab-overlay{padding:16px}
+  .cab-overlay h2{font-size:1.6rem}
+  .cab-overlay p{font-size:.86rem;margin:.35rem 0}
+  .cab-overlay small{font-size:.72rem}
+  .cab-btn{padding:11px 14px;margin:8px 3px 4px;font-size:.8rem}
+}
+.rotate-hint{display:none}
+@media(max-width:700px) and (orientation:portrait){.rotate-hint{display:block;text-align:center;color:#ffd166;font:800 .66rem/1.4 ui-monospace,Menlo,monospace;letter-spacing:.12em;margin:8px 0 0}}
